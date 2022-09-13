@@ -8,7 +8,7 @@ import {
   ErrorComponent,
 } from "@pankod/refine-mui";
 import routerProvider from "@pankod/refine-react-router-v6";
-import { dataProvider } from "@pankod/refine-supabase";
+import { dataProvider, liveProvider } from "@pankod/refine-supabase";
 import { RefineKbarProvider } from "@pankod/refine-kbar";
 import { useTranslation } from "react-i18next";
 import { ColorModeContextProvider } from "contexts";
@@ -16,6 +16,10 @@ import { supabaseClient } from "utility";
 import { Title, Sider, Layout, Header } from "components/layout";
 import { OffLayoutArea } from "components/offLayoutArea";
 import authProvider from "./authProvider";
+
+// import { PostList, PostCreate, PostEdit } from "pages/posts";
+
+import { PatientList } from "pages/patients";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -38,6 +42,7 @@ function App() {
             catchAll={<ErrorComponent />}
             routerProvider={routerProvider}
             dataProvider={dataProvider(supabaseClient)}
+            liveProvider={liveProvider(supabaseClient)}
             authProvider={authProvider}
             Title={Title}
             Sider={Sider}
@@ -45,6 +50,32 @@ function App() {
             Header={Header}
             OffLayoutArea={OffLayoutArea}
             i18nProvider={i18nProvider}
+            resources={[
+              {
+                name: "clinics",
+                list: PatientList,
+                // create: PostCreate,
+                // edit: PostEdit,
+              },
+              {
+                name: "doctors",
+                list: PatientList,
+                // create: PostCreate,
+                // edit: PostEdit,
+              },
+              {
+                name: "patients",
+                list: PatientList,
+                // create: PostCreate,
+                // edit: PostEdit,
+              },
+              {
+                name: "implants",
+                list: PatientList,
+                // create: PostCreate,
+                // edit: PostEdit,
+              },
+            ]}
           />
         </RefineKbarProvider>
       </RefineSnackbarProvider>

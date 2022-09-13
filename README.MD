@@ -1,4 +1,4 @@
-# smarttooth-frontend
+# healthcare-admin-dashboard-frontend
 
 <div align="center" style="margin: 30px;">
     <a href="https://refine.dev">

@@ -4,6 +4,9 @@ import { supabaseClient } from "utility";
 
 const authProvider: AuthProvider = {
   login: async ({ username, password }) => {
+    // const { user, error } = await supabaseClient.auth.update({
+    //   password: "123456",
+    // });
     const { user, error } = await supabaseClient.auth.signIn({
       email: username,
       password,

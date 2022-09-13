@@ -87,6 +87,23 @@
       "show": "Show Post"
     }
   },
+  "patients": {
+    "patients": "Patients",
+    "fields": {
+      "id": "Id",
+      "username": "Username",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At"
+    },
+    "titles": {
+      "create": "Create Patient",
+      "edit": "Edit Patient",
+      "list": "Patients",
+      "show": "Show Patient"
+    }
+  },
   "table": {
     "actions": "Actions"
   },
