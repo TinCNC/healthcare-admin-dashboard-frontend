@@ -20,6 +20,20 @@ const authProvider: AuthProvider = {
       return Promise.resolve();
     }
   },
+  register: async ({ username, password }) => {
+    const { user, error } = await supabaseClient.auth.signUp({
+      email: username,
+      password,
+    });
+
+    if (error) {
+      return Promise.reject(error);
+    }
+
+    if (user) {
+      return Promise.resolve();
+    }
+  },
   logout: async () => {
     const { error } = await supabaseClient.auth.signOut();
 

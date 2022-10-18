@@ -3,7 +3,7 @@
     "login": {
       "signin": "Sign in",
       "signup": "Sign up",
-      "username": "Username",
+      "email": "Email",
       "password": "Password",
       "remember": "Remember me",
       "forgotPassword": "Forgot password?",

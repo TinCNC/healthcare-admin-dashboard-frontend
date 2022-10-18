@@ -20,6 +20,7 @@ import authProvider from "./authProvider";
 // import { PostList, PostCreate, PostEdit } from "pages/posts";
 
 import { PatientList } from "pages/patients";
+import { LoginPage } from "pages/login";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -44,6 +45,7 @@ function App() {
             dataProvider={dataProvider(supabaseClient)}
             liveProvider={liveProvider(supabaseClient)}
             authProvider={authProvider}
+            LoginPage={LoginPage}
             Title={Title}
             Sider={Sider}
             Layout={Layout}
