@@ -22,6 +22,11 @@ import { OffLayoutArea } from "components/offLayoutArea";
 import authProvider from "./authProvider";
 
 import { PatientList } from "pages/patients";
+import { CategoriesList } from "pages/categories";
+
+import { DoctorList, DoctorShow } from "pages/doctors";
+
+import { DepartmentList } from "pages/departments";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -81,6 +86,12 @@ function App() {
             )}
             resources={[
               {
+                name: "departments",
+                list: DepartmentList,
+                // create: PostCreate,
+                // edit: PostEdit,
+              },
+              {
                 name: "clinics",
                 list: PatientList,
                 // create: PostCreate,
@@ -88,8 +99,9 @@ function App() {
               },
               {
                 name: "doctors",
-                list: PatientList,
-                // create: PostCreate,
+                list: DoctorList,
+                show: DoctorShow,
+                // create: DoctorCreate,
                 // edit: PostEdit,
               },
               {
@@ -101,6 +113,18 @@ function App() {
               {
                 name: "implants",
                 list: PatientList,
+                // create: PostCreate,
+                // edit: PostEdit,
+              },
+              {
+                name: "prosthetics",
+                list: PatientList,
+                // create: PostCreate,
+                // edit: PostEdit,
+              },
+              {
+                name: "categories",
+                list: CategoriesList,
                 // create: PostCreate,
                 // edit: PostEdit,
               },

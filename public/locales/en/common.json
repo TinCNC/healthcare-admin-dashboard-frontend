@@ -152,6 +152,41 @@
       "show": "Show Patient"
     }
   },
+  "departments": {
+    "departments": "Patients",
+    "fields": {
+      "id": "Id",
+      "name": "Name",
+      "description": "Description",
+      "createdAt": "Created At"
+    },
+    "titles": {
+      "create": "Create Patient",
+      "edit": "Edit Patient",
+      "list": "Departments",
+      "show": "Show Patient"
+    }
+  },
+  "doctors": {
+    "doctors": "Doctors",
+    "fields": {
+      "id": "Id",
+      "username": "Username",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "full_name": "Full Name",
+      "image": "Image",
+      "departments": "Departments",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At"
+    },
+    "titles": {
+      "create": "Create Doctor",
+      "edit": "Edit Doctor",
+      "list": "Doctors",
+      "show": "Show Doctor"
+    }
+  },
   "table": {
     "actions": "Actions"
   }
