@@ -152,8 +152,43 @@
       "show": "Show Patient"
     }
   },
+  "clinics": {
+    "clinics": "Clinics",
+    "fields": {
+      "id": "ID",
+      "name": "Name",
+      "address": "Address",
+      "capacity": "Capacity",
+      "createdAt": "Created At"
+    },
+    "titles": {
+      "create": "Create Clinic",
+      "edit": "Edit Clinic",
+      "list": "Clinics",
+      "show": "Clinic Information"
+    }
+  },
+  "diseases": {
+    "diseases": "Diseases",
+    "fields": {
+      "id": "ID",
+      "name": "Name",
+      "other_names": "Other Names",
+      "scientific_name": "Scientific Name",
+      "classification": "Classification",
+      "body_part": "Body Part",
+      "severity": "Severity",
+      "createdAt": "Created At"
+    },
+    "titles": {
+      "create": "Create Disease",
+      "edit": "Edit Disease",
+      "list": "Diseases",
+      "show": "Disease Information"
+    }
+  },
   "departments": {
-    "departments": "Patients",
+    "departments": "Departments",
     "fields": {
       "id": "Id",
       "name": "Name",

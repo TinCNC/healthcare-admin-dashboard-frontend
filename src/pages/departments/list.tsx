@@ -41,6 +41,15 @@ export const DepartmentList: React.FC = () => {
         flex: 0.5,
       },
       {
+        field: "created_at",
+        headerName: t("departments.fields.createdAt"),
+        minWidth: 400,
+        flex: 1,
+        renderCell: ({ row }) => {
+          return new Date(row.created_at).toLocaleString();
+        },
+      },
+      {
         field: "actions",
         type: "actions",
         headerName: t("table.actions"),

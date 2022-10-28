@@ -9,13 +9,25 @@ import {
   IconButton,
   Avatar,
   Stack,
+  Menu,
+  Button,
   FormControl,
   MenuItem,
+  ListItemIcon,
   Select,
   Toolbar,
   Typography,
+  Divider,
 } from "@pankod/refine-mui";
-import { DarkModeOutlined, LightModeOutlined } from "@mui/icons-material";
+
+import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
+import {
+  DarkModeOutlined,
+  LightModeOutlined,
+  Logout,
+  PersonAdd,
+  Settings,
+} from "@mui/icons-material";
 
 import { ColorModeContext } from "contexts";
 import i18n from "i18n";
@@ -82,13 +94,35 @@ export const Header: React.FC = () => {
               ))}
             </Select>
           </FormControl>
+
           {showUserInfo && (
-            <Stack direction="row" gap="16px" alignItems="center">
-              {user.avatar && <Avatar src={user?.avatar} alt={user?.name} />}
-              {user.name && (
-                <Typography variant="subtitle2">{user?.name}</Typography>
+            <PopupState variant="popover" popupId="demo-popup-menu">
+              {(popupState) => (
+                <React.Fragment>
+                  <Button
+                    variant="text"
+                    {...bindTrigger(popupState)}
+                    sx={{ textTransform: "none" }}
+                  >
+                    <Stack direction="row" gap="16px" alignItems="center">
+                      {user.avatar && (
+                        <Avatar src={user?.avatar} alt={user?.name} />
+                      )}
+                      {user.name && (
+                        <Typography variant="subtitle2">
+                          {user?.name}
+                        </Typography>
+                      )}
+                    </Stack>
+                  </Button>
+                  <Menu {...bindMenu(popupState)}>
+                    <MenuItem onClick={popupState.close}>Profile</MenuItem>
+                    <MenuItem onClick={popupState.close}>My account</MenuItem>
+                    <MenuItem onClick={popupState.close}>Logout</MenuItem>
+                  </Menu>
+                </React.Fragment>
               )}
-            </Stack>
+            </PopupState>
           )}
         </Stack>
       </Toolbar>

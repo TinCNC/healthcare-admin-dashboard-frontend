@@ -10,12 +10,12 @@ import {
   DeleteButton,
 } from "@pankod/refine-mui";
 
-import { IPatient } from "interfaces";
+import { IClinic } from "interfaces";
 
-export const PatientList: React.FC = () => {
+export const ClinicList: React.FC = () => {
   const t = useTranslate();
 
-  const { dataGridProps } = useDataGrid<IPatient>();
+  const { dataGridProps } = useDataGrid<IClinic>();
 
   // const categoryIds = dataGridProps.rows.map((item) => item.category.id);
   // const { data: categoriesData, isLoading } = useMany<ICategory>({
@@ -26,43 +26,34 @@ export const PatientList: React.FC = () => {
   //   },
   // });
 
-  const columns: GridColumns<IPatient> = [
+  const columns: GridColumns<IClinic> = [
     {
       field: "id",
-      headerName: t("patients.fields.id"),
+      headerName: t("clinics.fields.id"),
       type: "number",
       width: 50,
     },
     {
-      field: "username",
-      headerName: t("patients.fields.username"),
+      field: "name",
+      headerName: t("clinics.fields.name"),
       minWidth: 200,
       flex: 1,
     },
     {
-      field: "first_name",
-      headerName: t("patients.fields.firstName"),
+      field: "address",
+      headerName: t("clinics.fields.address"),
       minWidth: 200,
       flex: 1,
     },
     {
-      field: "last_name",
-      headerName: t("patients.fields.lastName"),
+      field: "capacity",
+      headerName: t("clinics.fields.capacity"),
       minWidth: 200,
       flex: 1,
     },
     {
       field: "created_at",
-      headerName: t("patients.fields.createdAt"),
-      minWidth: 400,
-      flex: 1,
-      renderCell: ({ row }) => {
-        return new Date(row.created_at).toLocaleString();
-      },
-    },
-    {
-      field: "updated_at",
-      headerName: t("patients.fields.updatedAt"),
+      headerName: t("clinics.fields.createdAt"),
       minWidth: 400,
       flex: 1,
       renderCell: ({ row }) => {

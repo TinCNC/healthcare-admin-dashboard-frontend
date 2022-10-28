@@ -26,6 +26,10 @@ import { CategoriesList } from "pages/categories";
 
 import { DoctorList, DoctorShow } from "pages/doctors";
 
+import { DiseaseList } from "pages/diseases";
+
+import { ClinicList } from "pages/clinics";
+
 import { DepartmentList } from "pages/departments";
 
 function App() {
@@ -92,8 +96,14 @@ function App() {
                 // edit: PostEdit,
               },
               {
+                name: "diseases",
+                list: DiseaseList,
+                // create: PostCreate,
+                // edit: PostEdit,
+              },
+              {
                 name: "clinics",
-                list: PatientList,
+                list: ClinicList,
                 // create: PostCreate,
                 // edit: PostEdit,
               },

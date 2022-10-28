@@ -10,12 +10,12 @@ import {
   DeleteButton,
 } from "@pankod/refine-mui";
 
-import { IPatient } from "interfaces";
+import { IDisease } from "interfaces";
 
-export const PatientList: React.FC = () => {
+export const DiseaseList: React.FC = () => {
   const t = useTranslate();
 
-  const { dataGridProps } = useDataGrid<IPatient>();
+  const { dataGridProps } = useDataGrid<IDisease>();
 
   // const categoryIds = dataGridProps.rows.map((item) => item.category.id);
   // const { data: categoriesData, isLoading } = useMany<ICategory>({
@@ -26,43 +26,34 @@ export const PatientList: React.FC = () => {
   //   },
   // });
 
-  const columns: GridColumns<IPatient> = [
+  const columns: GridColumns<IDisease> = [
     {
       field: "id",
-      headerName: t("patients.fields.id"),
+      headerName: t("diseases.fields.id"),
       type: "number",
       width: 50,
     },
     {
-      field: "username",
-      headerName: t("patients.fields.username"),
+      field: "name",
+      headerName: t("diseases.fields.name"),
       minWidth: 200,
       flex: 1,
     },
     {
-      field: "first_name",
-      headerName: t("patients.fields.firstName"),
+      field: "classification",
+      headerName: t("diseases.fields.classification"),
       minWidth: 200,
       flex: 1,
     },
     {
-      field: "last_name",
-      headerName: t("patients.fields.lastName"),
+      field: "severity",
+      headerName: t("diseases.fields.severity"),
       minWidth: 200,
       flex: 1,
     },
     {
-      field: "created_at",
-      headerName: t("patients.fields.createdAt"),
-      minWidth: 400,
-      flex: 1,
-      renderCell: ({ row }) => {
-        return new Date(row.created_at).toLocaleString();
-      },
-    },
-    {
-      field: "updated_at",
-      headerName: t("patients.fields.updatedAt"),
+      field: "createdAt",
+      headerName: t("clinics.fields.createdAt"),
       minWidth: 400,
       flex: 1,
       renderCell: ({ row }) => {
@@ -73,7 +64,7 @@ export const PatientList: React.FC = () => {
       field: "actions",
       type: "actions",
       headerName: t("table.actions"),
-      renderCell: function render({ row }) {
+      renderCell: ({ row }) => {
         return (
           <Stack direction="row" spacing={1}>
             <EditButton size="small" hideText recordItemId={row.id} />
