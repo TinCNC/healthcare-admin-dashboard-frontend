@@ -1,3 +1,4 @@
+import React from "react";
 import {
   // useOne,
   useShow,
@@ -22,6 +23,10 @@ import {
   ImageListItem,
   Grid,
   Box,
+  GridColumns,
+  DataGrid,
+  useDataGrid,
+  List,
 } from "@pankod/refine-mui";
 
 // import { FitnessCenter } from "@mui/icons-material";
@@ -34,6 +39,8 @@ import {
   // IProduct,
   IDoctor,
   IDepartment,
+  IProfessionalCertificates,
+  ITechnician,
 } from "interfaces";
 
 // import { ProductCard } from "../../components/product-card";
@@ -50,6 +57,31 @@ export const DoctorShow: React.FC = () => {
   const { data, isLoading } = queryResult;
   const record = data?.data;
 
+  const { dataGridProps } = useDataGrid<IProfessionalCertificates>({
+    resource: "professional_certificates",
+    permanentFilter: [{ field: "holder", value: record?.id, operator: "eq" }],
+  });
+
+  const creatorIds = dataGridProps.rows.map((item) => item.creator);
+  const { data: creatorsData, isLoading: creatorsLoading } =
+    useMany<ITechnician>({
+      resource: "technicians",
+      ids: creatorIds,
+      queryOptions: {
+        enabled: creatorIds.length > 0,
+      },
+    });
+
+  const validatorIds = dataGridProps.rows.map((item) => item.validator);
+  const { data: validatorsData, isLoading: validatorsLoading } =
+    useMany<ITechnician>({
+      resource: "technicians",
+      ids: validatorIds,
+      queryOptions: {
+        enabled: validatorIds.length > 0,
+      },
+    });
+
   const { data: departmentsData, isLoading: departmentsLoading } =
     useMany<IDepartment>({
       resource: "departments",
@@ -58,6 +90,144 @@ export const DoctorShow: React.FC = () => {
         enabled: record !== undefined ? record?.departments.length > 0 : false,
       },
     });
+
+  const certificatesColumns = React.useMemo<
+    GridColumns<IProfessionalCertificates>
+  >(
+    () => [
+      {
+        field: "id",
+        headerName: t("professional_certificates.fields.id"),
+        type: "number",
+        width: 50,
+      },
+      {
+        field: "name",
+        headerName: t("professional_certificates.fields.name"),
+        minWidth: 200,
+        maxWidth: 200,
+        flex: 1,
+      },
+      {
+        field: "issued_date",
+        headerName: t("professional_certificates.fields.issued_date"),
+        minWidth: 200,
+        maxWidth: 200,
+        flex: 1,
+        renderCell: ({ row }) => {
+          return new Date(row.created_at).toLocaleString();
+        },
+      },
+      {
+        field: "expired_at",
+        headerName: t("professional_certificates.fields.expired_at"),
+        minWidth: 200,
+        maxWidth: 200,
+        flex: 1,
+        renderCell: ({ row }) => {
+          return new Date(row.created_at).toLocaleString();
+        },
+      },
+      // {
+      //   field: "creator",
+      //   headerName: t("professional_certificates.fields.creator"),
+      //   minWidth: 200,
+      //   maxWidth: 200,
+      //   flex: 1,
+      // },
+      {
+        field: "creator",
+        headerName: t("professional_certificates.fields.creator"),
+        // type: "number",
+        minWidth: 200,
+        maxWidth: 200,
+        flex: 1,
+        renderCell: ({ row }) => {
+          if (creatorsLoading) {
+            return "Loading...";
+          }
+
+          const creator = creatorsData?.data.find(
+            (item) => item.id === row.creator
+          );
+          return creator?.first_name + " " + creator?.last_name;
+        },
+      },
+      {
+        field: "validator",
+        headerName: t("professional_certificates.fields.validator"),
+        // type: "number",
+        minWidth: 200,
+        maxWidth: 200,
+        flex: 1,
+        renderCell: ({ row }) => {
+          if (validatorsLoading) {
+            return "Loading...";
+          }
+
+          const validator = validatorsData?.data.find(
+            (item) => item.id === row.validator
+          );
+          return validator?.first_name + " " + validator?.last_name;
+        },
+      },
+      // {
+      //   field: "validator",
+      //   headerName: t("professional_certificates.fields.validator"),
+      //   minWidth: 200,
+      //   maxWidth: 200,
+      //   flex: 1,
+      // },
+      // {
+      //   field: "holder",
+      //   headerName: t("professional_certificates.fields.holder"),
+      //   minWidth: 200,
+      //   maxWidth: 200,
+      //   flex: 1,
+      // },
+      {
+        field: "program",
+        headerName: t("professional_certificates.fields.program"),
+        minWidth: 200,
+        maxWidth: 200,
+        flex: 1,
+      },
+      {
+        field: "level",
+        headerName: t("professional_certificates.fields.level"),
+        minWidth: 60,
+        maxWidth: 60,
+        flex: 1,
+      },
+      {
+        field: "created_at",
+        headerName: t("professional_certificates.fields.createdAt"),
+        minWidth: 200,
+        // maxWidth: 200,
+        flex: 1,
+        renderCell: ({ row }) => {
+          return new Date(row.created_at).toLocaleString();
+        },
+      },
+      // {
+      //   field: "actions",
+      //   type: "actions",
+      //   headerName: t("table.actions"),
+      //   renderCell: function render({ row }) {
+      //     return (
+      //       <Stack direction="row" spacing={1}>
+      //         <EditButton size="small" hideText recordItemId={row.id} />
+      //         <DeleteButton size="small" hideText recordItemId={row.id} />
+      //       </Stack>
+      //     );
+      //   },
+      //   align: "center",
+      //   headerAlign: "center",
+      //   minWidth: 80,
+      // },
+    ],
+    [t, creatorsData, creatorsLoading, validatorsData, validatorsLoading]
+  );
 
   //   const { data: categoryData } = useOne<ICategory>({
   //     resource: "categories",
@@ -162,11 +332,9 @@ export const DoctorShow: React.FC = () => {
             {record?.first_name + " " + record?.last_name}
           </Typography>
           <Typography variant="body1" fontWeight="bold">
-            {/* Location */}
             {t("doctors.fields.departments")}
           </Typography>
           <Typography variant="body2">
-            {/* <TagField value={record?.location} /> */}
             <Typography variant="body2">
               {departmentsData !== undefined &&
                 departmentsData.data.map((item) => {
@@ -174,12 +342,19 @@ export const DoctorShow: React.FC = () => {
                 })}
             </Typography>
           </Typography>
-          <Typography variant="body1" fontWeight="bold">
-            {/* About */}
-            {t("doctors.fields.about")}
-          </Typography>
-          {/* <Typography variant="body2">{parse(record?.about || "")}</Typography> */}
+          {/* <Typography variant="body1" fontWeight="bold">
+            {t("doctors.fields.biography")}
+          </Typography> */}
         </Stack>
+      </Stack>
+      <Stack gap={1} marginTop={4}>
+        <List resource="professional_certificates" breadcrumb={false}>
+          <DataGrid
+            {...dataGridProps}
+            columns={certificatesColumns}
+            autoHeight
+          />
+        </List>
       </Stack>
       {/* <Stack
         direction={{ sm: "column", md: "row" }}

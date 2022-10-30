@@ -6,6 +6,7 @@ import {
   GridColumns,
   List,
   Stack,
+  ShowButton,
   EditButton,
   DeleteButton,
 } from "@pankod/refine-mui";
@@ -31,44 +32,46 @@ export const PatientList: React.FC = () => {
       field: "id",
       headerName: t("patients.fields.id"),
       type: "number",
-      width: 50,
+      minWidth: 30,
+      maxWidth: 30,
+      flex: 1,
     },
     {
       field: "username",
       headerName: t("patients.fields.username"),
-      minWidth: 200,
+      minWidth: 100,
       flex: 1,
     },
     {
       field: "first_name",
       headerName: t("patients.fields.firstName"),
-      minWidth: 200,
+      minWidth: 100,
       flex: 1,
     },
     {
       field: "last_name",
       headerName: t("patients.fields.lastName"),
-      minWidth: 200,
+      minWidth: 100,
       flex: 1,
     },
     {
       field: "created_at",
       headerName: t("patients.fields.createdAt"),
-      minWidth: 400,
+      minWidth: 150,
       flex: 1,
       renderCell: ({ row }) => {
         return new Date(row.created_at).toLocaleString();
       },
     },
-    {
-      field: "updated_at",
-      headerName: t("patients.fields.updatedAt"),
-      minWidth: 400,
-      flex: 1,
-      renderCell: ({ row }) => {
-        return new Date(row.created_at).toLocaleString();
-      },
-    },
+    // {
+    //   field: "updated_at",
+    //   headerName: t("patients.fields.updatedAt"),
+    //   minWidth: 400,
+    //   flex: 1,
+    //   renderCell: ({ row }) => {
+    //     return new Date(row.created_at).toLocaleString();
+    //   },
+    // },
     {
       field: "actions",
       type: "actions",
@@ -76,6 +79,7 @@ export const PatientList: React.FC = () => {
       renderCell: function render({ row }) {
         return (
           <Stack direction="row" spacing={1}>
+            <ShowButton hideText recordItemId={row.id} />
             <EditButton size="small" hideText recordItemId={row.id} />
             <DeleteButton size="small" hideText recordItemId={row.id} />
           </Stack>
@@ -83,7 +87,8 @@ export const PatientList: React.FC = () => {
       },
       align: "center",
       headerAlign: "center",
-      minWidth: 80,
+      minWidth: 120,
+      // flex: 1,
     },
   ];
 

@@ -31,6 +31,16 @@ export interface IPatient {
   updated_at: string;
 }
 
+export interface ITechnician {
+  id: number;
+  username: string;
+  first_name: string;
+  last_name: string;
+  image: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface IDoctor {
   id: number;
   username: string;

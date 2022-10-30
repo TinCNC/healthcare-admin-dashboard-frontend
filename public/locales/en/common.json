@@ -222,6 +222,28 @@
       "show": "Show Doctor"
     }
   },
+  "professional_certificates": {
+    "professional_certificates": "Professional Certificates",
+    "fields": {
+      "id": "ID",
+      "name": "Name",
+      "description": "Description",
+      "issued_date": "Issued Date",
+      "expired_at": "Expired At",
+      "creator": "Creator",
+      "validator": "Validator",
+      "holder": "Holder",
+      "program": "Program",
+      "level": "Level",
+      "createdAt": "Created At"
+    },
+    "titles": {
+      "create": "Create Certificate",
+      "edit": "Edit Doctor",
+      "list": "Certificates",
+      "show": "Show Certificate"
+    }
+  },
   "table": {
     "actions": "Actions"
   }
