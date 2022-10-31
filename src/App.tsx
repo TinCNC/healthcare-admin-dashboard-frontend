@@ -11,8 +11,6 @@ import {
   AuthPage,
 } from "@pankod/refine-mui";
 
-import { Coronavirus, LocalHospital } from "@mui/icons-material";
-
 import routerProvider from "@pankod/refine-react-router-v6";
 import { dataProvider, liveProvider } from "@pankod/refine-supabase";
 import { RefineKbarProvider } from "@pankod/refine-kbar";
@@ -30,7 +28,7 @@ import { DoctorList, DoctorShow } from "pages/doctors";
 
 import { DiseaseList } from "pages/diseases";
 
-import { ClinicList } from "pages/clinics";
+import { ClinicList, ClinicCreate } from "pages/clinics";
 
 import { DepartmentList } from "pages/departments";
 
@@ -116,7 +114,7 @@ function App() {
               {
                 name: "clinics",
                 list: ClinicList,
-                // create: PostCreate,
+                create: ClinicCreate,
                 // edit: PostEdit,
                 icon: <FontAwesomeIcon icon={solid("hospital")} />,
               },

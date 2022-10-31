@@ -12,6 +12,14 @@ import {
 
 import { IDisease } from "interfaces";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  solid,
+  regular,
+  brands,
+  icon,
+} from "@fortawesome/fontawesome-svg-core/import.macro"; // <-- import styles to be used
+
 export const DiseaseList: React.FC = () => {
   const t = useTranslate();
 
@@ -79,7 +87,14 @@ export const DiseaseList: React.FC = () => {
   ];
 
   return (
-    <List>
+    <List
+      title={
+        <React.Fragment>
+          <FontAwesomeIcon icon={solid("disease")} />
+          &nbsp;{t("diseases.titles.list")}
+        </React.Fragment>
+      }
+    >
       <DataGrid {...dataGridProps} columns={columns} autoHeight />
     </List>
   );

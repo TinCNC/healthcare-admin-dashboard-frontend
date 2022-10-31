@@ -21,6 +21,13 @@ export const PatientCreate: React.FC = () => {
 
   const { autocompleteProps } = useAutocomplete<IClinic>({
     resource: "clinics",
+    onSearch: (value) => [
+      {
+        field: "name",
+        operator: "containss",
+        value,
+      },
+    ],
   });
 
   return (
@@ -100,7 +107,7 @@ export const PatientCreate: React.FC = () => {
               {...autocompleteProps}
               {...field}
               onChange={(_, value) => {
-                field.onChange(value);
+                field.onChange(value?.id);
               }}
               getOptionLabel={(item) => {
                 return item.name ? item.name : "";
