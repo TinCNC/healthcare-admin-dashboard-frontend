@@ -29,7 +29,7 @@ import {
   List,
 } from "@pankod/refine-mui";
 
-// import { FitnessCenter } from "@mui/icons-material";
+import { FitnessCenter, CardMembership } from "@mui/icons-material";
 
 import {
   // ITrainer,
@@ -348,7 +348,16 @@ export const DoctorShow: React.FC = () => {
         </Stack>
       </Stack>
       <Stack gap={1} marginTop={4}>
-        <List resource="professional_certificates" breadcrumb={false}>
+        <List
+          resource="professional_certificates"
+          title={
+            <React.Fragment>
+              <CardMembership sx={{ verticalAlign: "middle" }} />{" "}
+              {t("professional_certificates.titles.list")}
+            </React.Fragment>
+          }
+          breadcrumb={false}
+        >
           <DataGrid
             {...dataGridProps}
             columns={certificatesColumns}

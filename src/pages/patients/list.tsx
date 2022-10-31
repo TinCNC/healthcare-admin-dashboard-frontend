@@ -30,6 +30,14 @@ import {
 import { IClinic, IPatient } from "interfaces";
 import { Search } from "@mui/icons-material";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  solid,
+  regular,
+  brands,
+  icon,
+} from "@fortawesome/fontawesome-svg-core/import.macro"; // <-- import styles to be used
+
 export const PatientList: React.FC = () => {
   const t = useTranslate();
 
@@ -93,8 +101,8 @@ export const PatientList: React.FC = () => {
       field: "id",
       headerName: t("patients.fields.id"),
       type: "number",
-      minWidth: 30,
-      maxWidth: 30,
+      minWidth: 50,
+      maxWidth: 50,
       flex: 1,
     },
     {
@@ -285,7 +293,14 @@ export const PatientList: React.FC = () => {
           </Select>
         </FormControl>
       </Paper>
-      <List>
+      <List
+        title={
+          <React.Fragment>
+            <FontAwesomeIcon icon={solid("hospital-user")} />
+            &nbsp;{t("patients.titles.list")}
+          </React.Fragment>
+        }
+      >
         <DataGrid
           {...dataGridProps}
           // rows={
@@ -295,9 +310,7 @@ export const PatientList: React.FC = () => {
           // }
           // loading={tableQueryResult.isLoading || tableQueryResult.isFetching}
           filterModel={undefined}
-          // onFilterModelChange={() => {
-          //   return true;
-          // }}
+          disableColumnFilter={true}
           // filterModel={}
           columns={columns}
           autoHeight

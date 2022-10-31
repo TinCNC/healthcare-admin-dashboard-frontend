@@ -4,6 +4,7 @@ import {
   useGetLocale,
   useSetLocale,
   useLogout,
+  useTranslate,
 } from "@pankod/refine-core";
 import {
   AppBar,
@@ -37,6 +38,8 @@ import i18n from "i18n";
 export const Header: React.FC = () => {
   const { mode, setMode } = useContext(ColorModeContext);
   const { mutate: mutateLogout } = useLogout();
+
+  const t = useTranslate();
 
   const changeLanguage = useSetLocale();
   const locale = useGetLocale();
@@ -121,7 +124,7 @@ export const Header: React.FC = () => {
                   <Menu {...bindMenu(popupState)}>
                     {/* <MenuItem onClick={popupState.close}>Profile</MenuItem> */}
                     <MenuItem onClick={popupState.close}>
-                      <Person /> My account
+                      <Person /> {t("buttons.my_account", "My account")}
                     </MenuItem>
                     <MenuItem
                       key="logout"
@@ -130,7 +133,7 @@ export const Header: React.FC = () => {
                         popupState.close();
                       }}
                     >
-                      <Logout /> Logout
+                      <Logout /> {t("buttons.logout", "Logout")}
                     </MenuItem>
                   </Menu>
                 </React.Fragment>
