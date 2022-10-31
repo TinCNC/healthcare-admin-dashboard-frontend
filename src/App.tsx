@@ -21,7 +21,7 @@ import { Title, Sider, Layout, Header } from "components/layout";
 import { OffLayoutArea } from "components/offLayoutArea";
 import authProvider from "./authProvider";
 
-import { PatientList } from "pages/patients";
+import { PatientList, PatientCreate } from "pages/patients";
 import { CategoriesList } from "pages/categories";
 
 import { DoctorList, DoctorShow } from "pages/doctors";
@@ -117,6 +117,7 @@ function App() {
               {
                 name: "patients",
                 list: PatientList,
+                create: PatientCreate,
                 // create: PostCreate,
                 // edit: PostEdit,
               },

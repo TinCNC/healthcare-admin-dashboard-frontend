@@ -138,10 +138,11 @@
   "patients": {
     "patients": "Patients",
     "fields": {
-      "id": "Id",
+      "id": "ID",
       "username": "Username",
       "firstName": "First Name",
       "lastName": "Last Name",
+      "clinic": "Clinic",
       "createdAt": "Created At",
       "updatedAt": "Updated At"
     },
@@ -205,7 +206,7 @@
   "doctors": {
     "doctors": "Doctors",
     "fields": {
-      "id": "Id",
+      "id": "ID",
       "username": "Username",
       "firstName": "First Name",
       "lastName": "Last Name",

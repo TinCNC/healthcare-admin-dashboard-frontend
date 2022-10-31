@@ -26,6 +26,7 @@ export interface IPatient {
   username: string;
   first_name: string;
   last_name: string;
+  clinic: number;
   image: string;
   created_at: string;
   updated_at: string;
