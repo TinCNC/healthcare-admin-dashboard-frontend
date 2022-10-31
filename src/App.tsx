@@ -11,6 +11,8 @@ import {
   AuthPage,
 } from "@pankod/refine-mui";
 
+import { Coronavirus, LocalHospital } from "@mui/icons-material";
+
 import routerProvider from "@pankod/refine-react-router-v6";
 import { dataProvider, liveProvider } from "@pankod/refine-supabase";
 import { RefineKbarProvider } from "@pankod/refine-kbar";
@@ -31,6 +33,14 @@ import { DiseaseList } from "pages/diseases";
 import { ClinicList } from "pages/clinics";
 
 import { DepartmentList } from "pages/departments";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  solid,
+  regular,
+  brands,
+  icon,
+} from "@fortawesome/fontawesome-svg-core/import.macro"; // <-- import styles to be used
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -94,18 +104,21 @@ function App() {
                 list: DepartmentList,
                 // create: PostCreate,
                 // edit: PostEdit,
+                icon: <FontAwesomeIcon icon={solid("building")} />,
               },
               {
                 name: "diseases",
                 list: DiseaseList,
                 // create: PostCreate,
                 // edit: PostEdit,
+                icon: <FontAwesomeIcon icon={solid("disease")} />,
               },
               {
                 name: "clinics",
                 list: ClinicList,
                 // create: PostCreate,
                 // edit: PostEdit,
+                icon: <FontAwesomeIcon icon={solid("hospital")} />,
               },
               {
                 name: "doctors",
@@ -113,6 +126,7 @@ function App() {
                 show: DoctorShow,
                 // create: DoctorCreate,
                 // edit: PostEdit,
+                icon: <FontAwesomeIcon icon={solid("user-doctor")} />,
               },
               {
                 name: "patients",
@@ -120,6 +134,7 @@ function App() {
                 create: PatientCreate,
                 // create: PostCreate,
                 // edit: PostEdit,
+                icon: <FontAwesomeIcon icon={solid("hospital-user")} />,
               },
               {
                 name: "implants",
