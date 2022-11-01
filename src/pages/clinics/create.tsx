@@ -59,7 +59,6 @@ export const ClinicCreate: React.FC = () => {
           id="address"
           label="Address"
           name="address"
-          autoFocus
         />
         <TextField
           {...register("capacity", {
@@ -77,7 +76,6 @@ export const ClinicCreate: React.FC = () => {
           id="capacity"
           label="Capacity"
           name="capacity"
-          autoFocus
         />
       </Box>
     </Create>

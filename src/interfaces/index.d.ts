@@ -21,6 +21,14 @@ export interface IDepartment {
   created_at: string;
 }
 
+export interface IOrganization {
+  id: number;
+  name: string;
+  type: string;
+  address: string;
+  created_at: string;
+}
+
 export interface IPatient {
   id: number;
   username: string;

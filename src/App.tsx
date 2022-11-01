@@ -32,6 +32,8 @@ import { ClinicList, ClinicCreate } from "pages/clinics";
 
 import { DepartmentList } from "pages/departments";
 
+import { OrganizationList, OrganizationCreate } from "pages/organizations";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   solid,
@@ -101,6 +103,13 @@ function App() {
                 name: "departments",
                 list: DepartmentList,
                 // create: PostCreate,
+                // edit: PostEdit,
+                icon: <FontAwesomeIcon icon={solid("sitemap")} />,
+              },
+              {
+                name: "organizations",
+                list: OrganizationList,
+                create: OrganizationCreate,
                 // edit: PostEdit,
                 icon: <FontAwesomeIcon icon={solid("building")} />,
               },

@@ -204,6 +204,22 @@
       "show": "Show Patient"
     }
   },
+  "organizations": {
+    "organizations": "Organizations",
+    "fields": {
+      "id": "Id",
+      "name": "Name",
+      "type": "Type",
+      "address": "Address",
+      "createdAt": "Created At"
+    },
+    "titles": {
+      "create": "Create Organization",
+      "edit": "Edit Organization",
+      "list": "Organizations",
+      "show": "Show Organization"
+    }
+  },
   "doctors": {
     "doctors": "Doctors",
     "fields": {

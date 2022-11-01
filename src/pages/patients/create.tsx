@@ -59,7 +59,6 @@ export const PatientCreate: React.FC = () => {
           id="first_name"
           label="First Name"
           name="first_name"
-          autoFocus
         />
         <TextField
           {...register("last_name", { required: "Last Name is required" })}
@@ -71,7 +70,6 @@ export const PatientCreate: React.FC = () => {
           id="last_name"
           label="Last Name"
           name="last_name"
-          autoFocus
         />
         {/* <Controller
           control={control}
