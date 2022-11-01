@@ -195,10 +195,7 @@ export const OrganizationList: React.FC = () => {
           orientation="vertical"
           flexItem
         />
-
         <FormControl sx={{ minWidth: 320 }}>
-          {/* <InputLabel>Select Clinics</InputLabel> */}
-          {/* typeSearch */}
           <Autocomplete
             sx={{ ml: 1, flex: 1 }}
             options={["University", "College"]}
@@ -213,10 +210,9 @@ export const OrganizationList: React.FC = () => {
               <TextField
                 {...params}
                 // sx={{ width: "100px" }}
-                label={t("organizations.fields.type")}
+                placeholder={t("organizations.fields.type")}
                 // margin="normal"
                 variant="standard"
-                required
               />
             )}
           />

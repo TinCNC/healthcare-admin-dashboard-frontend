@@ -5,10 +5,25 @@ import {
   Autocomplete,
   useAutocomplete,
   Create,
+  Input,
+  Typography,
+  Stack,
+  Button,
 } from "@pankod/refine-mui";
 import { useForm, Controller } from "@pankod/refine-react-hook-form";
 
 import { IPatient, IClinic } from "interfaces";
+
+import { FileUpload } from "@mui/icons-material";
+import { LoadingButton } from "@mui/lab";
+import { BaseSyntheticEvent, useState } from "react";
+
+import {
+  uploadPatientAvatar,
+  getPublicImageUrl,
+  // getSignedImageUrl,
+  // downloadImage,
+} from "api";
 
 export const PatientCreate: React.FC = () => {
   const {
@@ -16,8 +31,111 @@ export const PatientCreate: React.FC = () => {
     saveButtonProps,
     register,
     control,
+    watch,
+    getValues,
+    setValue,
     formState: { errors },
   } = useForm<IPatient, HttpError, IPatient & { clinic: IClinic }>();
+
+  // const imageInput = watch("image");
+
+  const [imagePreview, setImagePreview] = useState<string>("");
+
+  const [imageFile, setImageFile] = useState<File>();
+
+  const [creatingPatient, setCreatingPatient] = useState<boolean>(false);
+
+  const handleSubmit = async (e: BaseSyntheticEvent<object, any, any>) => {
+    // console.log(saveButtonProps);
+
+    // console.log(watch("username"));
+    // console.log(getValues());
+    // setValue("image", "fegsegsegse");
+    // console.log(imageFile);
+
+    try {
+      if (imageFile !== undefined) {
+        setCreatingPatient(true);
+        const uploaded = await uploadPatientAvatar(
+          getValues("username"),
+          imageFile
+        );
+
+        if (uploaded !== undefined) {
+          const imageUrl = await getPublicImageUrl(
+            "profile-image",
+            uploaded?.Key
+          );
+          if (imageUrl !== undefined) setValue("image", imageUrl?.publicURL);
+        }
+
+        // if (uploaded !== undefined) {
+        //   const imageUrl = await getSignedImageUrl(
+        //     "profile-image",
+        //     uploaded?.Key
+        //   );
+        //   if (imageUrl !== undefined) setValue("image", imageUrl?.signedURL);
+        // }
+      }
+      saveButtonProps.onClick(e);
+      // throw new Error("Function not implemented.");
+    } catch (error) {
+      setCreatingPatient(false);
+    }
+  };
+
+  const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      // setIsUploadLoading(true);
+
+      // const formData = new FormData();
+
+      const target = event.target;
+      const file: File = (target.files as FileList)[0];
+
+      setImageFile(file);
+
+      console.log(imageFile);
+
+      // console.log(URL.createObjectURL(file));
+
+      setImagePreview(URL.createObjectURL(file));
+
+      // console.log(saveButtonProps);
+
+      // formData.append("file", file);
+
+      // const res = await axios.post<{ url: string }>(
+      //     `${apiUrl}/media/upload`,
+      //     formData,
+      //     {
+      //         withCredentials: false,
+      //         headers: {
+      //             "Access-Control-Allow-Origin": "*",
+      //         },
+      //     },
+      // );
+
+      // const { name, size, type, lastModified } = file;
+
+      // const imagePaylod = [
+      //     {
+      //         name,
+      //         size,
+      //         type,
+      //         lastModified,
+      //         url: res.data.url,
+      //     },
+      // ];
+
+      // setValue("images", imagePaylod, { shouldValidate: true });
+
+      // setIsUploadLoading(false);
+    } catch (error) {
+      // setError("images", { message: "Upload failed. Please try again." });
+      // setIsUploadLoading(false);
+    }
+  };
 
   const { autocompleteProps } = useAutocomplete<IClinic>({
     resource: "clinics",
@@ -31,7 +149,15 @@ export const PatientCreate: React.FC = () => {
   });
 
   return (
-    <Create isLoading={formLoading} saveButtonProps={saveButtonProps}>
+    <Create
+      isLoading={formLoading}
+      saveButtonProps={{
+        disabled: creatingPatient,
+        onClick: (e: BaseSyntheticEvent<object, any, any>) => {
+          handleSubmit(e);
+        },
+      }}
+    >
       <Box
         component="form"
         sx={{ display: "flex", flexDirection: "column" }}
@@ -127,6 +253,68 @@ export const PatientCreate: React.FC = () => {
             />
           )}
         />
+        <Stack
+          direction="row"
+          gap={4}
+          flexWrap="wrap"
+          sx={{ marginTop: "16px" }}
+        >
+          <label htmlFor="images-input">
+            <Input
+              id="images-input"
+              type="file"
+              sx={{ display: "none" }}
+              onChange={onChangeHandler}
+              // onChange={(event) => {
+              //   console.log(event.target);
+              // }}
+            />
+            <input
+              id="file"
+              {...register("image", {
+                required: "This field is required",
+              })}
+              type="hidden"
+            />
+            <LoadingButton
+              // loading={isUploadLoading}
+              loadingPosition="end"
+              endIcon={<FileUpload />}
+              variant="contained"
+              component="span"
+            >
+              Upload
+            </LoadingButton>
+            <br />
+            {/* {errors.image && (
+                            <Typography variant="caption" color="#fa541c">
+                                {errors.image?.message}
+                            </Typography>
+                        )} */}
+          </label>
+          {/* {imageInput && (
+                        <Box
+                            component="img"
+                            sx={{
+                                maxWidth: 250,
+                                maxHeight: 250,
+                            }}
+                            src={imageInput[0].url}
+                            alt="Post image"
+                        />
+                    )} */}
+          {imagePreview !== undefined && imagePreview !== "" && (
+            <Box
+              component="img"
+              sx={{
+                maxWidth: 300,
+                maxHeight: 300,
+              }}
+              src={imagePreview}
+              alt="Post image"
+            />
+          )}
+        </Stack>
       </Box>
     </Create>
   );
