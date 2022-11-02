@@ -4,8 +4,9 @@ import {
   CardActions,
   CardContent,
   CardMedia,
-  Button,
   ShowButton,
+  EditButton,
+  DeleteButton,
   Typography,
 } from "@pankod/refine-mui";
 import { IDoctor } from "interfaces";
@@ -22,7 +23,6 @@ export const TrainerCard: React.FC<DataProps> = ({ data }) => {
       <CardMedia
         component="img"
         height="240"
-        // image="https://www.dropbox.com/s/a36t7juz7rl0sqm/binhthanhmai-1665188876521.jpg?raw=1"
         image={data?.image}
         alt="avatar"
       />
@@ -37,7 +37,8 @@ export const TrainerCard: React.FC<DataProps> = ({ data }) => {
       <CardActions>
         {/* <Button size="small">View Details</Button> */}
         <ShowButton size="small" recordItemId={data?.id} />
-        {/* <Button size="small">Learn More</Button> */}
+        <EditButton size="small" recordItemId={data?.id} />
+        <DeleteButton size="small" recordItemId={data?.id} />
       </CardActions>
     </Card>
   );

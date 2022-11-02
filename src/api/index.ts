@@ -1,14 +1,31 @@
 import { supabaseClient } from "utility";
 
-export const uploadPatientAvatar = async (
-  username: string,
-  avatarFile: File
+// export const uploadPatientAvatar = async (
+//   username: string,
+//   avatarFile: File
+// ) => {
+//   const { data, error } = await supabaseClient.storage
+//     .from("profile-image")
+//     .upload(`patients/${username}/${avatarFile.name}`, avatarFile, {
+//       cacheControl: "3600",
+//       upsert: true,
+//     });
+
+//   if (error) return Promise.reject(error);
+
+//   if (data) return Promise.resolve(data);
+// };
+
+export const uploadImage = async (
+  imageFile: File,
+  bucket: string,
+  folderPath: string
 ) => {
   const { data, error } = await supabaseClient.storage
-    .from("profile-image")
-    .upload(`patients/${username}/${avatarFile.name}`, avatarFile, {
+    .from(bucket)
+    .upload(folderPath + imageFile.name, imageFile, {
       cacheControl: "3600",
-      upsert: false,
+      upsert: true,
     });
 
   if (error) return Promise.reject(error);

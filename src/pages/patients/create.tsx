@@ -1,4 +1,4 @@
-import { HttpError } from "@pankod/refine-core";
+import { HttpError, useTranslate } from "@pankod/refine-core";
 import {
   Box,
   TextField,
@@ -6,9 +6,9 @@ import {
   useAutocomplete,
   Create,
   Input,
-  Typography,
+  // Typography,
   Stack,
-  Button,
+  // Button,
 } from "@pankod/refine-mui";
 import { useForm, Controller } from "@pankod/refine-react-hook-form";
 
@@ -19,19 +19,20 @@ import { LoadingButton } from "@mui/lab";
 import { BaseSyntheticEvent, useState } from "react";
 
 import {
-  uploadPatientAvatar,
+  uploadImage,
   getPublicImageUrl,
   // getSignedImageUrl,
   // downloadImage,
 } from "api";
 
 export const PatientCreate: React.FC = () => {
+  const t = useTranslate();
   const {
     refineCore: { formLoading },
     saveButtonProps,
     register,
     control,
-    watch,
+    // watch,
     getValues,
     setValue,
     formState: { errors },
@@ -56,19 +57,18 @@ export const PatientCreate: React.FC = () => {
     try {
       if (imageFile !== undefined) {
         setCreatingPatient(true);
-        const uploaded = await uploadPatientAvatar(
-          getValues("username"),
-          imageFile
+        const uploaded = await uploadImage(
+          imageFile,
+          "profile-image",
+          `patients/${getValues("username")}/`
         );
-
         if (uploaded !== undefined) {
           const imageUrl = await getPublicImageUrl(
             "profile-image",
-            uploaded?.Key
+            uploaded?.Key.substring(uploaded?.Key.indexOf("/") + 1)
           );
           if (imageUrl !== undefined) setValue("image", imageUrl?.publicURL);
         }
-
         // if (uploaded !== undefined) {
         //   const imageUrl = await getSignedImageUrl(
         //     "profile-image",
@@ -77,6 +77,8 @@ export const PatientCreate: React.FC = () => {
         //   if (imageUrl !== undefined) setValue("image", imageUrl?.signedURL);
         // }
       }
+
+      setCreatingPatient(true);
       saveButtonProps.onClick(e);
       // throw new Error("Function not implemented.");
     } catch (error) {
@@ -171,7 +173,7 @@ export const PatientCreate: React.FC = () => {
           required
           fullWidth
           id="username"
-          label="Username"
+          label={t("patients.fields.username")}
           name="username"
           autoFocus
         />
@@ -183,7 +185,7 @@ export const PatientCreate: React.FC = () => {
           required
           fullWidth
           id="first_name"
-          label="First Name"
+          label={t("patients.fields.firstName")}
           name="first_name"
         />
         <TextField
@@ -194,7 +196,7 @@ export const PatientCreate: React.FC = () => {
           required
           fullWidth
           id="last_name"
-          label="Last Name"
+          label={t("patients.fields.lastName")}
           name="last_name"
         />
         {/* <Controller
@@ -242,7 +244,7 @@ export const PatientCreate: React.FC = () => {
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label="Clinic"
+                  label={t("patients.fields.clinic")}
                   margin="normal"
                   variant="outlined"
                   error={!!errors.clinic}

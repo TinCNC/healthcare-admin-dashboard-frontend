@@ -179,6 +179,7 @@
       "scientific_name": "Scientific Name",
       "classification": "Classification",
       "body_part": "Body Part",
+      "body_parts": "Body Parts",
       "severity": "Severity",
       "createdAt": "Created At"
     },

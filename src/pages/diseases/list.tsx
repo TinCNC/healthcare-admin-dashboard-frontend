@@ -6,6 +6,7 @@ import {
   GridColumns,
   List,
   Stack,
+  ShowButton,
   EditButton,
   DeleteButton,
 } from "@pankod/refine-mui";
@@ -75,6 +76,7 @@ export const DiseaseList: React.FC = () => {
       renderCell: ({ row }) => {
         return (
           <Stack direction="row" spacing={1}>
+            <ShowButton size="small" hideText recordItemId={row.id} />
             <EditButton size="small" hideText recordItemId={row.id} />
             <DeleteButton size="small" hideText recordItemId={row.id} />
           </Stack>

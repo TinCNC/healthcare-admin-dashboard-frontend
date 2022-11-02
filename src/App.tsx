@@ -21,18 +21,22 @@ import { Title, Sider, Layout, Header } from "components/layout";
 import { OffLayoutArea } from "components/offLayoutArea";
 import authProvider from "./authProvider";
 
-import { PatientList, PatientCreate } from "pages/patients";
+import { PatientList, PatientCreate, PatientEdit } from "pages/patients";
 import { CategoriesList } from "pages/categories";
 
 import { DoctorList, DoctorShow } from "pages/doctors";
 
-import { DiseaseList } from "pages/diseases";
+import { DiseaseList, DiseaseShow } from "pages/diseases";
 
-import { ClinicList, ClinicCreate } from "pages/clinics";
+import { ClinicList, ClinicCreate, ClinicEdit } from "pages/clinics";
 
 import { DepartmentList } from "pages/departments";
 
-import { OrganizationList, OrganizationCreate } from "pages/organizations";
+import {
+  OrganizationList,
+  OrganizationCreate,
+  OrganizationEdit,
+} from "pages/organizations";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -110,12 +114,13 @@ function App() {
                 name: "organizations",
                 list: OrganizationList,
                 create: OrganizationCreate,
-                // edit: PostEdit,
+                edit: OrganizationEdit,
                 icon: <FontAwesomeIcon icon={solid("building")} />,
               },
               {
                 name: "diseases",
                 list: DiseaseList,
+                show: DiseaseShow,
                 // create: PostCreate,
                 // edit: PostEdit,
                 icon: <FontAwesomeIcon icon={solid("disease")} />,
@@ -124,7 +129,7 @@ function App() {
                 name: "clinics",
                 list: ClinicList,
                 create: ClinicCreate,
-                // edit: PostEdit,
+                edit: ClinicEdit,
                 icon: <FontAwesomeIcon icon={solid("hospital")} />,
               },
               {
@@ -139,8 +144,7 @@ function App() {
                 name: "patients",
                 list: PatientList,
                 create: PatientCreate,
-                // create: PostCreate,
-                // edit: PostEdit,
+                edit: PatientEdit,
                 icon: <FontAwesomeIcon icon={solid("hospital-user")} />,
               },
               {
