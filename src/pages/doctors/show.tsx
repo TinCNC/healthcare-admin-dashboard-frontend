@@ -15,6 +15,7 @@ import {
   Typography,
   TagField,
   Avatar,
+  Button,
   ListItem,
   ListItemIcon,
   ListItemText,
@@ -29,7 +30,7 @@ import {
   List,
 } from "@pankod/refine-mui";
 
-import { FitnessCenter, CardMembership } from "@mui/icons-material";
+import { Add, CardMembership } from "@mui/icons-material";
 
 import {
   // ITrainer,
@@ -41,7 +42,9 @@ import {
   IDepartment,
   IProfessionalCertificates,
   ITechnician,
+  IOrganization,
 } from "interfaces";
+import { EditCertificateDialog } from "./components/EditCertificate";
 
 // import { ProductCard } from "../../components/product-card";
 
@@ -64,8 +67,8 @@ export const DoctorShow: React.FC = () => {
 
   const creatorIds = dataGridProps.rows.map((item) => item.creator);
   const { data: creatorsData, isLoading: creatorsLoading } =
-    useMany<ITechnician>({
-      resource: "technicians",
+    useMany<IOrganization>({
+      resource: "organizations",
       ids: creatorIds,
       queryOptions: {
         enabled: creatorIds.length > 0,
@@ -150,7 +153,7 @@ export const DoctorShow: React.FC = () => {
           const creator = creatorsData?.data.find(
             (item) => item.id === row.creator
           );
-          return creator?.first_name + " " + creator?.last_name;
+          return creator?.name;
         },
       },
       {
@@ -355,6 +358,14 @@ export const DoctorShow: React.FC = () => {
               <CardMembership sx={{ verticalAlign: "middle" }} />{" "}
               {t("professional_certificates.titles.list")}
             </React.Fragment>
+          }
+          // canCreate={true}
+          headerButtons={
+            // <Button variant="contained">
+            //   <Add />
+            //   &nbsp;Create Certificate
+            // </Button>
+            <EditCertificateDialog />
           }
           breadcrumb={false}
         >
