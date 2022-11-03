@@ -357,6 +357,7 @@ export const DoctorShow: React.FC = () => {
             <React.Fragment>
               <CardMembership sx={{ verticalAlign: "middle" }} />{" "}
               {t("professional_certificates.titles.list")}
+              {/* {record?.id} */}
             </React.Fragment>
           }
           // canCreate={true}
@@ -365,7 +366,7 @@ export const DoctorShow: React.FC = () => {
             //   <Add />
             //   &nbsp;Create Certificate
             // </Button>
-            <EditCertificateDialog />
+            <EditCertificateDialog holder={record?.id} />
           }
           breadcrumb={false}
         >
