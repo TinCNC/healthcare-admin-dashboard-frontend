@@ -239,7 +239,8 @@
       "edit": "Edit Doctor",
       "list": "Doctors",
       "show": "Show Doctor"
-    }
+    },
+    "loading": "Loading Doctors"
   },
   "professional_certificates": {
     "professional_certificates": "Professional Certificates",
