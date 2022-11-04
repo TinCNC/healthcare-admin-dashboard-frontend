@@ -2,7 +2,6 @@
 import React from "react";
 
 import {
-  Button,
   TextField,
   Dialog,
   DialogActions,
@@ -12,7 +11,6 @@ import {
   TextFieldProps,
   useAutocomplete,
   Autocomplete,
-  //   SaveButton,
 } from "@pankod/refine-mui";
 
 import dayjs, { Dayjs } from "dayjs";
@@ -22,61 +20,53 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import { LoadingButton } from "@mui/lab";
 
+import { IOrganization, ITechnician } from "interfaces";
+import { AddCircleOutlineOutlined, CancelOutlined } from "@mui/icons-material";
+
 import {
-  IOrganization,
-  IProfessionalCertificates,
-  ITechnician,
-} from "interfaces";
-import {
-  AddCircleOutlineOutlined,
-  AddBoxOutlined,
-  CancelOutlined,
-} from "@mui/icons-material";
+  Controller,
+  UseModalFormReturnType,
+} from "@pankod/refine-react-hook-form";
+import { useTranslate } from "@pankod/refine-core";
 
-import { Controller, useForm } from "@pankod/refine-react-hook-form";
-import { HttpError, useTranslate, useModal } from "@pankod/refine-core";
-// import { DatePicker } from "@mui/lab";
-
-export type DataProps = {
-  data?: IProfessionalCertificates;
-  holder?: number;
-};
-
-export const EditCertificateDialog: React.FC<DataProps> = ({
-  data,
-  holder,
+export const CertificateEditorDialog: React.FC<UseModalFormReturnType> = ({
+  register,
+  control,
+  formState: { errors },
+  refineCore: { onFinish, formLoading },
+  handleSubmit,
+  getValues,
+  setValue,
+  modal: { visible, close },
+  saveButtonProps,
 }) => {
-  const { visible, show, close } = useModal();
-  const {
-    refineCore: { onFinish, formLoading },
-    saveButtonProps,
-    register,
-    control,
-    handleSubmit,
-    getValues,
-    formState: { errors },
-  } = useForm<
-    IProfessionalCertificates,
-    HttpError,
-    IProfessionalCertificates & {
-      creator: IOrganization;
-      validator: ITechnician;
-    }
-  >({
-    refineCoreProps: {
-      action: "create",
-      resource: "professional_certificates",
-      redirect: false,
-      //   onMutationSuccess: {
+  // const {
+  //   refineCore: { onFinish, formLoading },
+  //   saveButtonProps,
+  //   register,
+  //   control,
+  //   handleSubmit,
+  //   getValues,
+  //   formState: { errors },
+  // } = useForm<
+  //   IProfessionalCertificates,
+  //   HttpError,
+  //   IProfessionalCertificates & {
+  //     creator: IOrganization;
+  //     validator: ITechnician;
+  //   }
+  // >({
+  //   refineCoreProps: {
+  //     action: "create",
+  //     resource: "professional_certificates",
+  //     redirect: false,
+  //     //   onMutationSuccess: {
 
-      //   }
-      // You can define all properties provided by refine useForm
-    },
-  });
+  //     //   }
+  //     // You can define all properties provided by refine useForm
+  //   },
+  // });
   const t = useTranslate();
-
-  //   const [processing, setProcessing] = useState(false);
-  //   const [open, setOpen] = React.useState(false);
 
   const { autocompleteProps: autocompleteCreatorProps } =
     useAutocomplete<IOrganization>({
@@ -106,37 +96,13 @@ export const EditCertificateDialog: React.FC<DataProps> = ({
 
   const [expiredAt, setExpiredAt] = React.useState<Dayjs | null>(dayjs());
 
-  //   const handleClickOpen = () => {
-  //     setOpen(true);
-  //   };
-
-  //   const handleClose = () => {
-  //     setOpen(false);
-  //   };
-
   const submitButtonClick = (e: React.BaseSyntheticEvent<object, any, any>) => {
-    // setProcessing(true);
     console.log(getValues());
-    // handleSubmit(onFinish);
     saveButtonProps.onClick(e);
-    // close();
-    // setProcessing(false);
   };
-
-  //   console.log(holder)
 
   return (
     <div>
-      {/* <Button variant="outlined" onClick={handleClickOpen}>
-        Open form dialog
-      </Button> */}
-      <Button variant="contained" onClick={show}>
-        <AddBoxOutlined
-          fontSize="small"
-          sx={{ marginLeft: "-4px", marginRight: "8px" }}
-        />
-        {t("professional_certificates.titles.create")}
-      </Button>
       <Dialog open={visible} onClose={close}>
         <DialogTitle>
           {t("professional_certificates.titles.create")}
@@ -151,7 +117,7 @@ export const EditCertificateDialog: React.FC<DataProps> = ({
               <TextField
                 {...register("name", { required: "Name is required" })}
                 error={!!errors?.name}
-                helperText={errors.name?.message}
+                helperText={errors.name?.message as string}
                 autoFocus
                 margin="dense"
                 id="name"
@@ -183,16 +149,20 @@ export const EditCertificateDialog: React.FC<DataProps> = ({
                 views={["year", "month", "day"]}
                 value={issuedDate}
                 onChange={(newValue) => {
+                  setValue("issued_date", newValue?.toDate().toDateString());
                   setIssuedDate(newValue);
                 }}
                 renderInput={(
                   params: JSX.IntrinsicAttributes & TextFieldProps
                 ) => (
                   <TextField
+                    required
+                    error={!!errors?.issued_date}
+                    helperText={errors.issued_date?.message as string}
                     fullWidth
                     variant="standard"
                     margin="dense"
-                    name="issued_date"
+                    // name="issued_date"
                     {...params}
                   />
                 )}
@@ -202,21 +172,31 @@ export const EditCertificateDialog: React.FC<DataProps> = ({
                   required: "Expired At is required",
                 })}
                 // id="expired_at"
+                // error={!!errors?.expired_at}
+                // helperText={errors.expired_at?.message as string}
+                disablePast
                 label="Expired At"
                 openTo="day"
                 views={["year", "month", "day"]}
                 value={expiredAt}
                 onChange={(newValue) => {
+                  setValue(
+                    "expired_at",
+                    newValue?.toDate().toLocaleDateString()
+                  );
                   setExpiredAt(newValue);
                 }}
                 renderInput={(
                   params: JSX.IntrinsicAttributes & TextFieldProps
                 ) => (
                   <TextField
+                    required
+                    error={!!errors?.expired_at}
+                    helperText={errors.expired_at?.message as string}
                     fullWidth
                     variant="standard"
                     margin="dense"
-                    name="expired_at"
+                    // name="expired_at"
                     {...params}
                   />
                 )}
@@ -245,7 +225,7 @@ export const EditCertificateDialog: React.FC<DataProps> = ({
                         margin="normal"
                         variant="standard"
                         error={!!errors.creator}
-                        helperText={errors.creator?.message}
+                        helperText={errors.creator?.message as string}
                         required
                       />
                     )}
@@ -282,7 +262,7 @@ export const EditCertificateDialog: React.FC<DataProps> = ({
                         margin="normal"
                         variant="standard"
                         error={!!errors.creator}
-                        helperText={errors.creator?.message}
+                        helperText={errors.creator?.message as string}
                         required
                       />
                     )}
@@ -296,7 +276,7 @@ export const EditCertificateDialog: React.FC<DataProps> = ({
                 hidden
                 id="holder"
                 name="holder"
-                value={holder}
+                // value={holder}
               />
               <TextField
                 {...register("program", {
@@ -304,7 +284,7 @@ export const EditCertificateDialog: React.FC<DataProps> = ({
                 })}
                 margin="dense"
                 error={!!errors?.program}
-                helperText={errors.program?.message}
+                helperText={errors.program?.message as string}
                 required
                 id="program"
                 label={t("professional_certificates.fields.program")}
@@ -318,7 +298,7 @@ export const EditCertificateDialog: React.FC<DataProps> = ({
                 })}
                 margin="dense"
                 error={!!errors?.level}
-                helperText={errors.level?.message}
+                helperText={errors.level?.message as string}
                 required
                 id="level"
                 label={t("professional_certificates.fields.level")}
@@ -346,13 +326,6 @@ export const EditCertificateDialog: React.FC<DataProps> = ({
           >
             Add Certificate
           </LoadingButton>
-          {/* <SaveButton
-            {...saveButtonProps}
-            variant="text"
-            startIcon={<AddCircleOutlineOutlined />}
-          >
-            Add Certificate
-          </SaveButton> */}
         </DialogActions>
       </Dialog>
     </div>

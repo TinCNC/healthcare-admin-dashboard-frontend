@@ -4,8 +4,11 @@ import {
   useShow,
   useTranslate,
   useMany,
-  useList,
+  // useList,
+  // HttpError,
 } from "@pankod/refine-core";
+
+import { useModalForm } from "@pankod/refine-react-hook-form";
 
 // import parse from "html-react-parser";
 
@@ -16,49 +19,76 @@ import {
   TagField,
   Avatar,
   Button,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  MuiList,
-  ImageList,
-  ImageListItem,
-  Grid,
-  Box,
+  // ListItem,
+  // ListItemIcon,
+  // ListItemText,
+  // MuiList,
+  // ImageList,
+  // ImageListItem,
+  // Grid,
+  // Box,
   GridColumns,
   DataGrid,
   useDataGrid,
   List,
+  EditButton,
+  DeleteButton,
 } from "@pankod/refine-mui";
 
-import { Add, CardMembership } from "@mui/icons-material";
+import { AddBoxOutlined, CardMembership } from "@mui/icons-material";
 
 import {
-  // ITrainer,
-  // ICertification,
-  // IService,
-  // IGallery,
-  // IProduct,
   IDoctor,
   IDepartment,
   IProfessionalCertificates,
   ITechnician,
   IOrganization,
 } from "interfaces";
-import { EditCertificateDialog } from "./components/EditCertificate";
-
-// import { ProductCard } from "../../components/product-card";
-
-// import { PostCard } from "../../components/post-card";
-
-// import { VideoDialog } from "../../components/video-dialog";
+import { CertificateEditorDialog } from "./components/CertificateEditor";
 
 export const DoctorShow: React.FC = () => {
   const t = useTranslate();
 
   const { queryResult } = useShow<IDoctor>();
 
+  const createModalFormReturnValues = useModalForm({
+    refineCoreProps: {
+      action: "create",
+      resource: "professional_certificates",
+      redirect: false,
+    },
+  });
+
+  const editModalFormReturnValues = useModalForm({
+    refineCoreProps: {
+      action: "edit",
+      resource: "professional_certificates",
+      redirect: false,
+    },
+  });
+
+  const {
+    setValue,
+    modal: {
+      show: showCreateModal,
+      // close: closeCreateModal,
+      // visible: createModalVisible,
+    },
+  } = createModalFormReturnValues;
+
+  const {
+    // setValue,
+    modal: {
+      show: showEditModal,
+      // close: closeCreateModal,
+      // visible: createModalVisible,
+    },
+  } = editModalFormReturnValues;
+
   const { data, isLoading } = queryResult;
   const record = data?.data;
+
+  setValue("holder", record?.id);
 
   const { dataGridProps } = useDataGrid<IProfessionalCertificates>({
     resource: "professional_certificates",
@@ -114,21 +144,21 @@ export const DoctorShow: React.FC = () => {
       {
         field: "issued_date",
         headerName: t("professional_certificates.fields.issued_date"),
-        minWidth: 200,
-        maxWidth: 200,
+        minWidth: 100,
+        maxWidth: 100,
         flex: 1,
         renderCell: ({ row }) => {
-          return new Date(row.created_at).toLocaleString();
+          return new Date(row.issued_date).toLocaleDateString();
         },
       },
       {
         field: "expired_at",
         headerName: t("professional_certificates.fields.expired_at"),
-        minWidth: 200,
-        maxWidth: 200,
+        minWidth: 100,
+        maxWidth: 100,
         flex: 1,
         renderCell: ({ row }) => {
-          return new Date(row.created_at).toLocaleString();
+          return new Date(row.expired_at).toLocaleDateString();
         },
       },
       // {
@@ -142,8 +172,8 @@ export const DoctorShow: React.FC = () => {
         field: "creator",
         headerName: t("professional_certificates.fields.creator"),
         // type: "number",
-        minWidth: 200,
-        maxWidth: 200,
+        minWidth: 220,
+        maxWidth: 220,
         flex: 1,
         renderCell: ({ row }) => {
           if (creatorsLoading) {
@@ -191,8 +221,8 @@ export const DoctorShow: React.FC = () => {
       {
         field: "program",
         headerName: t("professional_certificates.fields.program"),
-        minWidth: 200,
-        maxWidth: 200,
+        minWidth: 220,
+        maxWidth: 220,
         flex: 1,
       },
       {
@@ -212,24 +242,44 @@ export const DoctorShow: React.FC = () => {
           return new Date(row.created_at).toLocaleString();
         },
       },
-      // {
-      //   field: "actions",
-      //   type: "actions",
-      //   headerName: t("table.actions"),
-      //   renderCell: function render({ row }) {
-      //     return (
-      //       <Stack direction="row" spacing={1}>
-      //         <EditButton size="small" hideText recordItemId={row.id} />
-      //         <DeleteButton size="small" hideText recordItemId={row.id} />
-      //       </Stack>
-      //     );
-      //   },
-      //   align: "center",
-      //   headerAlign: "center",
-      //   minWidth: 80,
-      // },
+      {
+        field: "actions",
+        type: "actions",
+        headerName: t("table.actions"),
+        renderCell: function render({ row }) {
+          return (
+            <Stack direction="row" spacing={1}>
+              <EditButton
+                size="small"
+                hideText
+                onClick={() => {
+                  showEditModal(row.id);
+                }}
+                resourceNameOrRouteName="professional_certificates"
+                recordItemId={row.id}
+              />
+              <DeleteButton
+                size="small"
+                hideText
+                resourceNameOrRouteName="professional_certificates"
+                recordItemId={row.id}
+              />
+            </Stack>
+          );
+        },
+        align: "center",
+        headerAlign: "center",
+        minWidth: 80,
+      },
     ],
-    [t, creatorsData, creatorsLoading, validatorsData, validatorsLoading]
+    [
+      t,
+      creatorsLoading,
+      creatorsData?.data,
+      validatorsLoading,
+      validatorsData?.data,
+      showEditModal,
+    ]
   );
 
   //   const { data: categoryData } = useOne<ICategory>({
@@ -311,6 +361,8 @@ export const DoctorShow: React.FC = () => {
 
   return (
     <Show isLoading={isLoading}>
+      <CertificateEditorDialog {...createModalFormReturnValues} />
+      <CertificateEditorDialog {...editModalFormReturnValues} />
       <Stack
         direction={{ sm: "column", md: "row" }}
         spacing={{ xs: 1, sm: 2, md: 4 }}
@@ -341,7 +393,9 @@ export const DoctorShow: React.FC = () => {
             <Typography variant="body2">
               {departmentsData !== undefined &&
                 departmentsData.data.map((item) => {
-                  return <TagField value={item.name} />;
+                  return (
+                    <TagField sx={{ marginRight: "12px" }} value={item.name} />
+                  );
                 })}
             </Typography>
           </Typography>
@@ -357,16 +411,16 @@ export const DoctorShow: React.FC = () => {
             <React.Fragment>
               <CardMembership sx={{ verticalAlign: "middle" }} />{" "}
               {t("professional_certificates.titles.list")}
-              {/* {record?.id} */}
             </React.Fragment>
           }
-          // canCreate={true}
           headerButtons={
-            // <Button variant="contained">
-            //   <Add />
-            //   &nbsp;Create Certificate
-            // </Button>
-            <EditCertificateDialog holder={record?.id} />
+            <Button variant="contained" onClick={() => showCreateModal()}>
+              <AddBoxOutlined
+                fontSize="small"
+                sx={{ marginLeft: "-4px", marginRight: "8px" }}
+              />
+              {t("professional_certificates.titles.create")}
+            </Button>
           }
           breadcrumb={false}
         >

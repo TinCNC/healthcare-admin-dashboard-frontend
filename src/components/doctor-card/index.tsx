@@ -61,7 +61,6 @@ export const TrainerCard: React.FC<DataProps> = ({ data }) => {
         </Typography>
       </CardContent>
       <CardActions>
-        {/* <Button size="small">View Details</Button> */}
         <ShowButton size="small" recordItemId={data?.id} />
         <EditButton size="small" recordItemId={data?.id} />
         <DeleteButton size="small" recordItemId={data?.id} />
