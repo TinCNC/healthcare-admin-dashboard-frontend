@@ -179,6 +179,7 @@
       "scientific_name": "Scientific Name",
       "classification": "Classification",
       "body_part": "Body Part",
+      "body_parts": "Body Parts",
       "severity": "Severity",
       "createdAt": "Created At"
     },
@@ -204,6 +205,22 @@
       "show": "Show Patient"
     }
   },
+  "organizations": {
+    "organizations": "Organizations",
+    "fields": {
+      "id": "Id",
+      "name": "Name",
+      "type": "Type",
+      "address": "Address",
+      "createdAt": "Created At"
+    },
+    "titles": {
+      "create": "Create Organization",
+      "edit": "Edit Organization",
+      "list": "Organizations",
+      "show": "Show Organization"
+    }
+  },
   "doctors": {
     "doctors": "Doctors",
     "fields": {
@@ -222,7 +239,8 @@
       "edit": "Edit Doctor",
       "list": "Doctors",
       "show": "Show Doctor"
-    }
+    },
+    "loading": "Loading Doctors"
   },
   "professional_certificates": {
     "professional_certificates": "Professional Certificates",

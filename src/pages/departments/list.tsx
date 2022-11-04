@@ -81,7 +81,7 @@ export const DepartmentList: React.FC = () => {
     <List
       title={
         <React.Fragment>
-          <FontAwesomeIcon icon={solid("building")} />
+          <FontAwesomeIcon icon={solid("sitemap")} />
           &nbsp;{t("departments.titles.list")}
         </React.Fragment>
       }

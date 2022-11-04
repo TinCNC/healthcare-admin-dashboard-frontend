@@ -4,13 +4,13 @@ import {
   TextField,
   // Autocomplete,
   // useAutocomplete,
-  Create,
+  Edit,
 } from "@pankod/refine-mui";
 import { useForm, Controller } from "@pankod/refine-react-hook-form";
 
 import { IClinic } from "interfaces";
 
-export const ClinicCreate: React.FC = () => {
+export const ClinicEdit: React.FC = () => {
   const {
     refineCore: { formLoading },
     saveButtonProps,
@@ -31,7 +31,7 @@ export const ClinicCreate: React.FC = () => {
   // });
 
   return (
-    <Create isLoading={formLoading} saveButtonProps={saveButtonProps}>
+    <Edit isLoading={formLoading} saveButtonProps={saveButtonProps}>
       <Box
         component="form"
         sx={{ display: "flex", flexDirection: "column" }}
@@ -78,6 +78,6 @@ export const ClinicCreate: React.FC = () => {
           name="capacity"
         />
       </Box>
-    </Create>
+    </Edit>
   );
 };

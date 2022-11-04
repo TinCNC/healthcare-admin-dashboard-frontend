@@ -1,102 +1,64 @@
 import { supabaseClient } from "utility";
 
-// const authProvider: AuthProvider = {
-//   login: async ({ email, password, providerName }) => {
-//     const { user, error } = await supabaseClient.auth.signIn({
-//       email,
-//       password,
-//       provider: providerName,
+// export const uploadPatientAvatar = async (
+//   username: string,
+//   avatarFile: File
+// ) => {
+//   const { data, error } = await supabaseClient.storage
+//     .from("profile-image")
+//     .upload(`patients/${username}/${avatarFile.name}`, avatarFile, {
+//       cacheControl: "3600",
+//       upsert: true,
 //     });
 
-//     if (error) {
-//       return Promise.reject(error);
-//     }
+//   if (error) return Promise.reject(error);
 
-//     if (user) {
-//       return Promise.resolve();
-//     }
-
-//     // for third-party login
-//     return Promise.resolve(false);
-//   },
-//   register: async ({ email, password }) => {
-//     const { user, error } = await supabaseClient.auth.signUp({
-//       email,
-//       password,
-//     });
-
-//     if (error) {
-//       return Promise.reject(error);
-//     }
-
-//     if (user) {
-//       return Promise.resolve();
-//     }
-//   },
-//   forgotPassword: async ({ email }) => {
-//     const { data, error } = await supabaseClient.auth.api.resetPasswordForEmail(
-//       email,
-//       {
-//         redirectTo: `${window.location.origin}/update-password`,
-//       }
-//     );
-
-//     if (error) {
-//       return Promise.reject(error);
-//     }
-
-//     if (data) {
-//       return Promise.resolve();
-//     }
-//   },
-//   updatePassword: async ({ password }) => {
-//     const { data, error } = await supabaseClient.auth.update({ password });
-
-//     if (error) {
-//       return Promise.reject(error);
-//     }
-
-//     if (data) {
-//       return Promise.resolve("/");
-//     }
-//   },
-//   logout: async () => {
-//     const { error } = await supabaseClient.auth.signOut();
-
-//     if (error) {
-//       return Promise.reject(error);
-//     }
-
-//     return Promise.resolve("/");
-//   },
-//   checkError: () => Promise.resolve(),
-//   checkAuth: async () => {
-//     const session = supabaseClient.auth.session();
-//     const sessionFromURL = await supabaseClient.auth.getSessionFromUrl();
-
-//     if (session || sessionFromURL?.data?.user) {
-//       return Promise.resolve();
-//     }
-
-//     return Promise.reject();
-//   },
-//   getPermissions: async () => {
-//     const user = supabaseClient.auth.user();
-
-//     if (user) {
-//       return Promise.resolve(user.role);
-//     }
-//   },
-//   getUserIdentity: async () => {
-//     const user = supabaseClient.auth.user();
-
-//     if (user) {
-//       return Promise.resolve({
-//         ...user,
-//         name: user.email,
-//       });
-//     }
-//   },
+//   if (data) return Promise.resolve(data);
 // };
 
-// export default authProvider;
+export const uploadImage = async (
+  imageFile: File,
+  bucket: string,
+  folderPath: string
+) => {
+  const { data, error } = await supabaseClient.storage
+    .from(bucket)
+    .upload(folderPath + imageFile.name, imageFile, {
+      cacheControl: "3600",
+      upsert: true,
+    });
+
+  if (error) return Promise.reject(error);
+
+  if (data) return Promise.resolve(data);
+};
+
+export const getPublicImageUrl = async (bucket: string, path: string) => {
+  const { data, error } = supabaseClient.storage
+    .from(bucket)
+    .getPublicUrl(path);
+
+  if (error) return Promise.reject(error);
+
+  if (data) return Promise.resolve(data);
+};
+
+export const getSignedImageUrl = async (bucket: string, path: string) => {
+  const { data, error } = await supabaseClient.storage
+    .from(bucket)
+    .createSignedUrl(path, 60);
+
+  if (error) return Promise.reject(error);
+
+  if (data) return Promise.resolve(data);
+};
+
+export const downloadImage = async (bucket: string, path: string) => {
+  const { data, error } = await supabaseClient.storage
+    .from(bucket)
+    .download(path);
+
+  if (error) return Promise.reject(error);
+
+  if (data) return Promise.resolve(data);
+};

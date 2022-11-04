@@ -21,6 +21,14 @@ export interface IDepartment {
   created_at: string;
 }
 
+export interface IOrganization {
+  id: number;
+  name: string;
+  type: string;
+  address: string;
+  created_at: string;
+}
+
 export interface IPatient {
   id: number;
   username: string;
@@ -67,7 +75,9 @@ export interface IDisease {
   scientific_name: string;
   other_name: string;
   classification: string;
-  body_part: string;
+  description: string;
+  // body_part: string;
+  body_parts: string[];
   severity: string;
   created_at: string;
 }

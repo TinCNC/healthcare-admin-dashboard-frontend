@@ -1,104 +1,9 @@
-// import React from "react";
-// import { useTranslate, useMany } from "@pankod/refine-core";
-// import {
-//   useDataGrid,
-//   DataGrid,
-//   GridColumns,
-//   List,
-//   Stack,
-//   EditButton,
-//   DeleteButton,
-// } from "@pankod/refine-mui";
-
-// import { IDoctor } from "interfaces";
-
-// export const DoctorList: React.FC = () => {
-//   const t = useTranslate();
-
-//   const { dataGridProps } = useDataGrid<IDoctor>();
-
-//   // const categoryIds = dataGridProps.rows.map((item) => item.category.id);
-//   // const { data: categoriesData, isLoading } = useMany<ICategory>({
-//   //   resource: "categories",
-//   //   ids: categoryIds,
-//   //   queryOptions: {
-//   //     enabled: categoryIds.length > 0,
-//   //   },
-//   // });
-
-//   const columns: GridColumns<IDoctor> = [
-//     {
-//       field: "id",
-//       headerName: t("doctors.fields.id"),
-//       type: "number",
-//       width: 50,
-//     },
-//     {
-//       field: "username",
-//       headerName: t("doctors.fields.username"),
-//       minWidth: 200,
-//       flex: 1,
-//     },
-//     {
-//       field: "first_name",
-//       headerName: t("doctors.fields.firstName"),
-//       minWidth: 200,
-//       flex: 1,
-//     },
-//     {
-//       field: "last_name",
-//       headerName: t("doctors.fields.lastName"),
-//       minWidth: 200,
-//       flex: 1,
-//     },
-//     {
-//       field: "faculty",
-//       headerName: t("doctors.fields.faculty"),
-//       minWidth: 200,
-//       flex: 1,
-//     },
-//     {
-//       field: "created_at",
-//       headerName: t("doctors.fields.createdAt"),
-//       minWidth: 400,
-//       flex: 1,
-//     },
-//     {
-//       field: "updated_at",
-//       headerName: t("doctors.fields.updatedAt"),
-//       minWidth: 400,
-//       flex: 1,
-//     },
-//     {
-//       field: "actions",
-//       type: "actions",
-//       headerName: t("table.actions"),
-//       renderCell: function render({ row }) {
-//         return (
-//           <Stack direction="row" spacing={1}>
-//             <EditButton size="small" hideText recordItemId={row.id} />
-//             <DeleteButton size="small" hideText recordItemId={row.id} />
-//           </Stack>
-//         );
-//       },
-//       align: "center",
-//       headerAlign: "center",
-//       minWidth: 80,
-//     },
-//   ];
-
-//   return (
-//     <List>
-//       <DataGrid {...dataGridProps} columns={columns} autoHeight />
-//     </List>
-//   );
-// };
-
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
-  // useTranslate,
+  useTranslate,
   // useMany,
   useList,
+  GetListResponse,
 } from "@pankod/refine-core";
 import {
   // useDataGrid,
@@ -112,71 +17,247 @@ import {
   Grid,
   CircularProgress,
   Typography,
+  Divider,
+  FormControl,
+  IconButton,
+  InputBase,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  SelectChangeEvent,
+  Stack,
 } from "@pankod/refine-mui";
 
 import { IDoctor } from "interfaces";
 
 import { TrainerCard } from "../../components/doctor-card";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  solid,
+  regular,
+  brands,
+  icon,
+} from "@fortawesome/fontawesome-svg-core/import.macro"; // <-- import styles to be used
+import { Search } from "@mui/icons-material";
+
 export const DoctorList: React.FC = () => {
-  // const t = useTranslate();
+  const t = useTranslate();
+
+  const [isLoading, setIsLoading] = useState<Boolean>(false);
+
+  const [doctorListResponse, setDoctorListResponse] =
+    useState<GetListResponse<IDoctor>>();
+
+  const [userNameSearch, setUserNameSearch] = useState<string>("");
+
+  const [firstNameSearch, setFirstNameSearch] = useState<string>("");
+
+  const [lastNameSearch, setLastNameSearch] = useState<string>("");
 
   // const { dataGridProps } = useDataGrid<ITrainer>();
 
-  const trainerListQueryResult = useList<IDoctor>({
+  const { refetch: refetchDoctors } = useList<IDoctor>({
     resource: "doctors",
     config: {
-      pagination: { current: 1, pageSize: 10 },
+      filters: [
+        { field: "username", operator: "contains", value: userNameSearch },
+        { field: "first_name", operator: "contains", value: firstNameSearch },
+        { field: "last_name", operator: "contains", value: lastNameSearch },
+      ],
+      // pagination: { current: 1, pageSize: 10 },
+    },
+    queryOptions: {
+      enabled: false,
+      onSuccess: (data) => {
+        setIsLoading(false);
+        if (data.total > 0) {
+          setDoctorListResponse(data);
+        }
+      },
     },
   });
 
-  console.log(trainerListQueryResult);
+  useEffect(() => {
+    // console.log(selectServices);
+    setIsLoading(true);
+    setDoctorListResponse(undefined);
+    refetchDoctors();
+    // setTrainerListResponse(undefined);
+    // if (selectCountries !== undefined && selectCountries.length !== 0)
+    //   refetchTrainersWithCountries();
+    // // if (selectServices !== undefined && selectServices.length !== 0)
+    // //   refetchTrainersWithService();
+    // else refetchTrainers();
+  }, [
+    refetchDoctors,
+    // refetchTrainersWithCountries,
+    userNameSearch,
+    firstNameSearch,
+    lastNameSearch,
+    // selectServices,
+    // selectCountries,
+  ]);
 
-  console.log(trainerListQueryResult.data);
+  // console.log(trainerListQueryResult);
+
+  // console.log(trainerListQueryResult.data);
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      {trainerListQueryResult.isLoading ? (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            flexDirection: "column",
-            height: "calc(100vh - 112px)",
+    <Stack gap={1}>
+      <Paper
+        component="form"
+        sx={{
+          p: "2px 4px",
+          marginBottom: "10px",
+          display: "flex",
+          alignItems: "center",
+          // width: 960,
+        }}
+      >
+        <IconButton disabled type="button" sx={{ p: "10px" }} aria-label="menu">
+          <Search />
+        </IconButton>
+        <InputBase
+          sx={{ ml: 1, flex: 1 }}
+          placeholder="Search Username"
+          value={userNameSearch}
+          onChange={(
+            event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+          ) => {
+            setUserNameSearch(event.target.value);
           }}
-        >
-          <CircularProgress />
-          <Typography>Loading Doctors</Typography>
-        </Box>
-      ) : trainerListQueryResult.data !== undefined &&
-        trainerListQueryResult.data.total > 0 ? (
-        <Grid
-          container
-          spacing={{ xs: 2, md: 3 }}
-          columns={{ xs: 3, sm: 6, md: 9, lg: 12 }}
-        >
-          {trainerListQueryResult.data.data.map((row, index) => (
-            <Grid item xs={3} sm={3} md={3} lg={3} key={index}>
-              <TrainerCard data={row}></TrainerCard>
-            </Grid>
-          ))}
-        </Grid>
-      ) : (
-        <Box
+          inputProps={{ "aria-label": "search username" }}
+        />
+        <Divider
           sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "calc(100vh - 112px)",
+            color: "text.secondary",
+            borderColor: "text.secondary",
           }}
-        >
-          No Doctors Found
-        </Box>
-        // <Box sx={{ display: "flex", lineHeight: "calc(100vh - 112px)" }}>
-        //   No Doctors Found
-        // </Box>
-      )}
-    </Box>
+          orientation="vertical"
+          flexItem
+        />
+        <InputBase
+          sx={{ ml: 1, flex: 1 }}
+          placeholder="Search First Name"
+          value={firstNameSearch}
+          onChange={(
+            event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+          ) => {
+            setFirstNameSearch(event.target.value);
+          }}
+          inputProps={{ "aria-label": "search first name" }}
+        />
+        <Divider
+          sx={{
+            color: "text.secondary",
+            borderColor: "text.secondary",
+          }}
+          orientation="vertical"
+          flexItem
+        />
+        <InputBase
+          sx={{ ml: 1, flex: 1 }}
+          placeholder="Search Last Name"
+          value={lastNameSearch}
+          onChange={(
+            event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+          ) => {
+            setLastNameSearch(event.target.value);
+          }}
+          inputProps={{ "aria-label": "search last name" }}
+        />
+        <Divider
+          sx={{
+            color: "text.secondary",
+            borderColor: "text.secondary",
+          }}
+          orientation="vertical"
+          flexItem
+        />
+
+        {/* <IconButton color="primary" sx={{ p: '10px' }} aria-label="directions">
+        <DirectionsIcon />
+      </IconButton> */}
+        {/* <FormControl sx={{ minWidth: 320 }}>
+          <InputLabel>Select Clinics</InputLabel>
+          <Select
+            sx={{ ml: 1, flex: 1 }}
+            multiple
+            variant="standard"
+            value={selectClinics}
+            onChange={(
+              event: SelectChangeEvent<number[]>,
+              child: React.ReactNode
+            ) => {
+              setSelectClinics(event.target.value as number[]);
+            }}
+            // onChange={(
+            //   event: SelectChangeEvent<number>,
+            //   child: React.ReactNode
+            // ) => {
+            //   setSelectServices(event.target.value);
+            // }}
+            // label="Select Author"
+          >
+            {clinicsListQueryResult.data !== undefined &&
+              clinicsListQueryResult.data.total > 0 &&
+              clinicsListQueryResult.data.data.map((row, index) => (
+                <MenuItem key={row.id} value={row.id}>
+                  {row.name}
+                </MenuItem>
+              ))}
+          </Select>
+        </FormControl> */}
+      </Paper>
+      <List
+        title={
+          <React.Fragment>
+            <FontAwesomeIcon icon={solid("user-doctor")} />
+            &nbsp;{t("doctors.titles.list")}
+          </React.Fragment>
+        }
+        wrapperProps={{ sx: { minHeight: "calc(100vh - 230px)" } }}
+      >
+        {isLoading ? (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+              height: "calc(100vh - (340px))",
+            }}
+          >
+            <CircularProgress />
+            <Typography>{t("doctors.loading")}</Typography>
+          </Box>
+        ) : doctorListResponse !== undefined && doctorListResponse.total > 0 ? (
+          <Grid
+            container
+            spacing={{ xs: 2, md: 3 }}
+            columns={{ xs: 3, sm: 6, md: 9, lg: 12 }}
+          >
+            {doctorListResponse.data.map((row, index) => (
+              <Grid item xs={3} sm={3} md={3} lg={3} key={index}>
+                <TrainerCard data={row}></TrainerCard>
+              </Grid>
+            ))}
+          </Grid>
+        ) : (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "calc(100vh - 112px)",
+            }}
+          >
+            No Doctors Found
+          </Box>
+        )}
+      </List>
+    </Stack>
   );
 };
