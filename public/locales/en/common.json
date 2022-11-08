@@ -190,6 +190,23 @@
       "show": "Disease Information"
     }
   },
+  "diseases_groups": {
+    "diseases_groups": "Diseases Groups",
+    "fields": {
+      "id": "ID",
+      "group_name": "Group Name",
+      "icd10_code": "ICD10 Code",
+      "vn_code": "VN Code",
+      "statistics": "Statistics",
+      "createdAt": "Created At"
+    },
+    "titles": {
+      "create": "Create Diseases Group",
+      "edit": "Edit Diseases Group",
+      "list": "Diseases Groups",
+      "show": "Diseases Group Information"
+    }
+  },
   "departments": {
     "departments": "Departments",
     "fields": {

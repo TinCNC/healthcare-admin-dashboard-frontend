@@ -28,6 +28,8 @@ import { DoctorList, DoctorShow } from "pages/doctors";
 
 import { DiseaseList, DiseaseShow } from "pages/diseases";
 
+import { DiseaseGroupList, DiseaseGroupShow } from "pages/diseases_groups";
+
 import { ClinicList, ClinicCreate, ClinicEdit } from "pages/clinics";
 
 import { DepartmentList } from "pages/departments";
@@ -124,6 +126,14 @@ function App() {
                 // create: PostCreate,
                 // edit: PostEdit,
                 icon: <FontAwesomeIcon icon={solid("disease")} />,
+              },
+              {
+                name: "diseases_groups",
+                list: DiseaseGroupList,
+                show: DiseaseGroupShow,
+                // create: PostCreate,
+                // edit: PostEdit,
+                icon: <FontAwesomeIcon icon={solid("viruses")} />,
               },
               {
                 name: "clinics",

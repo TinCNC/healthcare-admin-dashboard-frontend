@@ -69,6 +69,15 @@ export interface IClinic {
   created_at: string;
 }
 
+export interface IDiseasesGroup {
+  id: number;
+  group_name: string;
+  icd10_code: string;
+  vn_code: string;
+  statistics: json;
+  created_at: string;
+}
+
 export interface IDisease {
   id: number;
   name: string;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useTranslate, useList, CrudFilters } from "@pankod/refine-core";
+import { useTranslate, CrudFilters } from "@pankod/refine-core";
 import {
   useDataGrid,
   DataGrid,
@@ -13,11 +13,7 @@ import {
   FormControl,
   IconButton,
   InputBase,
-  InputLabel,
-  MenuItem,
   Paper,
-  Select,
-  SelectChangeEvent,
   Autocomplete,
   TextField,
 } from "@pankod/refine-mui";
@@ -32,7 +28,6 @@ import {
   icon,
 } from "@fortawesome/fontawesome-svg-core/import.macro"; // <-- import styles to be used
 import { Search } from "@mui/icons-material";
-import { Controller } from "@pankod/refine-react-hook-form";
 
 export const OrganizationList: React.FC = () => {
   const t = useTranslate();

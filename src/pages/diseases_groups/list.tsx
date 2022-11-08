@@ -18,9 +18,10 @@ import {
   TextField,
 } from "@pankod/refine-mui";
 
-import { IDisease } from "interfaces";
+import { IDiseasesGroup } from "interfaces";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import {
   solid,
   regular,
@@ -29,16 +30,20 @@ import {
 } from "@fortawesome/fontawesome-svg-core/import.macro"; // <-- import styles to be used
 import { Search } from "@mui/icons-material";
 
-export const DiseaseList: React.FC = () => {
+export const DiseaseGroupList: React.FC = () => {
   const t = useTranslate();
 
-  const { dataGridProps, setFilters } = useDataGrid<IDisease>();
+  const { dataGridProps, setFilters } = useDataGrid<IDiseasesGroup>();
 
   const [nameSearch, setNameSearch] = useState<string>("");
 
-  const [classificationSearch, setClassificationSearch] = useState<string>("");
+  const [icd10CodeSearch, setIcd10CodeSearch] = useState<string>("");
 
-  const [severitySearch, setSeveritySearch] = useState<string>("");
+  const [vnCodeSearch, setVnCodeSearch] = useState<string>("");
+
+  // const [classificationSearch, setClassificationSearch] = useState<string>("");
+
+  // const [severitySearch, setSeveritySearch] = useState<string>("");
 
   // const categoryIds = dataGridProps.rows.map((item) => item.category.id);
   // const { data: categoriesData, isLoading } = useMany<ICategory>({
@@ -53,14 +58,19 @@ export const DiseaseList: React.FC = () => {
     // console.log(selectClinics);
     const filter: CrudFilters = [
       {
-        field: "name",
+        field: "group_name",
         operator: "contains",
         value: nameSearch,
       },
       {
-        field: "classification",
+        field: "icd10_code",
         operator: "contains",
-        value: classificationSearch,
+        value: icd10CodeSearch,
+      },
+      {
+        field: "vn_code",
+        operator: "contains",
+        value: vnCodeSearch,
       },
       // {
       //   field: "type",
@@ -68,45 +78,45 @@ export const DiseaseList: React.FC = () => {
       //   value: typeSearch,
       // },
     ];
-    if (severitySearch !== undefined && severitySearch.length !== 0) {
-      filter.push({
-        field: "severity",
-        operator: "eq",
-        value: severitySearch,
-      });
-    }
+    // if (severitySearch !== undefined && severitySearch.length !== 0) {
+    //   filter.push({
+    //     field: "severity",
+    //     operator: "eq",
+    //     value: severitySearch,
+    //   });
+    // }
     setFilters(filter);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [nameSearch, classificationSearch, severitySearch]);
+  }, [nameSearch, icd10CodeSearch, vnCodeSearch]);
 
-  const columns: GridColumns<IDisease> = [
+  const columns: GridColumns<IDiseasesGroup> = [
     {
       field: "id",
-      headerName: t("diseases.fields.id"),
+      headerName: t("diseases_groups.fields.id"),
       type: "number",
       width: 50,
     },
     {
-      field: "name",
-      headerName: t("diseases.fields.name"),
+      field: "group_name",
+      headerName: t("diseases_groups.fields.group_name"),
       minWidth: 200,
       flex: 1,
     },
     {
-      field: "classification",
-      headerName: t("diseases.fields.classification"),
+      field: "icd10_code",
+      headerName: t("diseases_groups.fields.icd10_code"),
       minWidth: 200,
       flex: 1,
     },
     {
-      field: "severity",
-      headerName: t("diseases.fields.severity"),
+      field: "vn_code",
+      headerName: t("diseases_groups.fields.vn_code"),
       minWidth: 200,
       flex: 1,
     },
     {
       field: "createdAt",
-      headerName: t("clinics.fields.createdAt"),
+      headerName: t("diseases_groups.fields.createdAt"),
       minWidth: 400,
       flex: 1,
       renderCell: ({ row }) => {
@@ -149,14 +159,14 @@ export const DiseaseList: React.FC = () => {
         </IconButton>
         <InputBase
           sx={{ ml: 1, flex: 1 }}
-          placeholder="Search Name"
+          placeholder="Search Group Name"
           value={nameSearch}
           onChange={(
             event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
           ) => {
             setNameSearch(event.target.value);
           }}
-          inputProps={{ "aria-label": "search name" }}
+          inputProps={{ "aria-label": "search group name" }}
         />
         <Divider
           sx={{
@@ -168,16 +178,35 @@ export const DiseaseList: React.FC = () => {
         />
         <InputBase
           sx={{ ml: 1, flex: 1 }}
-          placeholder="Search Classification"
-          value={classificationSearch}
+          placeholder="Search ICD10 Code"
+          value={icd10CodeSearch}
           onChange={(
             event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
           ) => {
-            setClassificationSearch(event.target.value);
+            setIcd10CodeSearch(event.target.value);
           }}
-          inputProps={{ "aria-label": "search classification" }}
+          inputProps={{ "aria-label": "search icd10 code" }}
         />
         <Divider
+          sx={{
+            color: "text.secondary",
+            borderColor: "text.secondary",
+          }}
+          orientation="vertical"
+          flexItem
+        />
+        <InputBase
+          sx={{ ml: 1, flex: 1 }}
+          placeholder="Search VN Code"
+          value={vnCodeSearch}
+          onChange={(
+            event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+          ) => {
+            setVnCodeSearch(event.target.value);
+          }}
+          inputProps={{ "aria-label": "search vn code" }}
+        />
+        {/* <Divider
           sx={{
             color: "text.secondary",
             borderColor: "text.secondary",
@@ -206,40 +235,13 @@ export const DiseaseList: React.FC = () => {
               />
             )}
           />
-          {/* <Select
-            sx={{ ml: 1, flex: 1 }}
-            multiple
-            variant="standard"
-            value={selectClinics}
-            onChange={(
-              event: SelectChangeEvent<number[]>,
-              child: React.ReactNode
-            ) => {
-              setSelectClinics(event.target.value as number[]);
-            }}
-            // onChange={(
-            //   event: SelectChangeEvent<number>,
-            //   child: React.ReactNode
-            // ) => {
-            //   setSelectServices(event.target.value);
-            // }}
-            // label="Select Author"
-          >
-            {clinicsListQueryResult.data !== undefined &&
-              clinicsListQueryResult.data.total > 0 &&
-              clinicsListQueryResult.data.data.map((row, index) => (
-                <MenuItem key={row.id} value={row.id}>
-                  {row.name}
-                </MenuItem>
-              ))}
-          </Select> */}
-        </FormControl>
+        </FormControl> */}
       </Paper>
       <List
         title={
           <React.Fragment>
-            <FontAwesomeIcon icon={solid("disease")} />
-            &nbsp;{t("diseases.titles.list")}
+            <FontAwesomeIcon icon={solid("viruses")} />
+            &nbsp;{t("diseases_groups.titles.list")}
           </React.Fragment>
         }
       >
