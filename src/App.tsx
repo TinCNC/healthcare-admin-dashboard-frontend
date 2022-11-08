@@ -24,7 +24,12 @@ import authProvider from "./authProvider";
 import { PatientList, PatientCreate, PatientEdit } from "pages/patients";
 import { CategoriesList } from "pages/categories";
 
-import { DoctorList, DoctorShow } from "pages/doctors";
+import {
+  DoctorList,
+  DoctorShow,
+  DoctorCreate,
+  DoctorEdit,
+} from "pages/doctors";
 
 import { DiseaseList, DiseaseShow } from "pages/diseases";
 
@@ -146,8 +151,8 @@ function App() {
                 name: "doctors",
                 list: DoctorList,
                 show: DoctorShow,
-                // create: DoctorCreate,
-                // edit: PostEdit,
+                create: DoctorCreate,
+                edit: DoctorEdit,
                 icon: <FontAwesomeIcon icon={solid("user-doctor")} />,
               },
               {
