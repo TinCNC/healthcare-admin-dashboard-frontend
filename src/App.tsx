@@ -22,6 +22,7 @@ import { OffLayoutArea } from "components/offLayoutArea";
 import authProvider from "./authProvider";
 
 import { PatientList, PatientCreate, PatientEdit } from "pages/patients";
+import { ProductList, ProductShow } from "pages/products";
 import { CategoriesList } from "pages/categories";
 
 import {
@@ -48,10 +49,12 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   solid,
-  regular,
-  brands,
-  icon,
+  // regular,
+  // brands,
+  // icon,
 } from "@fortawesome/fontawesome-svg-core/import.macro"; // <-- import styles to be used
+
+import { Category } from "@mui/icons-material";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -162,23 +165,28 @@ function App() {
                 edit: PatientEdit,
                 icon: <FontAwesomeIcon icon={solid("hospital-user")} />,
               },
+              // {
+              //   name: "implants",
+              //   list: PatientList,
+              //   // create: PostCreate,
+              //   // edit: PostEdit,
+              //   icon: <FontAwesomeIcon icon={solid("teeth")} />,
+              // },
               {
-                name: "implants",
-                list: PatientList,
+                // name: "prosthetics",
+                name: "products",
+                list: ProductList,
+                show: ProductShow,
                 // create: PostCreate,
                 // edit: PostEdit,
-              },
-              {
-                name: "prosthetics",
-                list: PatientList,
-                // create: PostCreate,
-                // edit: PostEdit,
+                icon: <FontAwesomeIcon icon={solid("bone")} />,
               },
               {
                 name: "categories",
                 list: CategoriesList,
                 // create: PostCreate,
                 // edit: PostEdit,
+                icon: <Category />,
               },
             ]}
             Title={Title}

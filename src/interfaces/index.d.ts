@@ -112,6 +112,7 @@ export interface IProduct {
   description: string;
   manufacturing_cost: number[];
   sale_price: string;
+  image: string;
   created_at: string;
 }
 
