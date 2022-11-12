@@ -3,6 +3,7 @@ import {
   useTranslate,
   useMany,
   CrudFilters,
+  useList,
   // useTable,
 } from "@pankod/refine-core";
 import {
@@ -18,6 +19,11 @@ import {
   Paper,
   InputBase,
   IconButton,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
 } from "@pankod/refine-mui";
 
 import { IProduct, ICategory } from "interfaces";
@@ -47,46 +53,61 @@ export const ProductList: React.FC = () => {
 
   // const { tableQueryResult, setFilters: setFilters2 } = useTable<IPatient>();
 
-  const [userNameSearch, setUserNameSearch] = useState<string>("");
+  const [nameSearch, setNameSearch] = useState<string>("");
 
   const [firstNameSearch, setFirstNameSearch] = useState<string>("");
 
   const [lastNameSearch, setLastNameSearch] = useState<string>("");
 
-  // const [selectClinics, setSelectClinics] = useState<number[]>([]);
+  const [minManufacturingCost, setMinManufacturingCost] = useState<
+    number | undefined
+  >();
 
-  // const clinicsListQueryResult = useList<IClinic>({
-  //   resource: "clinics",
-  // });
+  const [maxManufacturingCost, setMaxManufacturingCost] = useState<
+    number | undefined
+  >();
+
+  const [selectCategories, setSelectCategories] = useState<number[]>([]);
+
+  const categoriesListQueryResult = useList<ICategory>({
+    resource: "categories",
+  });
 
   useEffect(() => {
     const filter: CrudFilters = [
       {
         field: "name",
         operator: "contains",
-        value: userNameSearch,
+        value: nameSearch,
       },
-      // {
-      //   field: "first_name",
-      //   operator: "contains",
-      //   value: firstNameSearch,
-      // },
-      // {
-      //   field: "last_name",
-      //   operator: "contains",
-      //   value: lastNameSearch,
-      // },
+      {
+        field: "manufacturing_cost",
+        operator: "gte",
+        value: minManufacturingCost,
+      },
+      {
+        field: "manufacturing_cost",
+        operator: "lte",
+        value: maxManufacturingCost,
+      },
     ];
-    // if (selectClinics !== undefined && selectClinics.length !== 0) {
-    //   filter.push({
-    //     field: "clinic",
-    //     operator: "in",
-    //     value: selectClinics,
-    //   });
-    // }
+    if (selectCategories !== undefined && selectCategories.length !== 0) {
+      filter.push({
+        field: "category",
+        operator: "in",
+        value: selectCategories,
+      });
+    }
     setFilters(filter);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userNameSearch, firstNameSearch, lastNameSearch]);
+  }, [
+    nameSearch,
+    firstNameSearch,
+    lastNameSearch,
+    selectCategories,
+    minManufacturingCost,
+    maxManufacturingCost,
+  ]);
 
   // const categoryIds = dataGridProps.rows.map((item) => item.category.id);
   // const { data: categoriesData, isLoading } = useMany<ICategory>({
@@ -123,7 +144,7 @@ export const ProductList: React.FC = () => {
           return "Loading...";
         }
         const category = categoriesData?.data.find(
-          (item) => item.id === row.id
+          (item) => item.id === row.category
         );
         return category?.title;
       },
@@ -186,12 +207,12 @@ export const ProductList: React.FC = () => {
         </IconButton>
         <InputBase
           sx={{ ml: 1, flex: 1 }}
-          placeholder="Search Username"
-          value={userNameSearch}
+          placeholder="Search Name"
+          value={nameSearch}
           onChange={(
             event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
           ) => {
-            setUserNameSearch(event.target.value);
+            setNameSearch(event.target.value);
           }}
           inputProps={{ "aria-label": "search username" }}
         />
@@ -203,17 +224,29 @@ export const ProductList: React.FC = () => {
           orientation="vertical"
           flexItem
         />
-        <InputBase
-          sx={{ ml: 1, flex: 1 }}
-          placeholder="Search First Name"
-          value={firstNameSearch}
-          onChange={(
-            event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-          ) => {
-            setFirstNameSearch(event.target.value);
-          }}
-          inputProps={{ "aria-label": "search first name" }}
-        />
+        <FormControl sx={{ minWidth: 320 }}>
+          <InputLabel>Select Categories</InputLabel>
+          <Select
+            sx={{ ml: 1, flex: 1 }}
+            multiple
+            variant="standard"
+            value={selectCategories}
+            onChange={(
+              event: SelectChangeEvent<number[]>,
+              child: React.ReactNode
+            ) => {
+              setSelectCategories(event.target.value as number[]);
+            }}
+          >
+            {categoriesListQueryResult.data !== undefined &&
+              categoriesListQueryResult.data.total > 0 &&
+              categoriesListQueryResult.data.data.map((row, index) => (
+                <MenuItem key={row.id} value={row.id}>
+                  {row.title}
+                </MenuItem>
+              ))}
+          </Select>
+        </FormControl>
         <Divider
           sx={{
             color: "text.secondary",
@@ -222,17 +255,46 @@ export const ProductList: React.FC = () => {
           orientation="vertical"
           flexItem
         />
-        <InputBase
-          sx={{ ml: 1, flex: 1 }}
-          placeholder="Search Last Name"
-          value={lastNameSearch}
-          onChange={(
-            event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-          ) => {
-            setLastNameSearch(event.target.value);
+        <FormControl sx={{ width: 120 }}>
+          <InputBase
+            sx={{ ml: 1, flex: 1 }}
+            placeholder="Min"
+            type="number"
+            value={minManufacturingCost}
+            onChange={(
+              event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+            ) => {
+              setMinManufacturingCost(
+                parseInt(event.target.value) || undefined
+              );
+            }}
+            inputProps={{ "aria-label": "min capacity" }}
+          />
+        </FormControl>
+        <Divider
+          sx={{
+            color: "text.secondary",
+            borderColor: "text.secondary",
           }}
-          inputProps={{ "aria-label": "search last name" }}
+          orientation="vertical"
+          flexItem
         />
+        <FormControl sx={{ width: 120 }}>
+          <InputBase
+            sx={{ ml: 1, flex: 1 }}
+            placeholder="Max"
+            type="number"
+            value={maxManufacturingCost}
+            onChange={(
+              event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+            ) => {
+              setMaxManufacturingCost(
+                parseInt(event.target.value) || undefined
+              );
+            }}
+            inputProps={{ "aria-label": "max capacity" }}
+          />
+        </FormControl>
       </Paper>
       <List
         title={

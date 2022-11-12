@@ -22,7 +22,12 @@ import { OffLayoutArea } from "components/offLayoutArea";
 import authProvider from "./authProvider";
 
 import { PatientList, PatientCreate, PatientEdit } from "pages/patients";
-import { ProductList, ProductShow } from "pages/products";
+import {
+  ProductList,
+  ProductShow,
+  ProductCreate,
+  ProductEdit,
+} from "pages/products";
 import { CategoriesList } from "pages/categories";
 
 import {
@@ -177,8 +182,8 @@ function App() {
                 name: "products",
                 list: ProductList,
                 show: ProductShow,
-                // create: PostCreate,
-                // edit: PostEdit,
+                create: ProductCreate,
+                edit: ProductEdit,
                 icon: <FontAwesomeIcon icon={solid("bone")} />,
               },
               {

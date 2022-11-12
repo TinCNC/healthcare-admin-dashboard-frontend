@@ -6,26 +6,19 @@ import {
   useAutocomplete,
   Create,
   Input,
-  // Typography,
   Stack,
-  // Button,
 } from "@pankod/refine-mui";
 import { useForm, Controller } from "@pankod/refine-react-hook-form";
 
-import { IPatient, IClinic } from "interfaces";
+import { IProduct, ICategory } from "interfaces";
 
-import { FileUpload } from "@mui/icons-material";
+import { FileUpload, SaveOutlined } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { BaseSyntheticEvent, useState } from "react";
 
-import {
-  uploadImage,
-  getPublicImageUrl,
-  // getSignedImageUrl,
-  // downloadImage,
-} from "api";
+import { uploadImage, getPublicImageUrl } from "api";
 
-export const PatientCreate: React.FC = () => {
+export const ProductCreate: React.FC = () => {
   const t = useTranslate();
   const {
     refineCore: { formLoading },
@@ -36,7 +29,7 @@ export const PatientCreate: React.FC = () => {
     getValues,
     setValue,
     formState: { errors },
-  } = useForm<IPatient, HttpError, IPatient & { clinic: IClinic }>();
+  } = useForm<IProduct, HttpError, IProduct & { category: ICategory }>();
 
   // const imageInput = watch("image");
 
@@ -44,7 +37,7 @@ export const PatientCreate: React.FC = () => {
 
   const [imageFile, setImageFile] = useState<File>();
 
-  const [creatingPatient, setCreatingPatient] = useState<boolean>(false);
+  const [creatingProduct, setCreatingProduct] = useState<boolean>(false);
 
   const handleSubmit = async (e: BaseSyntheticEvent<object, any, any>) => {
     // console.log(saveButtonProps);
@@ -56,15 +49,15 @@ export const PatientCreate: React.FC = () => {
 
     try {
       if (imageFile !== undefined) {
-        setCreatingPatient(true);
+        setCreatingProduct(true);
         const uploaded = await uploadImage(
           imageFile,
-          "profile-image",
-          `patients/${getValues("username")}/`
+          "product-image",
+          `${getValues("name")}/`
         );
         if (uploaded !== undefined) {
           const imageUrl = await getPublicImageUrl(
-            "profile-image",
+            "product-image",
             uploaded?.Key.substring(uploaded?.Key.indexOf("/") + 1)
           );
           if (imageUrl !== undefined) setValue("image", imageUrl?.publicURL);
@@ -78,72 +71,32 @@ export const PatientCreate: React.FC = () => {
         // }
       }
 
-      setCreatingPatient(true);
       saveButtonProps.onClick(e);
+      setCreatingProduct(false);
       // throw new Error("Function not implemented.");
     } catch (error) {
-      setCreatingPatient(false);
+      setCreatingProduct(false);
     }
   };
 
   const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     try {
-      // setIsUploadLoading(true);
-
-      // const formData = new FormData();
-
       const target = event.target;
       const file: File = (target.files as FileList)[0];
-
       setImageFile(file);
-
       console.log(imageFile);
-
-      // console.log(URL.createObjectURL(file));
-
       setImagePreview(URL.createObjectURL(file));
-
-      // console.log(saveButtonProps);
-
-      // formData.append("file", file);
-
-      // const res = await axios.post<{ url: string }>(
-      //     `${apiUrl}/media/upload`,
-      //     formData,
-      //     {
-      //         withCredentials: false,
-      //         headers: {
-      //             "Access-Control-Allow-Origin": "*",
-      //         },
-      //     },
-      // );
-
-      // const { name, size, type, lastModified } = file;
-
-      // const imagePaylod = [
-      //     {
-      //         name,
-      //         size,
-      //         type,
-      //         lastModified,
-      //         url: res.data.url,
-      //     },
-      // ];
-
-      // setValue("images", imagePaylod, { shouldValidate: true });
-
-      // setIsUploadLoading(false);
     } catch (error) {
       // setError("images", { message: "Upload failed. Please try again." });
       // setIsUploadLoading(false);
     }
   };
 
-  const { autocompleteProps } = useAutocomplete<IClinic>({
-    resource: "clinics",
+  const { autocompleteProps } = useAutocomplete<ICategory>({
+    resource: "categories",
     onSearch: (value) => [
       {
-        field: "name",
+        field: "title",
         operator: "containss",
         value,
       },
@@ -153,114 +106,40 @@ export const PatientCreate: React.FC = () => {
   return (
     <Create
       isLoading={formLoading}
-      saveButtonProps={{
-        disabled: creatingPatient,
-        onClick: (e: BaseSyntheticEvent<object, any, any>) => {
-          handleSubmit(e);
-        },
-      }}
-    >
-      <Box
-        component="form"
-        sx={{ display: "flex", flexDirection: "column" }}
-        autoComplete="off"
-      >
-        <TextField
-          {...register("username", { required: "Username is required" })}
-          error={!!errors?.username}
-          helperText={errors.username?.message}
-          margin="normal"
-          required
-          fullWidth
-          id="username"
-          label={t("patients.fields.username")}
-          name="username"
-          autoFocus
-        />
-        <TextField
-          {...register("first_name", { required: "First Name is required" })}
-          error={!!errors?.first_name}
-          helperText={errors.first_name?.message}
-          margin="normal"
-          required
-          fullWidth
-          id="first_name"
-          label={t("patients.fields.firstName")}
-          name="first_name"
-        />
-        <TextField
-          {...register("last_name", { required: "Last Name is required" })}
-          error={!!errors?.last_name}
-          helperText={errors.last_name?.message}
-          margin="normal"
-          required
-          fullWidth
-          id="last_name"
-          label={t("patients.fields.lastName")}
-          name="last_name"
-        />
-        {/* <Controller
-          control={control}
-          name="status"
-          rules={{ required: "Status is required" }}
-          render={({ field }) => (
-            <Autocomplete
-              {...field}
-              options={["published", "draft", "rejected"]}
-              onChange={(_, value) => {
-                field.onChange(value);
-              }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Status"
-                  margin="normal"
-                  variant="outlined"
-                  error={!!errors.status}
-                  helperText={errors.status?.message}
-                  required
-                />
-              )}
-            />
-          )}
-        /> */}
-        <Controller
-          control={control}
-          name="clinic"
-          rules={{ required: "Clinic is required" }}
-          render={({ field }) => (
-            <Autocomplete
-              {...autocompleteProps}
-              {...field}
-              onChange={(_, value) => {
-                field.onChange(value?.id);
-              }}
-              getOptionLabel={(item) => {
-                return item.name ? item.name : "";
-              }}
-              isOptionEqualToValue={(option, value) =>
-                value === undefined || option.id === value.id
-              }
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label={t("patients.fields.clinic")}
-                  margin="normal"
-                  variant="outlined"
-                  error={!!errors.clinic}
-                  helperText={errors.clinic?.message}
-                  required
-                />
-              )}
-            />
-          )}
-        />
-        <Stack
-          direction="row"
-          gap={4}
-          flexWrap="wrap"
-          sx={{ marginTop: "16px" }}
+      footerButtons={
+        <LoadingButton
+          type="submit"
+          startIcon={<SaveOutlined />}
+          loadingPosition="start"
+          loading={formLoading || creatingProduct}
+          variant="contained"
+          onClick={async (e) => handleSubmit(e)}
         >
+          {t("buttons.save")}
+        </LoadingButton>
+      }
+      // saveButtonProps={{
+      //   disabled: creatingProduct || formLoading,
+      //   onClick: (e: BaseSyntheticEvent<object, any, any>) => {
+      //     handleSubmit(e);
+      //   },
+      // }}
+    >
+      <Stack
+        direction={{ sm: "column", md: "row" }}
+        spacing={{ xs: 1, sm: 2, md: 4 }}
+      >
+        <Stack gap={1}>
+          <Box
+            component="img"
+            alt={getValues("name")}
+            src={
+              imagePreview ||
+              getValues("image") ||
+              "https://opuqcfkadzuitwfpengj.supabase.co/storage/v1/object/public/placeholder-images/product-placeholder.jpg"
+            }
+            sx={{ width: 192, height: 192 }}
+          />
           <label htmlFor="images-input">
             <Input
               id="images-input"
@@ -271,17 +150,11 @@ export const PatientCreate: React.FC = () => {
               //   console.log(event.target);
               // }}
             />
-            <input
-              id="file"
-              {...register("image", {
-                required: "This field is required",
-              })}
-              type="hidden"
-            />
+            <input id="file" {...register("image")} type="hidden" />
             <LoadingButton
               // loading={isUploadLoading}
-              loadingPosition="end"
-              endIcon={<FileUpload />}
+              loadingPosition="start"
+              startIcon={<FileUpload />}
               variant="contained"
               component="span"
             >
@@ -294,30 +167,119 @@ export const PatientCreate: React.FC = () => {
                             </Typography>
                         )} */}
           </label>
-          {/* {imageInput && (
-                        <Box
-                            component="img"
-                            sx={{
-                                maxWidth: 250,
-                                maxHeight: 250,
-                            }}
-                            src={imageInput[0].url}
-                            alt="Post image"
-                        />
-                    )} */}
-          {imagePreview !== undefined && imagePreview !== "" && (
-            <Box
-              component="img"
-              sx={{
-                maxWidth: 300,
-                maxHeight: 300,
-              }}
-              src={imagePreview}
-              alt="Post image"
-            />
-          )}
         </Stack>
-      </Box>
+        <Stack gap={1} width="100%">
+          <Box
+            component="form"
+            sx={{ display: "flex", flexDirection: "column" }}
+            autoComplete="off"
+          >
+            <TextField
+              {...register("name", { required: "Name is required" })}
+              error={!!errors?.name}
+              helperText={errors.name?.message}
+              margin="normal"
+              required
+              fullWidth
+              id="name"
+              label={t("products.fields.name")}
+              name="name"
+              autoFocus
+            />
+            <Controller
+              control={control}
+              name="category"
+              rules={{ required: "Category is required" }}
+              render={({ field }) => (
+                <Autocomplete
+                  {...autocompleteProps}
+                  {...field}
+                  onChange={(_, value) => {
+                    field.onChange(value?.id);
+                  }}
+                  getOptionLabel={(item) => {
+                    return item.title ? item.title : "";
+                  }}
+                  isOptionEqualToValue={(option, value) =>
+                    value === undefined || option.id === value.id
+                  }
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label={t("products.fields.category")}
+                      margin="normal"
+                      variant="outlined"
+                      error={!!errors.category}
+                      helperText={errors.category?.message}
+                      required
+                    />
+                  )}
+                />
+              )}
+            />
+            <TextField
+              {...register("application", {
+                required: "Application is required",
+              })}
+              error={!!errors?.application}
+              helperText={errors.application?.message}
+              margin="normal"
+              required
+              fullWidth
+              id="application"
+              label={t("products.fields.application")}
+              name="application"
+            />
+            <TextField
+              {...register("description")}
+              error={!!errors?.description}
+              helperText={errors.description?.message}
+              margin="normal"
+              required
+              multiline
+              rows={4}
+              fullWidth
+              id="description"
+              label={t("products.fields.description")}
+              name="description"
+            />
+            <TextField
+              {...register("manufacturing_cost", {
+                required: "manufacturing Cost is required",
+              })}
+              error={!!errors?.manufacturing_cost}
+              helperText={errors.manufacturing_cost?.message}
+              margin="normal"
+              type="number"
+              required
+              fullWidth
+              id="manufacturing_cost"
+              label={t("products.fields.manufacturing_cost")}
+              name="manufacturing_cost"
+            />
+            <TextField
+              {...register("sale_price", {
+                required: "Sale Price is required",
+              })}
+              error={!!errors?.sale_price}
+              helperText={errors.sale_price?.message}
+              margin="normal"
+              type="number"
+              required
+              fullWidth
+              id="sale_price"
+              label={t("products.fields.sale_price")}
+              name="sale_price"
+            />
+            <Stack
+              direction="row"
+              gap={4}
+              flexWrap="wrap"
+              sx={{ marginTop: "16px" }}
+            ></Stack>
+          </Box>
+        </Stack>
+      </Stack>
     </Create>
   );
 };

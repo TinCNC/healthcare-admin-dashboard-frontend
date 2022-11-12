@@ -10,7 +10,7 @@ import {
 
 // import parse from "html-react-parser";
 
-import { Show, Stack, Typography, TagField, Avatar } from "@pankod/refine-mui";
+import { Show, Stack, Typography, TagField, Box } from "@pankod/refine-mui";
 
 import { IProduct, ICategory } from "interfaces";
 
@@ -38,9 +38,13 @@ export const ProductShow: React.FC = () => {
         spacing={{ xs: 1, sm: 2, md: 4 }}
       >
         <Stack gap={1}>
-          <Avatar
+          <Box
+            component="img"
             alt={record?.name}
-            src={record?.image}
+            src={
+              record?.image ||
+              "https://opuqcfkadzuitwfpengj.supabase.co/storage/v1/object/public/placeholder-images/product-placeholder.jpg"
+            }
             sx={{ width: 192, height: 192 }}
           />
         </Stack>
@@ -63,9 +67,7 @@ export const ProductShow: React.FC = () => {
           <Typography variant="body1" fontWeight="bold">
             {t("products.fields.application")}
           </Typography>
-          <Typography variant="body2">
-            {categoriesData !== undefined && categoriesData?.data?.title}
-          </Typography>
+          <Typography variant="body2">{record?.application}</Typography>
           <Typography variant="body1" fontWeight="bold">
             {t("products.fields.manufacturing_cost")}
           </Typography>
