@@ -20,7 +20,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import { LoadingButton } from "@mui/lab";
 
-import { IOrganization, ITechnician } from "interfaces";
+import { IMedicalSpeciality, IOrganization, ITechnician } from "interfaces";
 import { AddCircleOutlineOutlined, CancelOutlined } from "@mui/icons-material";
 
 import {
@@ -29,7 +29,11 @@ import {
 } from "@pankod/refine-react-hook-form";
 import { useTranslate } from "@pankod/refine-core";
 
-export const CertificateEditorDialog: React.FC<UseModalFormReturnType> = ({
+export type DataProps = UseModalFormReturnType & {
+  submitButtonText?: string;
+};
+
+export const CertificateEditorDialog: React.FC<DataProps> = ({
   register,
   control,
   formState: { errors },
@@ -39,6 +43,7 @@ export const CertificateEditorDialog: React.FC<UseModalFormReturnType> = ({
   setValue,
   modal: { visible, close },
   saveButtonProps,
+  submitButtonText,
 }) => {
   // const {
   //   refineCore: { onFinish, formLoading },
@@ -86,6 +91,19 @@ export const CertificateEditorDialog: React.FC<UseModalFormReturnType> = ({
       onSearch: (value) => [
         {
           field: "username",
+          operator: "containss",
+          value,
+        },
+      ],
+    });
+
+  const { autocompleteProps: autocompleteSpecialityProps } =
+    useAutocomplete<IMedicalSpeciality>({
+      resource: "medical_specialities",
+      pagination: { current: 1, pageSize: 10000 },
+      onSearch: (value) => [
+        {
+          field: "name",
           operator: "containss",
           value,
         },
@@ -261,8 +279,39 @@ export const CertificateEditorDialog: React.FC<UseModalFormReturnType> = ({
                         label={t("professional_certificates.fields.validator")}
                         margin="normal"
                         variant="standard"
-                        error={!!errors.creator}
-                        helperText={errors.creator?.message as string}
+                        error={!!errors.validator}
+                        helperText={errors.validator?.message as string}
+                        required
+                      />
+                    )}
+                  />
+                )}
+              />
+              <Controller
+                control={control}
+                name="speciality"
+                rules={{ required: "Speciality is required" }}
+                render={({ field }) => (
+                  <Autocomplete
+                    {...autocompleteSpecialityProps}
+                    {...field}
+                    onChange={(_, value) => {
+                      field.onChange(value?.id);
+                    }}
+                    getOptionLabel={(item) => {
+                      return item.name ? item.name : "";
+                    }}
+                    isOptionEqualToValue={(option, value) =>
+                      value === undefined || option.id === value.id
+                    }
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label={t("professional_certificates.fields.speciality")}
+                        margin="normal"
+                        variant="standard"
+                        error={!!errors.speciality}
+                        helperText={errors.speciality?.message as string}
                         required
                       />
                     )}
@@ -307,12 +356,59 @@ export const CertificateEditorDialog: React.FC<UseModalFormReturnType> = ({
                 fullWidth
                 variant="standard"
               />
+              <Controller
+                control={control}
+                name="type"
+                // rules={{
+                //   required: t("errors.required.field", { field: "Type" }),
+                // }}
+                rules={{ required: "Type is required" }}
+                render={({ field }) => (
+                  <Autocomplete
+                    options={[
+                      "Medical Degree",
+                      "Specialized Medical Degree",
+                      "Permission of Medical Professional Practices",
+                    ]}
+                    {...field}
+                    onChange={(_, value) => {
+                      field.onChange(value);
+                    }}
+                    // getOptionLabel={(item) => {
+                    //   return (
+                    //     autocompleteProps?.options?.find(
+                    //       (p) => p?.id?.toString() === item?.id?.toString()
+                    //     )?.title ?? ""
+                    //   );
+                    // }}
+                    isOptionEqualToValue={(option, value) =>
+                      value === undefined ||
+                      option.toString() === value.toString()
+                    }
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label={t("professional_certificates.fields.type")}
+                        margin="normal"
+                        variant="standard"
+                        error={!!errors?.type}
+                        helperText={errors.type?.message as string}
+                        required
+                      />
+                    )}
+                  />
+                )}
+              />
             </form>
           </LocalizationProvider>
         </DialogContent>
         <DialogActions>
           {/* <Button onClick={close}>Cancel</Button> */}
-          <LoadingButton startIcon={<CancelOutlined />} onClick={close}>
+          <LoadingButton
+            color="error"
+            startIcon={<CancelOutlined />}
+            onClick={close}
+          >
             Cancel
           </LoadingButton>
           {/* <Button onClick={handleClose}>Add Certificate</Button> */}
@@ -324,7 +420,7 @@ export const CertificateEditorDialog: React.FC<UseModalFormReturnType> = ({
             // {...saveButtonProps}
             onClick={(e) => submitButtonClick(e)}
           >
-            Add Certificate
+            {submitButtonText || "Submit"}
           </LoadingButton>
         </DialogActions>
       </Dialog>

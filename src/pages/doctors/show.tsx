@@ -4,6 +4,7 @@ import {
   useShow,
   useTranslate,
   useMany,
+  useModal,
   // useList,
   // HttpError,
 } from "@pankod/refine-core";
@@ -19,20 +20,13 @@ import {
   TagField,
   Avatar,
   Button,
-  // ListItem,
-  // ListItemIcon,
-  // ListItemText,
-  // MuiList,
-  // ImageList,
-  // ImageListItem,
-  // Grid,
-  // Box,
   GridColumns,
   DataGrid,
   useDataGrid,
   List,
   EditButton,
   DeleteButton,
+  ShowButton,
 } from "@pankod/refine-mui";
 
 import { AddBoxOutlined, CardMembership } from "@mui/icons-material";
@@ -43,13 +37,33 @@ import {
   IProfessionalCertificates,
   ITechnician,
   IOrganization,
+  IMedicalSpeciality,
 } from "interfaces";
+import { CertificateDetailDialog } from "./components/CertificateDetail";
 import { CertificateEditorDialog } from "./components/CertificateEditor";
 
 export const DoctorShow: React.FC = () => {
   const t = useTranslate();
 
   const { queryResult } = useShow<IDoctor>();
+
+  const {
+    queryResult: certificateQueryResult,
+    // showId,
+    setShowId,
+  } = useShow<IProfessionalCertificates>({
+    resource: "professional_certificates",
+    id: "0",
+  });
+
+  const { data: certificateData, isLoading: certificateLoading } =
+    certificateQueryResult;
+
+  const {
+    show: showDetailModal,
+    close: closeDetailModal,
+    visible: detailModalVisible,
+  } = useModal();
 
   const createModalFormReturnValues = useModalForm({
     refineCoreProps: {
@@ -93,6 +107,9 @@ export const DoctorShow: React.FC = () => {
   const { dataGridProps } = useDataGrid<IProfessionalCertificates>({
     resource: "professional_certificates",
     permanentFilter: [{ field: "holder", value: record?.id, operator: "eq" }],
+    queryOptions: {
+      enabled: !isLoading,
+    },
   });
 
   const creatorIds = dataGridProps.rows.map((item) => item.creator);
@@ -112,6 +129,16 @@ export const DoctorShow: React.FC = () => {
       ids: validatorIds,
       queryOptions: {
         enabled: validatorIds.length > 0,
+      },
+    });
+
+  const specialityIds = dataGridProps.rows.map((item) => item.speciality);
+  const { data: specialitiesData, isLoading: specialitiesLoading } =
+    useMany<IMedicalSpeciality>({
+      resource: "medical_specialities",
+      ids: specialityIds,
+      queryOptions: {
+        enabled: specialityIds.length > 0,
       },
     });
 
@@ -205,6 +232,24 @@ export const DoctorShow: React.FC = () => {
         },
       },
       // {
+      //   field: "speciality",
+      //   headerName: t("professional_certificates.fields.speciality"),
+      //   // type: "number",
+      //   minWidth: 200,
+      //   maxWidth: 200,
+      //   flex: 1,
+      //   renderCell: ({ row }) => {
+      //     if (specialitiesLoading) {
+      //       return "Loading...";
+      //     }
+
+      //     const speciality = specialitiesData?.data.find(
+      //       (item) => item.id === row.speciality
+      //     );
+      //     return speciality?.name;
+      //   },
+      // },
+      // {
       //   field: "validator",
       //   headerName: t("professional_certificates.fields.validator"),
       //   minWidth: 200,
@@ -225,13 +270,20 @@ export const DoctorShow: React.FC = () => {
         maxWidth: 220,
         flex: 1,
       },
-      {
-        field: "level",
-        headerName: t("professional_certificates.fields.level"),
-        minWidth: 60,
-        maxWidth: 60,
-        flex: 1,
-      },
+      // {
+      //   field: "level",
+      //   headerName: t("professional_certificates.fields.level"),
+      //   minWidth: 60,
+      //   maxWidth: 60,
+      //   flex: 1,
+      // },
+      // {
+      //   field: "type",
+      //   headerName: t("professional_certificates.fields.type"),
+      //   minWidth: 60,
+      //   maxWidth: 60,
+      //   flex: 1,
+      // },
       {
         field: "created_at",
         headerName: t("professional_certificates.fields.createdAt"),
@@ -249,6 +301,16 @@ export const DoctorShow: React.FC = () => {
         renderCell: function render({ row }) {
           return (
             <Stack direction="row" spacing={1}>
+              <ShowButton
+                size="small"
+                hideText
+                onClick={() => {
+                  setShowId(row.id);
+                  showDetailModal();
+                }}
+                resourceNameOrRouteName="professional_certificates"
+                recordItemId={row.id}
+              />
               <EditButton
                 size="small"
                 hideText
@@ -278,6 +340,10 @@ export const DoctorShow: React.FC = () => {
       creatorsData?.data,
       validatorsLoading,
       validatorsData?.data,
+      // specialitiesLoading,
+      // specialitiesData?.data,
+      setShowId,
+      showDetailModal,
       showEditModal,
     ]
   );
@@ -361,8 +427,23 @@ export const DoctorShow: React.FC = () => {
 
   return (
     <Show isLoading={isLoading}>
-      <CertificateEditorDialog {...createModalFormReturnValues} />
-      <CertificateEditorDialog {...editModalFormReturnValues} />
+      <CertificateEditorDialog
+        submitButtonText={t("professional_certificates.titles.create")}
+        {...createModalFormReturnValues}
+      />
+      <CertificateEditorDialog
+        submitButtonText={t("professional_certificates.titles.edit")}
+        {...editModalFormReturnValues}
+      />
+      <CertificateDetailDialog
+        loading={certificateLoading}
+        data={certificateData?.data}
+        creatorsData={creatorsData?.data}
+        validatorsData={validatorsData?.data}
+        specialitiesData={specialitiesData?.data}
+        close={closeDetailModal}
+        visible={detailModalVisible}
+      />
       <Stack
         direction={{ sm: "column", md: "row" }}
         spacing={{ xs: 1, sm: 2, md: 4 }}
@@ -373,11 +454,6 @@ export const DoctorShow: React.FC = () => {
             src={record?.image}
             sx={{ width: 192, height: 192 }}
           />
-          {/* <VideoDialog
-            buttonText="Why train with me?"
-            dialogTitle="Trainer's Introduction Video"
-            videoLink={record?.video}
-          /> */}
         </Stack>
         <Stack gap={1}>
           <Typography variant="body1" fontWeight="bold">
@@ -431,125 +507,6 @@ export const DoctorShow: React.FC = () => {
           />
         </List>
       </Stack>
-      {/* <Stack
-        direction={{ sm: "column", md: "row" }}
-        spacing={{ xs: 1, sm: 2, md: 4 }}
-      >
-        <Stack sx={{ gap: 1, minWidth: 320 }}>
-          <Typography variant="h4" fontWeight="bold">
-            {t("trainers.services")}
-          </Typography>
-          <Typography variant="body1">
-            <MuiList>
-              {!servicesLoading &&
-                servicesData !== undefined &&
-                servicesData.data.map((row, index) => (
-                  <ListItem>
-                    <ListItemIcon>
-                      <FitnessCenter />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={row.name}
-                      // secondary={secondary ? 'Secondary text' : null}
-                    />
-                  </ListItem>
-                ))}
-            </MuiList>
-          </Typography>
-        </Stack>
-        <Stack sx={{ gap: 1, minWidth: 480 }}>
-          <Typography variant="h4" fontWeight="bold">
-            {t("trainers.certification")}
-          </Typography>
-          <Stack>
-            <Grid
-              container
-              spacing={{ xs: 2, md: 3 }}
-              columns={{ xs: 3, sm: 6, md: 9, lg: 12 }}
-            >
-              {!certificationsLoading &&
-                certificationsData !== undefined &&
-                certificationsData.data.map((row, index) => (
-                  <Grid item xs={3} sm={3} md={3} lg={3} key={index}>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        width: "fit-content",
-                        color: "text.secondary",
-                      }}
-                      gap={1}
-                    >
-                      <Avatar
-                        src={
-                          row?.image ||
-                          "https://mhxuwblyckkausnppiws.supabase.co/storage/v1/object/sign/certificates/generic/Certification.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJjZXJ0aWZpY2F0ZXMvZ2VuZXJpYy9DZXJ0aWZpY2F0aW9uLnBuZyIsImlhdCI6MTY2NjQ0NzcyNywiZXhwIjoxOTgxODA3NzI3fQ.PIbh5UD83atwxItAW2J_NO97dFHafLcUuE6elzSeQg4"
-                        }
-                      />
-                      <Typography variant="body2">{row?.name}</Typography>
-                    </Box>
-                  </Grid>
-                ))}
-            </Grid>
-          </Stack>
-        </Stack>
-      </Stack> */}
-      {/* <Stack gap={1} justifyContent="center" alignItems="center">
-        <Typography variant="h4" fontWeight="bold">
-          {t("trainers.image_gallery")}
-        </Typography>
-        <ImageList sx={{ width: 960, height: 600 }} cols={3} rowHeight={320}>
-          {!galleryLoading &&
-            galleryData !== undefined &&
-            galleryData.data.map((item) => (
-              <ImageListItem key={item.image} sx={{ width: 320 }}>
-                <img
-                  // src={`${item.image}?w=320&h=320&fit=crop&auto=format`}
-                  // srcSet={`${item.image}?w=320&h=320&fit=crop&auto=format&dpr=2 2x`}
-                  src={`${item.image}`}
-                  srcSet={`${item.image}`}
-                  // width={240}
-                  // height={240}
-                  alt={item.title}
-                  style={{ height: "inherit" }}
-                  loading="lazy"
-                />
-              </ImageListItem>
-            ))}
-        </ImageList>
-      </Stack> */}
-      {/* <Stack gap={1} justifyContent="center" alignItems="center">
-        <Typography variant="h4" fontWeight="bold">
-          {t("trainers.subscriptions")}
-        </Typography>
-        <MuiList>
-          {!productLoading &&
-            productData !== undefined &&
-            productData.data.map((item) => (
-              <ListItem>
-                <ProductCard data={item}></ProductCard>
-              </ListItem>
-            ))}
-        </MuiList>
-      </Stack> */}
-      {/* <Stack gap={1}>
-        <Typography variant="h4" fontWeight="bold">
-          {t("trainers.posts")}
-        </Typography>
-        <Grid
-          container
-          spacing={{ xs: 2, md: 3 }}
-          columns={{ xs: 3, sm: 6, md: 9, lg: 12 }}
-        >
-          {!postsLoading &&
-            postsData !== undefined &&
-            postsData.data.map((row, index) => (
-              <Grid item xs={3} sm={3} md={3} lg={3} key={index}>
-                <PostCard data={row}></PostCard>
-              </Grid>
-            ))}
-        </Grid>
-      </Stack> */}
     </Show>
   );
 };
