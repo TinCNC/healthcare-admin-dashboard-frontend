@@ -303,14 +303,16 @@
       "expired_at": "Expired At",
       "creator": "Creator",
       "validator": "Validator",
+      "speciality": "Speciality",
       "holder": "Holder",
       "program": "Program",
+      "type": "Type",
       "level": "Level",
       "createdAt": "Created At"
     },
     "titles": {
       "create": "Create Certificate",
-      "edit": "Edit Doctor",
+      "edit": "Edit Certificate",
       "list": "Certificates",
       "show": "Show Certificate"
     }

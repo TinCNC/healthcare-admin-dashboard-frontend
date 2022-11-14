@@ -21,6 +21,13 @@ export interface IDepartment {
   created_at: string;
 }
 
+export interface IMedicalSpeciality {
+  id: number;
+  name: string;
+  description: string;
+  created_at: string;
+}
+
 export interface IOrganization {
   id: number;
   name: string;
@@ -125,7 +132,12 @@ export interface IProfessionalCertificates {
   creator: number;
   validator: number;
   holder: string;
+  speciality: number;
   program: string;
+  type:
+    | "Medical Degree"
+    | "Specialized Medical Degree"
+    | "Permission of Medical Professional Practices";
   level: number;
   created_at: string;
 }
