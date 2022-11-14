@@ -1,5 +1,5 @@
 import React from "react";
-import { useTranslate, useMany } from "@pankod/refine-core";
+import { useTranslate } from "@pankod/refine-core";
 import {
   useDataGrid,
   DataGrid,
@@ -10,54 +10,26 @@ import {
   DeleteButton,
 } from "@pankod/refine-mui";
 
-import { ICategory, IPost } from "interfaces";
+import { ICategory } from "interfaces";
 
 export const CategoriesList: React.FC = () => {
   const t = useTranslate();
 
-  const { dataGridProps } = useDataGrid<IPost>();
+  const { dataGridProps } = useDataGrid<ICategory>();
 
-  const categoryIds = dataGridProps.rows.map((item) => item.category.id);
-  const { data: categoriesData, isLoading } = useMany<ICategory>({
-    resource: "categories",
-    ids: categoryIds,
-    queryOptions: {
-      enabled: categoryIds.length > 0,
-    },
-  });
-
-  const columns = React.useMemo<GridColumns<IPost>>(
+  const columns = React.useMemo<GridColumns<ICategory>>(
     () => [
       {
         field: "id",
-        headerName: t("posts.fields.id"),
+        headerName: t("categories.fields.id"),
         type: "number",
         width: 50,
       },
       {
-        field: "name",
-        headerName: t("posts.fields.title"),
+        field: "title",
+        headerName: t("categories.fields.title"),
         minWidth: 400,
         flex: 1,
-      },
-      {
-        field: "description",
-        headerName: t("posts.fields.category.title"),
-        type: "number",
-        headerAlign: "left",
-        align: "left",
-        minWidth: 250,
-        flex: 0.5,
-        renderCell: function render({ row }) {
-          if (isLoading) {
-            return "Loading...";
-          }
-
-          const category = categoriesData?.data.find(
-            (item) => item.id === row.category.id
-          );
-          return category?.title;
-        },
       },
       {
         field: "actions",
@@ -76,7 +48,7 @@ export const CategoriesList: React.FC = () => {
         minWidth: 80,
       },
     ],
-    [t, categoriesData, isLoading]
+    [t]
   );
 
   return (

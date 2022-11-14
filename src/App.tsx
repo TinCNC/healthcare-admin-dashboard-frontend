@@ -22,11 +22,24 @@ import { OffLayoutArea } from "components/offLayoutArea";
 import authProvider from "./authProvider";
 
 import { PatientList, PatientCreate, PatientEdit } from "pages/patients";
+import {
+  ProductList,
+  ProductShow,
+  ProductCreate,
+  ProductEdit,
+} from "pages/products";
 import { CategoriesList } from "pages/categories";
 
-import { DoctorList, DoctorShow } from "pages/doctors";
+import {
+  DoctorList,
+  DoctorShow,
+  DoctorCreate,
+  DoctorEdit,
+} from "pages/doctors";
 
 import { DiseaseList, DiseaseShow } from "pages/diseases";
+
+import { DiseaseGroupList, DiseaseGroupShow } from "pages/diseases_groups";
 
 import { ClinicList, ClinicCreate, ClinicEdit } from "pages/clinics";
 
@@ -41,10 +54,12 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   solid,
-  regular,
-  brands,
-  icon,
+  // regular,
+  // brands,
+  // icon,
 } from "@fortawesome/fontawesome-svg-core/import.macro"; // <-- import styles to be used
+
+import { Category } from "@mui/icons-material";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -126,6 +141,14 @@ function App() {
                 icon: <FontAwesomeIcon icon={solid("disease")} />,
               },
               {
+                name: "diseases_groups",
+                list: DiseaseGroupList,
+                show: DiseaseGroupShow,
+                // create: PostCreate,
+                // edit: PostEdit,
+                icon: <FontAwesomeIcon icon={solid("viruses")} />,
+              },
+              {
                 name: "clinics",
                 list: ClinicList,
                 create: ClinicCreate,
@@ -136,8 +159,8 @@ function App() {
                 name: "doctors",
                 list: DoctorList,
                 show: DoctorShow,
-                // create: DoctorCreate,
-                // edit: PostEdit,
+                create: DoctorCreate,
+                edit: DoctorEdit,
                 icon: <FontAwesomeIcon icon={solid("user-doctor")} />,
               },
               {
@@ -147,23 +170,28 @@ function App() {
                 edit: PatientEdit,
                 icon: <FontAwesomeIcon icon={solid("hospital-user")} />,
               },
+              // {
+              //   name: "implants",
+              //   list: PatientList,
+              //   // create: PostCreate,
+              //   // edit: PostEdit,
+              //   icon: <FontAwesomeIcon icon={solid("teeth")} />,
+              // },
               {
-                name: "implants",
-                list: PatientList,
-                // create: PostCreate,
-                // edit: PostEdit,
-              },
-              {
-                name: "prosthetics",
-                list: PatientList,
-                // create: PostCreate,
-                // edit: PostEdit,
+                // name: "prosthetics",
+                name: "products",
+                list: ProductList,
+                show: ProductShow,
+                create: ProductCreate,
+                edit: ProductEdit,
+                icon: <FontAwesomeIcon icon={solid("bone")} />,
               },
               {
                 name: "categories",
                 list: CategoriesList,
                 // create: PostCreate,
                 // edit: PostEdit,
+                icon: <Category />,
               },
             ]}
             Title={Title}

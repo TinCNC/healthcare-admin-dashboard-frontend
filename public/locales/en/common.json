@@ -154,6 +154,40 @@
       "show": "Show Patient"
     }
   },
+  "products": {
+    "products": "Products",
+    "fields": {
+      "id": "ID",
+      "name": "Name",
+      "category": "Category",
+      "application": "Application",
+      "description": "Description",
+      "manufacturing_cost": "Manufacturing Cost",
+      "sale_price": "Sale Price",
+      "createdAt": "Created At"
+    },
+    "titles": {
+      "create": "Create Products",
+      "edit": "Edit Products",
+      "list": "Products",
+      "show": "Show Products"
+    }
+  },
+  "categories": {
+    "categories": "Categories",
+    "fields": {
+      "id": "ID",
+      "title": "Name",
+      "description": "Description",
+      "createdAt": "Created At"
+    },
+    "titles": {
+      "create": "Create Categories",
+      "edit": "Edit Categories",
+      "list": "Categories",
+      "show": "Show Categories"
+    }
+  },
   "clinics": {
     "clinics": "Clinics",
     "fields": {
@@ -188,6 +222,23 @@
       "edit": "Edit Disease",
       "list": "Diseases",
       "show": "Disease Information"
+    }
+  },
+  "diseases_groups": {
+    "diseases_groups": "Diseases Groups",
+    "fields": {
+      "id": "ID",
+      "group_name": "Group Name",
+      "icd10_code": "ICD10 Code",
+      "vn_code": "VN Code",
+      "statistics": "Statistics",
+      "createdAt": "Created At"
+    },
+    "titles": {
+      "create": "Create Diseases Group",
+      "edit": "Edit Diseases Group",
+      "list": "Diseases Groups",
+      "show": "Diseases Group Information"
     }
   },
   "departments": {
