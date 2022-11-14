@@ -10,7 +10,14 @@ import {
 
 // import parse from "html-react-parser";
 
-import { Show, Stack, Typography, TagField, Box } from "@pankod/refine-mui";
+import {
+  Show,
+  Stack,
+  Typography,
+  TagField,
+  Box,
+  Button,
+} from "@pankod/refine-mui";
 
 import { IProduct, ICategory } from "interfaces";
 
@@ -81,6 +88,7 @@ export const ProductShow: React.FC = () => {
           </Typography>
           <Typography variant="body2">{record?.description}</Typography>
         </Stack>
+        {/* <Button onClick={methodDoesNotExist()}>Break the world</Button>; */}
       </Stack>
       {/* <Stack gap={1} marginTop={4}>
         <List
@@ -231,3 +239,8 @@ export const ProductShow: React.FC = () => {
     </Show>
   );
 };
+function methodDoesNotExist():
+  | React.MouseEventHandler<HTMLButtonElement>
+  | undefined {
+  throw new Error("Function not implemented.");
+}
