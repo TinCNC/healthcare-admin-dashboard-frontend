@@ -205,8 +205,8 @@ export const PatientShow: React.FC = () => {
         field: "issuer",
         headerName: t("health_status_certificates.fields.issuer"),
         // type: "number",
-        minWidth: 220,
-        maxWidth: 220,
+        minWidth: 200,
+        maxWidth: 200,
         flex: 1,
         renderCell: ({ row }) => {
           if (issuersLoading) {

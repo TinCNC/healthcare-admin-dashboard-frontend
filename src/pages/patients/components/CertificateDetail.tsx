@@ -89,7 +89,7 @@ export const CertificateDetailDialog: React.FC<DataProps> = ({
             {t("health_status_certificates.fields.validator")}
           </Typography>
           <Typography variant="body2">
-            {validatorsData?.find((item) => item.id === data?.issuer)?.name}
+            {validatorsData?.find((item) => item.id === data?.validator)?.name}
           </Typography>
 
           <Typography variant="body1" fontWeight="bold">
