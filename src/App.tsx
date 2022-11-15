@@ -21,7 +21,12 @@ import { Title, Sider, Layout, Header } from "components/layout";
 import { OffLayoutArea } from "components/offLayoutArea";
 import authProvider from "./authProvider";
 
-import { PatientList, PatientCreate, PatientEdit } from "pages/patients";
+import {
+  PatientList,
+  PatientCreate,
+  PatientEdit,
+  PatientShow,
+} from "pages/patients";
 import {
   ProductList,
   ProductShow,
@@ -168,6 +173,7 @@ function App() {
                 list: PatientList,
                 create: PatientCreate,
                 edit: PatientEdit,
+                show: PatientShow,
                 icon: <FontAwesomeIcon icon={solid("hospital-user")} />,
               },
               // {

@@ -145,13 +145,14 @@ export interface IProfessionalCertificates {
 export interface IHealthStatusCertificates {
   id: number;
   name: string;
-  disease: string;
+  disease: number;
   description: string;
-  issuer: string;
+  issuer: number;
   issued_date: string;
-  expired_at: string;
+  expired_date: string;
   validator: number;
   holder: number;
   examiner: number;
+  status: string;
   created_at: string;
 }

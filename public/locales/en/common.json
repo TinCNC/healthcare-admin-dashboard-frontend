@@ -143,6 +143,7 @@
       "username": "Username",
       "firstName": "First Name",
       "lastName": "Last Name",
+      "full_name": "Full Name",
       "clinic": "Clinic",
       "createdAt": "Created At",
       "updatedAt": "Updated At"
@@ -292,6 +293,29 @@
       "show": "Show Doctor"
     },
     "loading": "Loading Doctors"
+  },
+  "health_status_certificates": {
+    "health_status_certificates": "Health Status Certificates",
+    "fields": {
+      "id": "ID",
+      "name": "Name",
+      "disease": "Disease",
+      "description": "Description",
+      "issued_date": "Issued Date",
+      "expired_date": "Expired Date",
+      "issuer": "Issuer",
+      "validator": "Validator",
+      "holder": "Holder",
+      "examiner": "Examiner",
+      "status": "Status",
+      "createdAt": "Created At"
+    },
+    "titles": {
+      "create": "Create Certificate",
+      "edit": "Edit Certificate",
+      "list": "Certificates",
+      "show": "Show Certificate"
+    }
   },
   "professional_certificates": {
     "professional_certificates": "Professional Certificates",
