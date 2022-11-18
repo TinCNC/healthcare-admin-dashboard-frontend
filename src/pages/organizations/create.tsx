@@ -1,3 +1,5 @@
+import { SaveOutlined } from "@mui/icons-material";
+import { LoadingButton } from "@mui/lab";
 import { useTranslate, HttpError } from "@pankod/refine-core";
 import {
   Create,
@@ -18,6 +20,7 @@ export const OrganizationCreate: React.FC = () => {
     register,
     control,
     formState: { errors },
+    refineCore: { formLoading },
   } = useForm<IOrganization, HttpError, IOrganization>();
 
   // const { autocompleteProps } = useAutocomplete<ICategory>({
@@ -25,7 +28,22 @@ export const OrganizationCreate: React.FC = () => {
   // });
 
   return (
-    <Create saveButtonProps={saveButtonProps}>
+    <Create
+      isLoading={formLoading}
+      footerButtons={
+        <LoadingButton
+          type="submit"
+          startIcon={<SaveOutlined />}
+          loadingPosition="start"
+          loading={formLoading}
+          variant="contained"
+          onClick={async (e) => saveButtonProps.onClick(e)}
+        >
+          {t("buttons.save")}
+        </LoadingButton>
+      }
+      // saveButtonProps={saveButtonProps}
+    >
       <Box
         component="form"
         sx={{ display: "flex", flexDirection: "column" }}

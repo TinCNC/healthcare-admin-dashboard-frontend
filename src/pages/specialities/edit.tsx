@@ -1,12 +1,12 @@
 import { SaveOutlined } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { useTranslate, HttpError } from "@pankod/refine-core";
-import { Create, Box, TextField } from "@pankod/refine-mui";
+import { Edit, Box, TextField } from "@pankod/refine-mui";
 import { useForm } from "@pankod/refine-react-hook-form";
 
-import { IDepartment } from "interfaces";
+import { IMedicalSpeciality } from "interfaces";
 
-export const DepartmentCreate: React.FC = () => {
+export const SpecialityEdit: React.FC = () => {
   const t = useTranslate();
 
   const {
@@ -14,10 +14,10 @@ export const DepartmentCreate: React.FC = () => {
     saveButtonProps,
     register,
     formState: { errors },
-  } = useForm<IDepartment, HttpError, IDepartment>();
+  } = useForm<IMedicalSpeciality, HttpError, IMedicalSpeciality>();
 
   return (
-    <Create
+    <Edit
       isLoading={formLoading}
       footerButtons={
         <LoadingButton
@@ -47,14 +47,13 @@ export const DepartmentCreate: React.FC = () => {
           margin="normal"
           fullWidth
           label={t("departments.fields.name")}
-          name="name"
+          name="title"
           autoFocus
         />
         <TextField
           {...register("description", {
             required: t("errors.required.field", { field: "Description" }),
           })}
-          name="description"
           error={!!errors.description}
           helperText={errors.description?.message}
           margin="normal"
@@ -63,6 +62,6 @@ export const DepartmentCreate: React.FC = () => {
           rows={4}
         />
       </Box>
-    </Create>
+    </Edit>
   );
 };

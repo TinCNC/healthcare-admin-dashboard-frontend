@@ -4,9 +4,9 @@ import { useTranslate, HttpError } from "@pankod/refine-core";
 import { Create, Box, TextField } from "@pankod/refine-mui";
 import { useForm } from "@pankod/refine-react-hook-form";
 
-import { IDepartment } from "interfaces";
+import { IMedicalSpeciality } from "interfaces";
 
-export const DepartmentCreate: React.FC = () => {
+export const SpecialityCreate: React.FC = () => {
   const t = useTranslate();
 
   const {
@@ -14,7 +14,7 @@ export const DepartmentCreate: React.FC = () => {
     saveButtonProps,
     register,
     formState: { errors },
-  } = useForm<IDepartment, HttpError, IDepartment>();
+  } = useForm<IMedicalSpeciality, HttpError, IMedicalSpeciality>();
 
   return (
     <Create

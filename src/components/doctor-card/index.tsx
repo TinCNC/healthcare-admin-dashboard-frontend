@@ -38,7 +38,7 @@ export const TrainerCard: React.FC<DataProps> = ({ data }) => {
       <CardMedia
         component="img"
         height="240"
-        image={data?.image}
+        image={data?.image || "images/People_Placeholder.png"}
         alt="avatar"
       />
       <CardContent>

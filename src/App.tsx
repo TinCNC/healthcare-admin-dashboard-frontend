@@ -21,15 +21,25 @@ import { Title, Sider, Layout, Header } from "components/layout";
 import { OffLayoutArea } from "components/offLayoutArea";
 import authProvider from "./authProvider";
 
-import { PatientList, PatientCreate, PatientEdit } from "pages/patients";
+import {
+  PatientList,
+  PatientCreate,
+  PatientEdit,
+  PatientShow,
+} from "pages/patients";
 import {
   ProductList,
   ProductShow,
   ProductCreate,
   ProductEdit,
 } from "pages/products";
+import {
+  TechnicianList,
+  TechnicianCreate,
+  TechnicianEdit,
+  TechnicianShow,
+} from "pages/technicians";
 import { CategoriesList } from "pages/categories";
-
 import {
   DoctorList,
   DoctorShow,
@@ -43,7 +53,18 @@ import { DiseaseGroupList, DiseaseGroupShow } from "pages/diseases_groups";
 
 import { ClinicList, ClinicCreate, ClinicEdit } from "pages/clinics";
 
-import { DepartmentList } from "pages/departments";
+import {
+  DepartmentList,
+  DepartmentCreate,
+  DepartmentEdit,
+} from "pages/departments";
+
+import {
+  SpecialityList,
+  SpecialityCreate,
+  SpecialityEdit,
+  SpecialityShow,
+} from "pages/specialities";
 
 import {
   OrganizationList,
@@ -121,8 +142,16 @@ function App() {
               {
                 name: "departments",
                 list: DepartmentList,
-                // create: PostCreate,
-                // edit: PostEdit,
+                create: DepartmentCreate,
+                edit: DepartmentEdit,
+                icon: <FontAwesomeIcon icon={solid("sitemap")} />,
+              },
+              {
+                name: "medical_specialities",
+                list: SpecialityList,
+                show: SpecialityShow,
+                create: SpecialityCreate,
+                edit: SpecialityEdit,
                 icon: <FontAwesomeIcon icon={solid("sitemap")} />,
               },
               {
@@ -168,7 +197,16 @@ function App() {
                 list: PatientList,
                 create: PatientCreate,
                 edit: PatientEdit,
+                show: PatientShow,
                 icon: <FontAwesomeIcon icon={solid("hospital-user")} />,
+              },
+              {
+                name: "technicians",
+                list: TechnicianList,
+                create: TechnicianCreate,
+                edit: TechnicianEdit,
+                show: TechnicianShow,
+                icon: <FontAwesomeIcon icon={solid("user-secret")} />,
               },
               // {
               //   name: "implants",

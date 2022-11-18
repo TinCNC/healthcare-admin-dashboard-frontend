@@ -142,16 +142,36 @@ export interface IProfessionalCertificates {
   created_at: string;
 }
 
+export interface ITechnicianCertificates {
+  id: number;
+  name: string;
+  description: string;
+  issued_date: string;
+  expired_date: string;
+  issuer: number;
+  validator: number;
+  holder: string;
+  // speciality: number;
+  program: string;
+  // type:
+  //   | "Medical Degree"
+  //   | "Specialized Medical Degree"
+  //   | "Permission of Medical Professional Practices";
+  level: number;
+  created_at: string;
+}
+
 export interface IHealthStatusCertificates {
   id: number;
   name: string;
-  disease: string;
+  disease: number;
   description: string;
-  issuer: string;
+  issuer: number;
   issued_date: string;
-  expired_at: string;
+  expired_date: string;
   validator: number;
   holder: number;
   examiner: number;
+  status: string;
   created_at: string;
 }

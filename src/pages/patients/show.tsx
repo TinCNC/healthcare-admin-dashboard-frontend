@@ -1,12 +1,10 @@
 import React from "react";
 import {
-  // useOne,
   useShow,
   useTranslate,
   useMany,
   useModal,
-  // useList,
-  // HttpError,
+  useOne,
 } from "@pankod/refine-core";
 
 import { useModalForm } from "@pankod/refine-react-hook-form";
@@ -17,7 +15,6 @@ import {
   Show,
   Stack,
   Typography,
-  TagField,
   Avatar,
   Button,
   GridColumns,
@@ -32,29 +29,25 @@ import {
 import { AddBoxOutlined, CardMembership } from "@mui/icons-material";
 
 import {
+  IHealthStatusCertificates,
+  IPatient,
+  IClinic,
   IDoctor,
-  IDepartment,
-  IProfessionalCertificates,
-  ITechnician,
-  IOrganization,
-  IMedicalSpeciality,
+  IDisease,
 } from "interfaces";
 import { CertificateDetailDialog } from "./components/CertificateDetail";
 import { CertificateEditorDialog } from "./components/CertificateEditor";
 
-export const DoctorShow: React.FC = () => {
+export const PatientShow: React.FC = () => {
   const t = useTranslate();
 
-  const { queryResult } = useShow<IDoctor>();
+  const { queryResult } = useShow<IPatient>();
 
-  const {
-    queryResult: certificateQueryResult,
-    // showId,
-    setShowId,
-  } = useShow<IProfessionalCertificates>({
-    resource: "professional_certificates",
-    id: "0",
-  });
+  const { queryResult: certificateQueryResult, setShowId } =
+    useShow<IHealthStatusCertificates>({
+      resource: "health_status_certificates",
+      id: "0",
+    });
 
   const { data: certificateData, isLoading: certificateLoading } =
     certificateQueryResult;
@@ -68,7 +61,7 @@ export const DoctorShow: React.FC = () => {
   const createModalFormReturnValues = useModalForm({
     refineCoreProps: {
       action: "create",
-      resource: "professional_certificates",
+      resource: "health_status_certificates",
       redirect: false,
     },
   });
@@ -76,7 +69,7 @@ export const DoctorShow: React.FC = () => {
   const editModalFormReturnValues = useModalForm({
     refineCoreProps: {
       action: "edit",
-      resource: "professional_certificates",
+      resource: "health_status_certificates",
       redirect: false,
     },
   });
@@ -104,73 +97,91 @@ export const DoctorShow: React.FC = () => {
 
   setValue("holder", record?.id);
 
-  const { dataGridProps } = useDataGrid<IProfessionalCertificates>({
-    resource: "professional_certificates",
+  const { dataGridProps } = useDataGrid<IHealthStatusCertificates>({
+    resource: "health_status_certificates",
     permanentFilter: [{ field: "holder", value: record?.id, operator: "eq" }],
     queryOptions: {
       enabled: !isLoading,
     },
   });
 
-  const creatorIds = dataGridProps.rows.map((item) => item.creator);
-  const { data: creatorsData, isLoading: creatorsLoading } =
-    useMany<IOrganization>({
-      resource: "organizations",
-      ids: creatorIds,
-      queryOptions: {
-        enabled: creatorIds.length > 0,
-      },
-    });
+  const diseaseIds = dataGridProps.rows.map((item) => item.disease);
+  const { data: diseasesData, isLoading: diseasesLoading } = useMany<IDisease>({
+    resource: "diseases",
+    ids: diseaseIds,
+    queryOptions: {
+      enabled: diseaseIds.length > 0,
+    },
+  });
+
+  const issuerIds = dataGridProps.rows.map((item) => item.issuer);
+  const { data: issuersData, isLoading: issuersLoading } = useMany<IDoctor>({
+    resource: "doctors",
+    ids: issuerIds,
+    queryOptions: {
+      enabled: issuerIds.length > 0,
+    },
+  });
 
   const validatorIds = dataGridProps.rows.map((item) => item.validator);
   const { data: validatorsData, isLoading: validatorsLoading } =
-    useMany<ITechnician>({
-      resource: "technicians",
+    useMany<IClinic>({
+      resource: "clinics",
       ids: validatorIds,
       queryOptions: {
         enabled: validatorIds.length > 0,
       },
     });
 
-  const specialityIds = dataGridProps.rows.map((item) => item.speciality);
-  const { data: specialitiesData, isLoading: specialitiesLoading } =
-    useMany<IMedicalSpeciality>({
-      resource: "medical_specialities",
-      ids: specialityIds,
+  const examinersId = dataGridProps.rows.map((item) => item.examiner);
+  const { data: examinersData, isLoading: examinersLoading } = useMany<IDoctor>(
+    {
+      resource: "doctors",
+      ids: examinersId,
       queryOptions: {
-        enabled: specialityIds.length > 0,
+        enabled: issuerIds.length > 0,
       },
-    });
-
-  const { data: departmentsData, isLoading: departmentsLoading } =
-    useMany<IDepartment>({
-      resource: "departments",
-      ids: record?.departments || [],
-      queryOptions: {
-        enabled: record !== undefined ? record?.departments.length > 0 : false,
-      },
-    });
+    }
+  );
 
   const certificatesColumns = React.useMemo<
-    GridColumns<IProfessionalCertificates>
+    GridColumns<IHealthStatusCertificates>
   >(
     () => [
       {
         field: "id",
-        headerName: t("professional_certificates.fields.id"),
+        headerName: t("health_status_certificates.fields.id"),
         type: "number",
         width: 50,
       },
       {
         field: "name",
-        headerName: t("professional_certificates.fields.name"),
+        headerName: t("health_status_certificates.fields.name"),
         minWidth: 200,
         maxWidth: 200,
         flex: 1,
       },
       {
+        field: "disease",
+        headerName: t("health_status_certificates.fields.disease"),
+        // type: "number",
+        minWidth: 200,
+        maxWidth: 200,
+        flex: 1,
+        renderCell: ({ row }) => {
+          if (diseasesLoading) {
+            return "Loading...";
+          }
+
+          const disease = diseasesData?.data.find(
+            (item) => item.id === row.disease
+          );
+          return disease?.name;
+        },
+      },
+      {
         field: "issued_date",
-        headerName: t("professional_certificates.fields.issued_date"),
+        headerName: t("health_status_certificates.fields.issued_date"),
         minWidth: 100,
         maxWidth: 100,
         flex: 1,
@@ -179,48 +190,38 @@ export const DoctorShow: React.FC = () => {
         },
       },
       {
-        field: "expired_at",
-        headerName: t("professional_certificates.fields.expired_at"),
+        field: "expired_date",
+        headerName: t("health_status_certificates.fields.expired_date"),
         minWidth: 100,
         maxWidth: 100,
         flex: 1,
-        // renderCell: ({ row }) => {
-        //   return new Date(row.expired_at).toLocaleDateString();
-        // },
         renderCell: ({ row }) => {
-          if (row.expired_at === undefined || row.expired_at === null)
+          if (row.expired_date === undefined || row.expired_date === null)
             return "Never Expire";
-          return new Date(row.expired_at).toLocaleDateString();
+          return new Date(row.expired_date).toLocaleDateString();
         },
       },
-      // {
-      //   field: "creator",
-      //   headerName: t("professional_certificates.fields.creator"),
-      //   minWidth: 200,
-      //   maxWidth: 200,
-      //   flex: 1,
-      // },
       {
-        field: "creator",
-        headerName: t("professional_certificates.fields.creator"),
+        field: "issuer",
+        headerName: t("health_status_certificates.fields.issuer"),
         // type: "number",
-        minWidth: 220,
-        maxWidth: 220,
+        minWidth: 200,
+        maxWidth: 200,
         flex: 1,
         renderCell: ({ row }) => {
-          if (creatorsLoading) {
+          if (issuersLoading) {
             return "Loading...";
           }
 
-          const creator = creatorsData?.data.find(
-            (item) => item.id === row.creator
+          const issuer = issuersData?.data.find(
+            (item) => item.id === row.issuer
           );
-          return creator?.name;
+          return issuer?.first_name + " " + issuer?.last_name;
         },
       },
       {
         field: "validator",
-        headerName: t("professional_certificates.fields.validator"),
+        headerName: t("health_status_certificates.fields.validator"),
         // type: "number",
         minWidth: 200,
         maxWidth: 200,
@@ -233,65 +234,30 @@ export const DoctorShow: React.FC = () => {
           const validator = validatorsData?.data.find(
             (item) => item.id === row.validator
           );
-          return validator?.first_name + " " + validator?.last_name;
+          return validator?.name;
         },
       },
-      // {
-      //   field: "speciality",
-      //   headerName: t("professional_certificates.fields.speciality"),
-      //   // type: "number",
-      //   minWidth: 200,
-      //   maxWidth: 200,
-      //   flex: 1,
-      //   renderCell: ({ row }) => {
-      //     if (specialitiesLoading) {
-      //       return "Loading...";
-      //     }
-
-      //     const speciality = specialitiesData?.data.find(
-      //       (item) => item.id === row.speciality
-      //     );
-      //     return speciality?.name;
-      //   },
-      // },
-      // {
-      //   field: "validator",
-      //   headerName: t("professional_certificates.fields.validator"),
-      //   minWidth: 200,
-      //   maxWidth: 200,
-      //   flex: 1,
-      // },
-      // {
-      //   field: "holder",
-      //   headerName: t("professional_certificates.fields.holder"),
-      //   minWidth: 200,
-      //   maxWidth: 200,
-      //   flex: 1,
-      // },
       {
-        field: "program",
-        headerName: t("professional_certificates.fields.program"),
-        minWidth: 220,
-        maxWidth: 220,
+        field: "examiner",
+        headerName: t("health_status_certificates.fields.examiner"),
+        // type: "number",
+        minWidth: 200,
+        maxWidth: 200,
         flex: 1,
+        renderCell: ({ row }) => {
+          if (examinersLoading) {
+            return "Loading...";
+          }
+
+          const examiner = examinersData?.data.find(
+            (item) => item.id === row.examiner
+          );
+          return examiner?.first_name + " " + examiner?.last_name;
+        },
       },
-      // {
-      //   field: "level",
-      //   headerName: t("professional_certificates.fields.level"),
-      //   minWidth: 60,
-      //   maxWidth: 60,
-      //   flex: 1,
-      // },
-      // {
-      //   field: "type",
-      //   headerName: t("professional_certificates.fields.type"),
-      //   minWidth: 60,
-      //   maxWidth: 60,
-      //   flex: 1,
-      // },
       {
         field: "created_at",
-        headerName: t("professional_certificates.fields.createdAt"),
+        headerName: t("health_status_certificates.fields.createdAt"),
         minWidth: 200,
         // maxWidth: 200,
         flex: 1,
@@ -313,7 +279,7 @@ export const DoctorShow: React.FC = () => {
                   setShowId(row.id);
                   showDetailModal();
                 }}
-                resourceNameOrRouteName="professional_certificates"
+                resourceNameOrRouteName="health_status_certificates"
                 recordItemId={row.id}
               />
               <EditButton
@@ -322,13 +288,13 @@ export const DoctorShow: React.FC = () => {
                 onClick={() => {
                   showEditModal(row.id);
                 }}
-                resourceNameOrRouteName="professional_certificates"
+                resourceNameOrRouteName="health_status_certificates"
                 recordItemId={row.id}
               />
               <DeleteButton
                 size="small"
                 hideText
-                resourceNameOrRouteName="professional_certificates"
+                resourceNameOrRouteName="health_status_certificates"
                 recordItemId={row.id}
               />
             </Stack>
@@ -341,25 +307,27 @@ export const DoctorShow: React.FC = () => {
     ],
     [
       t,
-      creatorsLoading,
-      creatorsData?.data,
+      diseasesLoading,
+      diseasesData?.data,
+      issuersLoading,
+      issuersData?.data,
       validatorsLoading,
       validatorsData?.data,
-      // specialitiesLoading,
-      // specialitiesData?.data,
+      examinersLoading,
+      examinersData?.data,
       setShowId,
       showDetailModal,
       showEditModal,
     ]
   );
 
-  //   const { data: categoryData } = useOne<ICategory>({
-  //     resource: "categories",
-  //     id: record?.category.id || "",
-  //     queryOptions: {
-  //       enabled: !!record?.category.id,
-  //     },
-  //   });
+  const { data: clinicData, isLoading: clinicLoading } = useOne<IClinic>({
+    resource: "clinics",
+    id: record?.clinic || "",
+    queryOptions: {
+      enabled: !!record?.clinic,
+    },
+  });
 
   // const { data: servicesData, isLoading: servicesLoading } = useMany<IService>({
   //   resource: "services",
@@ -433,19 +401,20 @@ export const DoctorShow: React.FC = () => {
   return (
     <Show isLoading={isLoading}>
       <CertificateEditorDialog
-        submitButtonText={t("professional_certificates.titles.create")}
+        submitButtonText={t("health_status_certificates.titles.create")}
         {...createModalFormReturnValues}
       />
       <CertificateEditorDialog
-        submitButtonText={t("professional_certificates.titles.edit")}
+        submitButtonText={t("health_status_certificates.titles.edit")}
         {...editModalFormReturnValues}
       />
       <CertificateDetailDialog
         loading={certificateLoading}
         data={certificateData?.data}
-        creatorsData={creatorsData?.data}
+        diseasesData={diseasesData?.data}
+        issuersData={issuersData?.data}
         validatorsData={validatorsData?.data}
-        specialitiesData={specialitiesData?.data}
+        examinersData={examinersData?.data}
         close={closeDetailModal}
         visible={detailModalVisible}
       />
@@ -462,36 +431,26 @@ export const DoctorShow: React.FC = () => {
         </Stack>
         <Stack gap={1}>
           <Typography variant="body1" fontWeight="bold">
-            {t("doctors.fields.full_name")}
+            {t("patients.fields.full_name")}
           </Typography>
           <Typography variant="body2">
             {record?.first_name + " " + record?.last_name}
           </Typography>
           <Typography variant="body1" fontWeight="bold">
-            {t("doctors.fields.departments")}
+            {t("patients.fields.clinic")}
           </Typography>
           <Typography variant="body2">
-            <Typography variant="body2">
-              {departmentsData !== undefined &&
-                departmentsData.data.map((item) => {
-                  return (
-                    <TagField sx={{ marginRight: "12px" }} value={item.name} />
-                  );
-                })}
-            </Typography>
+            {!clinicLoading ? clinicData?.data?.name : "Loading"}
           </Typography>
-          {/* <Typography variant="body1" fontWeight="bold">
-            {t("doctors.fields.biography")}
-          </Typography> */}
         </Stack>
       </Stack>
       <Stack gap={1} marginTop={4}>
         <List
-          resource="professional_certificates"
+          resource="health_status_certificates"
           title={
             <React.Fragment>
               <CardMembership sx={{ verticalAlign: "middle" }} />{" "}
-              {t("professional_certificates.titles.list")}
+              {t("health_status_certificates.titles.list")}
             </React.Fragment>
           }
           headerButtons={
@@ -500,7 +459,7 @@ export const DoctorShow: React.FC = () => {
                 fontSize="small"
                 sx={{ marginLeft: "-4px", marginRight: "8px" }}
               />
-              {t("professional_certificates.titles.create")}
+              {t("health_status_certificates.titles.create")}
             </Button>
           }
           breadcrumb={false}

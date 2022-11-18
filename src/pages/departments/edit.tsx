@@ -1,124 +1,63 @@
+import { SaveOutlined } from "@mui/icons-material";
+import { LoadingButton } from "@mui/lab";
 import { useTranslate, HttpError } from "@pankod/refine-core";
-import {
-  Edit,
-  Box,
-  TextField,
-  Autocomplete,
-  useAutocomplete,
-} from "@pankod/refine-mui";
-import { Controller, useForm } from "@pankod/refine-react-hook-form";
+import { Edit, Box, TextField } from "@pankod/refine-mui";
+import { useForm } from "@pankod/refine-react-hook-form";
 
-import { IPost, ICategory } from "interfaces";
+import { IDepartment } from "interfaces";
 
-export const PostEdit: React.FC = () => {
+export const DepartmentEdit: React.FC = () => {
   const t = useTranslate();
 
   const {
+    refineCore: { formLoading },
     saveButtonProps,
-    refineCore: { queryResult },
     register,
-    control,
     formState: { errors },
-  } = useForm<IPost, HttpError, IPost & { category: ICategory }>();
-
-  const { autocompleteProps } = useAutocomplete<ICategory>({
-    resource: "categories",
-    defaultValue: queryResult?.data?.data.category.id,
-  });
+  } = useForm<IDepartment, HttpError, IDepartment>();
 
   return (
-    <Edit saveButtonProps={saveButtonProps}>
+    <Edit
+      isLoading={formLoading}
+      footerButtons={
+        <LoadingButton
+          type="submit"
+          startIcon={<SaveOutlined />}
+          loadingPosition="start"
+          loading={formLoading}
+          variant="contained"
+          onClick={async (e) => saveButtonProps.onClick(e)}
+        >
+          {t("buttons.save")}
+        </LoadingButton>
+      }
+      // saveButtonProps={saveButtonProps}
+    >
       <Box
         component="form"
         sx={{ display: "flex", flexDirection: "column" }}
         autoComplete="off"
       >
         <TextField
-          {...register("title", {
-            required: t("errors.required.field", { field: "Title" }),
+          {...register("name", {
+            required: t("errors.required.field", { field: "Name" }),
           })}
-          error={!!errors.title}
-          helperText={errors.title?.message}
+          error={!!errors.name}
+          helperText={errors.name?.message}
           margin="normal"
           fullWidth
-          label={t("posts.fields.title")}
+          label={t("departments.fields.name")}
           name="title"
           autoFocus
         />
-        <Controller
-          control={control}
-          name="status"
-          rules={{
-            required: t("errors.required.field", { field: "Status" }),
-          }}
-          defaultValue={null as any}
-          render={({ field }) => (
-            <Autocomplete
-              options={["published", "draft", "rejected"]}
-              {...field}
-              onChange={(_, value) => {
-                field.onChange(value);
-              }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label={t("posts.fields.status.title")}
-                  margin="normal"
-                  variant="outlined"
-                  error={!!errors.status}
-                  helperText={errors.status?.message}
-                  required
-                />
-              )}
-            />
-          )}
-        />
-        <Controller
-          control={control}
-          name="category"
-          rules={{
-            required: t("errors.required.field", { field: "Category" }),
-          }}
-          defaultValue={null as any}
-          render={({ field }) => (
-            <Autocomplete
-              {...autocompleteProps}
-              {...field}
-              onChange={(_, value) => {
-                field.onChange(value);
-              }}
-              getOptionLabel={(item) => {
-                return (
-                  autocompleteProps?.options?.find(
-                    (p) => p?.id?.toString() === item?.id?.toString()
-                  )?.title ?? ""
-                );
-              }}
-              isOptionEqualToValue={(option, value) =>
-                value === undefined || option.id.toString() === value.toString()
-              }
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label={t("posts.fields.category.title")}
-                  margin="normal"
-                  variant="outlined"
-                  error={!!errors.category}
-                  helperText={errors.category?.message}
-                  required
-                />
-              )}
-            />
-          )}
-        />
         <TextField
-          {...register("content", {
-            required: t("errors.required.field", { field: "Content" }),
+          {...register("description", {
+            required: t("errors.required.field", { field: "Description" }),
           })}
-          error={!!errors.content}
-          helperText={errors.content?.message}
+          error={!!errors.description}
+          helperText={errors.description?.message}
           margin="normal"
-          label={t("posts.fields.content")}
+          label={t("departments.fields.description")}
           multiline
           rows={4}
         />
