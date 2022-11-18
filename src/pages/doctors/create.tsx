@@ -265,13 +265,7 @@ export const DoctorCreate: React.FC = () => {
               //   console.log(event.target);
               // }}
             />
-            <input
-              id="file"
-              {...register("image", {
-                required: "This field is required",
-              })}
-              type="hidden"
-            />
+            <input id="file" {...register("image")} type="hidden" />
             <LoadingButton
               // loading={isUploadLoading}
               loadingPosition="end"

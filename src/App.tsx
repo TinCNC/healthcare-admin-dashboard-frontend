@@ -48,7 +48,11 @@ import { DiseaseGroupList, DiseaseGroupShow } from "pages/diseases_groups";
 
 import { ClinicList, ClinicCreate, ClinicEdit } from "pages/clinics";
 
-import { DepartmentList } from "pages/departments";
+import {
+  DepartmentList,
+  DepartmentCreate,
+  DepartmentEdit,
+} from "pages/departments";
 
 import {
   OrganizationList,
@@ -126,8 +130,8 @@ function App() {
               {
                 name: "departments",
                 list: DepartmentList,
-                // create: PostCreate,
-                // edit: PostEdit,
+                create: DepartmentCreate,
+                edit: DepartmentEdit,
                 icon: <FontAwesomeIcon icon={solid("sitemap")} />,
               },
               {

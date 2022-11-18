@@ -43,6 +43,7 @@ export const CertificateEditorDialog: React.FC<DataProps> = ({
   modal: { visible, close },
   saveButtonProps,
   submitButtonText,
+  reset,
 }) => {
   const t = useTranslate();
 
@@ -100,7 +101,7 @@ export const CertificateEditorDialog: React.FC<DataProps> = ({
 
   const [issuedDate, setIssuedDate] = React.useState<Dayjs | null>(dayjs());
 
-  const [expiredDate, setExpiredDate] = React.useState<Dayjs | null>(dayjs());
+  const [expiredDate, setExpiredDate] = React.useState<Dayjs | null>(null);
 
   const submitButtonClick = (e: React.BaseSyntheticEvent<object, any, any>) => {
     console.log(getValues());
@@ -109,7 +110,13 @@ export const CertificateEditorDialog: React.FC<DataProps> = ({
 
   return (
     <div>
-      <Dialog open={visible} onClose={close}>
+      <Dialog
+        open={visible}
+        onClose={() => {
+          reset();
+          close();
+        }}
+      >
         <DialogTitle>
           {t("professional_certificates.titles.create")}
         </DialogTitle>
@@ -205,26 +212,25 @@ export const CertificateEditorDialog: React.FC<DataProps> = ({
               />
               <DatePicker
                 {...register("expired_date")}
-                // id="expired_at"
-                // error={!!errors?.expired_at}
-                // helperText={errors.expired_at?.message as string}
                 disablePast
                 label={t("health_status_certificates.fields.expired_date")}
                 openTo="day"
                 views={["year", "month", "day"]}
                 value={expiredDate}
                 onChange={(newValue) => {
-                  setValue(
-                    "expired_date",
-                    newValue?.toDate().toLocaleDateString()
-                  );
+                  if (newValue === null) setValue("expired_date", null);
+                  else {
+                    setValue(
+                      "expired_date",
+                      newValue?.toDate().toLocaleDateString()
+                    );
+                  }
                   setExpiredDate(newValue);
                 }}
                 renderInput={(
                   params: JSX.IntrinsicAttributes & TextFieldProps
                 ) => (
                   <TextField
-                    required
                     error={!!errors?.expired_date}
                     helperText={errors.expired_date?.message as string}
                     fullWidth
@@ -369,7 +375,10 @@ export const CertificateEditorDialog: React.FC<DataProps> = ({
           <LoadingButton
             color="error"
             startIcon={<CancelOutlined />}
-            onClick={close}
+            onClick={() => {
+              reset();
+              close();
+            }}
           >
             Cancel
           </LoadingButton>

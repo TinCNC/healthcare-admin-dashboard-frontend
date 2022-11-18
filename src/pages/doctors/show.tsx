@@ -184,7 +184,12 @@ export const DoctorShow: React.FC = () => {
         minWidth: 100,
         maxWidth: 100,
         flex: 1,
+        // renderCell: ({ row }) => {
+        //   return new Date(row.expired_at).toLocaleDateString();
+        // },
         renderCell: ({ row }) => {
+          if (row.expired_at === undefined || row.expired_at === null)
+            return "Never Expire";
           return new Date(row.expired_at).toLocaleDateString();
         },
       },

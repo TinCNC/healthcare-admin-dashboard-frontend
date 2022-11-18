@@ -251,10 +251,10 @@
       "createdAt": "Created At"
     },
     "titles": {
-      "create": "Create Patient",
-      "edit": "Edit Patient",
+      "create": "Create Departments",
+      "edit": "Edit Departments",
       "list": "Departments",
-      "show": "Show Patient"
+      "show": "Show Departments"
     }
   },
   "organizations": {

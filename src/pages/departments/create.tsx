@@ -1,28 +1,17 @@
 import { useTranslate, HttpError } from "@pankod/refine-core";
-import {
-  Create,
-  Box,
-  TextField,
-  Autocomplete,
-  useAutocomplete,
-} from "@pankod/refine-mui";
-import { Controller, useForm } from "@pankod/refine-react-hook-form";
+import { Create, Box, TextField } from "@pankod/refine-mui";
+import { useForm } from "@pankod/refine-react-hook-form";
 
-import { IPost, ICategory } from "interfaces";
+import { IDepartment } from "interfaces";
 
-export const PostCreate: React.FC = () => {
+export const DepartmentCreate: React.FC = () => {
   const t = useTranslate();
 
   const {
     saveButtonProps,
     register,
-    control,
     formState: { errors },
-  } = useForm<IPost, HttpError, IPost & { category: ICategory }>();
-
-  const { autocompleteProps } = useAutocomplete<ICategory>({
-    resource: "categories",
-  });
+  } = useForm<IDepartment, HttpError, IDepartment>();
 
   return (
     <Create saveButtonProps={saveButtonProps}>
@@ -32,89 +21,26 @@ export const PostCreate: React.FC = () => {
         autoComplete="off"
       >
         <TextField
-          {...register("title", {
-            required: t("errors.required.field", { field: "Title" }),
+          {...register("name", {
+            required: t("errors.required.field", { field: "Name" }),
           })}
-          error={!!errors.title}
-          helperText={errors.title?.message}
+          error={!!errors.name}
+          helperText={errors.name?.message}
           margin="normal"
           fullWidth
-          label={t("posts.fields.title")}
-          name="title"
+          label={t("departments.fields.name")}
+          name="name"
           autoFocus
         />
-        <Controller
-          control={control}
-          name="status"
-          rules={{
-            required: t("errors.required.field", { field: "Status" }),
-          }}
-          render={({ field }) => (
-            <Autocomplete
-              options={["published", "draft", "rejected"]}
-              {...field}
-              onChange={(_, value) => {
-                field.onChange(value);
-              }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label={t("posts.fields.status.title")}
-                  margin="normal"
-                  variant="outlined"
-                  error={!!errors.status}
-                  helperText={errors.status?.message}
-                  required
-                />
-              )}
-            />
-          )}
-        />
-        <Controller
-          control={control}
-          name="category"
-          rules={{
-            required: t("errors.required.field", { field: "Category" }),
-          }}
-          render={({ field }) => (
-            <Autocomplete
-              {...autocompleteProps}
-              {...field}
-              onChange={(_, value) => {
-                field.onChange(value);
-              }}
-              getOptionLabel={(item) => {
-                return (
-                  autocompleteProps?.options?.find(
-                    (p) => p?.id?.toString() === item?.id?.toString()
-                  )?.title ?? ""
-                );
-              }}
-              isOptionEqualToValue={(option, value) =>
-                value === undefined || option.id.toString() === value.toString()
-              }
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label={t("posts.fields.category.title")}
-                  margin="normal"
-                  variant="outlined"
-                  error={!!errors.category}
-                  helperText={errors.category?.message}
-                  required
-                />
-              )}
-            />
-          )}
-        />
         <TextField
-          {...register("content", {
-            required: t("errors.required.field", { field: "Content" }),
+          {...register("description", {
+            required: t("errors.required.field", { field: "Description" }),
           })}
-          error={!!errors.content}
-          helperText={errors.content?.message}
+          name="description"
+          error={!!errors.description}
+          helperText={errors.description?.message}
           margin="normal"
-          label={t("posts.fields.content")}
+          label={t("departments.fields.description")}
           multiline
           rows={4}
         />
