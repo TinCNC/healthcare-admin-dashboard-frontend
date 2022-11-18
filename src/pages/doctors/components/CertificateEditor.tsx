@@ -113,11 +113,10 @@ export const CertificateEditorDialog: React.FC<DataProps> = ({
 
   const [issuedDate, setIssuedDate] = React.useState<Dayjs | null>(dayjs());
 
-  // const [expiredAt, setExpiredAt] = React.useState<Dayjs | null>(dayjs());
-
   const [expiredAt, setExpiredAt] = React.useState<Dayjs | null>(null);
 
   const submitButtonClick = (e: React.BaseSyntheticEvent<object, any, any>) => {
+    if (getValues("expired_at") === "") setValue("expired_at", null);
     console.log(getValues());
     saveButtonProps.onClick(e);
   };

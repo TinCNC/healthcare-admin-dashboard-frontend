@@ -155,6 +155,23 @@
       "show": "Show Patient"
     }
   },
+  "technicians": {
+    "technicians": "Technicians",
+    "fields": {
+      "id": "ID",
+      "username": "Username",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "full_name": "Full Name",
+      "createdAt": "Created At"
+    },
+    "titles": {
+      "create": "Create Technician",
+      "edit": "Edit Technician",
+      "list": "Technicians",
+      "show": "Show Technician"
+    }
+  },
   "products": {
     "products": "Products",
     "fields": {
@@ -257,6 +274,21 @@
       "show": "Show Departments"
     }
   },
+  "medical_specialities": {
+    "medical_specialities": "Medical Specialities",
+    "fields": {
+      "id": "Id",
+      "name": "Name",
+      "description": "Description",
+      "createdAt": "Created At"
+    },
+    "titles": {
+      "create": "Create Speciality",
+      "edit": "Edit Speciality",
+      "list": "Medical Specialities",
+      "show": "Show Speciality"
+    }
+  },
   "organizations": {
     "organizations": "Organizations",
     "fields": {
@@ -326,6 +358,30 @@
       "issued_date": "Issued Date",
       "expired_at": "Expired At",
       "creator": "Creator",
+      "validator": "Validator",
+      "speciality": "Speciality",
+      "holder": "Holder",
+      "program": "Program",
+      "type": "Type",
+      "level": "Level",
+      "createdAt": "Created At"
+    },
+    "titles": {
+      "create": "Create Certificate",
+      "edit": "Edit Certificate",
+      "list": "Certificates",
+      "show": "Show Certificate"
+    }
+  },
+  "technician_certificates": {
+    "technician_certificates": "Technician Certificates",
+    "fields": {
+      "id": "ID",
+      "name": "Name",
+      "description": "Description",
+      "issued_date": "Issued Date",
+      "expired_date": "Expired Date",
+      "issuer": "Issuer",
       "validator": "Validator",
       "speciality": "Speciality",
       "holder": "Holder",

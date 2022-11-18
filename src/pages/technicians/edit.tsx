@@ -2,41 +2,34 @@ import { HttpError, useTranslate } from "@pankod/refine-core";
 import {
   Box,
   TextField,
-  Autocomplete,
-  useAutocomplete,
+  // Autocomplete,
+  // useAutocomplete,
   Edit,
   Input,
   Stack,
   Avatar,
 } from "@pankod/refine-mui";
-import { useForm, Controller } from "@pankod/refine-react-hook-form";
+import { useForm } from "@pankod/refine-react-hook-form";
 
-import { IDoctor, IDepartment } from "interfaces";
+import { ITechnician } from "interfaces";
 
 import { FileUpload, SaveOutlined } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { BaseSyntheticEvent, useState } from "react";
 
-import {
-  uploadImage,
-  getPublicImageUrl,
-  // getSignedImageUrl,
-  // downloadImage,
-} from "api";
+import { uploadImage, getPublicImageUrl } from "api";
 
-export const DoctorEdit: React.FC = () => {
+export const TechnicianEdit: React.FC = () => {
   const t = useTranslate();
-
   const {
-    refineCore: { formLoading, queryResult },
+    refineCore: { formLoading },
     saveButtonProps,
     register,
-    control,
-    // watch,
+    // control,
     getValues,
     setValue,
     formState: { errors },
-  } = useForm<IDoctor, HttpError, IDoctor & { departments: IDepartment[] }>();
+  } = useForm<ITechnician, HttpError, ITechnician>();
 
   // const imageInput = watch("image");
 
@@ -44,7 +37,7 @@ export const DoctorEdit: React.FC = () => {
 
   const [imageFile, setImageFile] = useState<File>();
 
-  const [creatingPatient, setCreatingPatient] = useState<boolean>(false);
+  const [creatingTechnician, setCreatingTechnician] = useState<boolean>(false);
 
   const handleSubmit = async (e: BaseSyntheticEvent<object, any, any>) => {
     // console.log(saveButtonProps);
@@ -56,11 +49,11 @@ export const DoctorEdit: React.FC = () => {
 
     try {
       if (imageFile !== undefined) {
-        setCreatingPatient(true);
+        setCreatingTechnician(true);
         const uploaded = await uploadImage(
           imageFile,
           "profile-image",
-          `doctors/${getValues("username")}/`
+          `technicians/${getValues("username")}/`
         );
         if (uploaded !== undefined) {
           const imageUrl = await getPublicImageUrl(
@@ -70,12 +63,11 @@ export const DoctorEdit: React.FC = () => {
           if (imageUrl !== undefined) setValue("image", imageUrl?.publicURL);
         }
       }
-
-      setCreatingPatient(false);
       saveButtonProps.onClick(e);
+      setCreatingTechnician(false);
       // throw new Error("Function not implemented.");
     } catch (error) {
-      setCreatingPatient(false);
+      setCreatingTechnician(false);
     }
   };
 
@@ -96,44 +88,42 @@ export const DoctorEdit: React.FC = () => {
     }
   };
 
-  const {
-    autocompleteProps,
-    // defaultValueQueryResult
-  } = useAutocomplete<IDepartment>({
-    resource: "departments",
-    onSearch: (value) => [
-      {
-        field: "name",
-        operator: "containss",
-        value,
-      },
-    ],
-    defaultValue: queryResult?.data?.data.departments,
-  });
-
-  // console.log(defaultValueQueryResult?.data?.data[0]);
+  // const {
+  //   autocompleteProps,
+  //   // defaultValueQueryResult
+  // } = useAutocomplete<IClinic>({
+  //   resource: "clinics",
+  //   onSearch: (value) => [
+  //     {
+  //       field: "name",
+  //       operator: "containss",
+  //       value,
+  //     },
+  //   ],
+  //   defaultValue: queryResult?.data?.data.clinic,
+  // });
 
   return (
     <Edit
       isLoading={formLoading}
+      // saveButtonProps={{
+      //   disabled: creatingTechnician,
+      //   onClick: (e: BaseSyntheticEvent<object, any, any>) => {
+      //     handleSubmit(e);
+      //   },
+      // }}
       footerButtons={
         <LoadingButton
           type="submit"
           startIcon={<SaveOutlined />}
           loadingPosition="start"
-          loading={formLoading || creatingPatient}
+          loading={formLoading || creatingTechnician}
           variant="contained"
           onClick={async (e) => handleSubmit(e)}
         >
           {t("buttons.save")}
         </LoadingButton>
       }
-      // saveButtonProps={{
-      //   disabled: creatingPatient || formLoading,
-      //   onClick: (e: BaseSyntheticEvent<object, any, any>) => {
-      //     handleSubmit(e);
-      //   },
-      // }}
     >
       <Stack
         direction={{ sm: "column", md: "row" }}
@@ -151,9 +141,6 @@ export const DoctorEdit: React.FC = () => {
               type="file"
               sx={{ display: "none" }}
               onChange={onChangeHandler}
-              // onChange={(event) => {
-              //   console.log(event.target);
-              // }}
             />
             <input id="file" {...register("image")} type="hidden" />
             <LoadingButton
@@ -187,7 +174,7 @@ export const DoctorEdit: React.FC = () => {
               required
               fullWidth
               id="username"
-              label={t("doctors.fields.username")}
+              label="Username"
               name="username"
               autoFocus
             />
@@ -202,7 +189,7 @@ export const DoctorEdit: React.FC = () => {
               required
               fullWidth
               id="first_name"
-              label={t("doctors.fields.first_name")}
+              label="First Name"
               name="first_name"
             />
             <TextField
@@ -213,7 +200,7 @@ export const DoctorEdit: React.FC = () => {
               required
               fullWidth
               id="last_name"
-              label={t("doctors.fields.last_name")}
+              label="Last Name"
               name="last_name"
             />
             {/* <Controller
@@ -241,18 +228,18 @@ export const DoctorEdit: React.FC = () => {
             />
           )}
         /> */}
-            <Controller
+            {/* <Controller
               control={control}
-              name="departments"
-              rules={{ required: "Departments is required" }}
+              name="clinic"
+              rules={{ required: "Clinic is required" }}
               render={({ field }) => (
                 <Autocomplete
-                  multiple
                   {...autocompleteProps}
                   {...field}
                   // defaultValue={defaultValueQueryResult?.data?.data[0]}
                   onChange={(_, value) => {
-                    field.onChange(value?.map((item) => item.id));
+                    console.log(value);
+                    field.onChange(value?.id);
                   }}
                   getOptionLabel={(item) => {
                     return item.name ? item.name : "";
@@ -264,17 +251,17 @@ export const DoctorEdit: React.FC = () => {
                     <TextField
                       {...params}
                       // placeholder={defaultValueQueryResult?.data?.data[0].name}
-                      label={t("doctors.fields.departments")}
+                      label="Clinic"
                       margin="normal"
                       variant="outlined"
-                      error={!!errors.departments}
-                      helperText={errors.departments?.message}
+                      error={!!errors.clinic}
+                      helperText={errors.clinic?.message}
                       required
                     />
                   )}
                 />
               )}
-            />
+            /> */}
           </Box>
         </Stack>
       </Stack>

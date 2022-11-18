@@ -1,5 +1,5 @@
 import React from "react";
-import { useTranslate, useMany } from "@pankod/refine-core";
+import { useTranslate } from "@pankod/refine-core";
 import {
   useDataGrid,
   DataGrid,
@@ -15,9 +15,9 @@ import { IDepartment } from "interfaces";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   solid,
-  regular,
-  brands,
-  icon,
+  // regular,
+  // brands,
+  // icon,
 } from "@fortawesome/fontawesome-svg-core/import.macro"; // <-- import styles to be used
 
 export const DepartmentList: React.FC = () => {

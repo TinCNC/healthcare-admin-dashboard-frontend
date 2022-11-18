@@ -14,7 +14,7 @@ import { useForm, Controller } from "@pankod/refine-react-hook-form";
 
 import { IDoctor, IDepartment } from "interfaces";
 
-import { FileUpload } from "@mui/icons-material";
+import { FileUpload, SaveOutlined } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { BaseSyntheticEvent, useState } from "react";
 
@@ -142,12 +142,24 @@ export const DoctorCreate: React.FC = () => {
   return (
     <Create
       isLoading={formLoading}
-      saveButtonProps={{
-        disabled: creatingPatient || formLoading,
-        onClick: (e: BaseSyntheticEvent<object, any, any>) => {
-          handleSubmit(e);
-        },
-      }}
+      footerButtons={
+        <LoadingButton
+          type="submit"
+          startIcon={<SaveOutlined />}
+          loadingPosition="start"
+          loading={formLoading || creatingPatient}
+          variant="contained"
+          onClick={async (e) => handleSubmit(e)}
+        >
+          {t("buttons.save")}
+        </LoadingButton>
+      }
+      // saveButtonProps={{
+      //   disabled: creatingPatient || formLoading,
+      //   onClick: (e: BaseSyntheticEvent<object, any, any>) => {
+      //     handleSubmit(e);
+      //   },
+      // }}
     >
       <Box
         component="form"

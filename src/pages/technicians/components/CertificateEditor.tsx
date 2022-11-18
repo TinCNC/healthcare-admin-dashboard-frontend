@@ -19,7 +19,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import { LoadingButton } from "@mui/lab";
 
-import { IDoctor, IClinic, IDisease } from "interfaces";
+import { IOrganization, ITechnician } from "interfaces";
 import { AddCircleOutlineOutlined, CancelOutlined } from "@mui/icons-material";
 
 import {
@@ -47,26 +47,13 @@ export const CertificateEditorDialog: React.FC<DataProps> = ({
 }) => {
   const t = useTranslate();
 
-  const { autocompleteProps: autocompleteDiseaseProps } =
-    useAutocomplete<IDisease>({
-      resource: "diseases",
+  const { autocompleteProps: autocompleteIssuerProps } =
+    useAutocomplete<IOrganization>({
+      resource: "organizations",
       pagination: { current: 1, pageSize: 10000 },
       onSearch: (value) => [
         {
           field: "name",
-          operator: "containss",
-          value,
-        },
-      ],
-    });
-
-  const { autocompleteProps: autocompleteIssuerProps } =
-    useAutocomplete<IDoctor>({
-      resource: "doctors",
-      pagination: { current: 1, pageSize: 10000 },
-      onSearch: (value) => [
-        {
-          field: "username",
           operator: "containss",
           value,
         },
@@ -74,21 +61,8 @@ export const CertificateEditorDialog: React.FC<DataProps> = ({
     });
 
   const { autocompleteProps: autocompleteValidatorProps } =
-    useAutocomplete<IClinic>({
-      resource: "clinics",
-      pagination: { current: 1, pageSize: 10000 },
-      onSearch: (value) => [
-        {
-          field: "name",
-          operator: "containss",
-          value,
-        },
-      ],
-    });
-
-  const { autocompleteProps: autocompleteExaminerProps } =
-    useAutocomplete<IDoctor>({
-      resource: "doctors",
+    useAutocomplete<ITechnician>({
+      resource: "technicians",
       pagination: { current: 1, pageSize: 10000 },
       onSearch: (value) => [
         {
@@ -118,13 +92,11 @@ export const CertificateEditorDialog: React.FC<DataProps> = ({
           close();
         }}
       >
-        <DialogTitle>
-          {t("professional_certificates.titles.create")}
-        </DialogTitle>
+        <DialogTitle>{t("technician_certificates.titles.create")}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Please enter the information of the health status certificate belong
-            to this person
+            Please enter the information of the technician certificate belong to
+            this person
           </DialogContentText>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <form className="form" onSubmit={handleSubmit(onFinish)}>
@@ -135,43 +107,11 @@ export const CertificateEditorDialog: React.FC<DataProps> = ({
                 autoFocus
                 margin="dense"
                 id="name"
-                label={t("health_status_certificates.fields.name")}
+                label={t("technician_certificates.fields.name")}
                 name="name"
-                required
                 // defaultValue={"lsdjflksd"}
                 fullWidth
                 variant="standard"
-              />
-              <Controller
-                control={control}
-                name="disease"
-                rules={{ required: "Disease is required" }}
-                render={({ field }) => (
-                  <Autocomplete
-                    {...autocompleteDiseaseProps}
-                    {...field}
-                    onChange={(_, value) => {
-                      field.onChange(value?.id);
-                    }}
-                    getOptionLabel={(item) => {
-                      return item.name ? item.name : "";
-                    }}
-                    isOptionEqualToValue={(option, value) =>
-                      value === undefined || option.id === value.id
-                    }
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label={t("health_status_certificates.fields.disease")}
-                        margin="normal"
-                        variant="standard"
-                        error={!!errors.disease}
-                        helperText={errors.disease?.message as string}
-                        required
-                      />
-                    )}
-                  />
-                )}
               />
               {/* <TextField
               {...register("description")}
@@ -188,7 +128,7 @@ export const CertificateEditorDialog: React.FC<DataProps> = ({
                   required: "Issued Date is required",
                 })}
                 disableFuture
-                label={t("health_status_certificates.fields.issued_date")}
+                label={t("technician_certificates.fields.issued_date")}
                 openTo="day"
                 views={["year", "month", "day"]}
                 value={issuedDate}
@@ -214,7 +154,7 @@ export const CertificateEditorDialog: React.FC<DataProps> = ({
               <DatePicker
                 {...register("expired_date")}
                 disablePast
-                label={t("health_status_certificates.fields.expired_date")}
+                label={t("technician_certificates.fields.expired_date")}
                 openTo="day"
                 views={["year", "month", "day"]}
                 value={expiredDate}
@@ -253,13 +193,7 @@ export const CertificateEditorDialog: React.FC<DataProps> = ({
                       field.onChange(value?.id);
                     }}
                     getOptionLabel={(item) => {
-                      return item.username
-                        ? item.username +
-                            ": " +
-                            item.first_name +
-                            " " +
-                            item.last_name
-                        : "";
+                      return item.name ? item.name : "";
                     }}
                     isOptionEqualToValue={(option, value) =>
                       value === undefined || option.id === value.id
@@ -267,7 +201,7 @@ export const CertificateEditorDialog: React.FC<DataProps> = ({
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label={t("health_status_certificates.fields.issuer")}
+                        label={t("technician_certificates.fields.issuer")}
                         margin="normal"
                         variant="standard"
                         error={!!errors.creator}
@@ -290,37 +224,6 @@ export const CertificateEditorDialog: React.FC<DataProps> = ({
                       field.onChange(value?.id);
                     }}
                     getOptionLabel={(item) => {
-                      return item.name ? item.name : "";
-                    }}
-                    isOptionEqualToValue={(option, value) =>
-                      value === undefined || option.id === value.id
-                    }
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label={t("health_status_certificates.fields.validator")}
-                        margin="normal"
-                        variant="standard"
-                        error={!!errors.validator}
-                        helperText={errors.validator?.message as string}
-                        required
-                      />
-                    )}
-                  />
-                )}
-              />
-              <Controller
-                control={control}
-                name="examiner"
-                rules={{ required: "Examiner is required" }}
-                render={({ field }) => (
-                  <Autocomplete
-                    {...autocompleteExaminerProps}
-                    {...field}
-                    onChange={(_, value) => {
-                      field.onChange(value?.id);
-                    }}
-                    getOptionLabel={(item) => {
                       return item.username
                         ? item.username +
                             ": " +
@@ -335,16 +238,29 @@ export const CertificateEditorDialog: React.FC<DataProps> = ({
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label={t("health_status_certificates.fields.examiner")}
+                        label={t("technician_certificates.fields.validator")}
                         margin="normal"
                         variant="standard"
-                        error={!!errors.examiner}
-                        helperText={errors.examiner?.message as string}
+                        error={!!errors.validator}
+                        helperText={errors.validator?.message as string}
                         required
                       />
                     )}
                   />
                 )}
+              />
+              <TextField
+                {...register("program", { required: "Program is required" })}
+                error={!!errors?.program}
+                helperText={errors.program?.message as string}
+                autoFocus
+                margin="dense"
+                id="program"
+                label={t("technician_certificates.fields.program")}
+                name="program"
+                // defaultValue={"lsdjflksd"}
+                fullWidth
+                variant="standard"
               />
               <input
                 {...register("holder", {
@@ -356,16 +272,15 @@ export const CertificateEditorDialog: React.FC<DataProps> = ({
                 // value={holder}
               />
               <TextField
-                {...register("status", {
-                  required: "Status is required",
-                })}
+                {...register("level", { required: "Level is required" })}
+                error={!!errors?.level}
+                helperText={errors.level?.message as string}
+                autoFocus
                 margin="dense"
-                error={!!errors?.status}
-                helperText={errors.status?.message as string}
-                required
-                id="status"
-                label={t("health_status_certificates.fields.status")}
-                name="status"
+                id="level"
+                label={t("technician_certificates.fields.level")}
+                name="level"
+                // defaultValue={"lsdjflksd"}
                 fullWidth
                 variant="standard"
               />

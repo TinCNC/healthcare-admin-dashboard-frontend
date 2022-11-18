@@ -23,9 +23,9 @@ import { IOrganization } from "interfaces";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   solid,
-  regular,
-  brands,
-  icon,
+  // regular,
+  // brands,
+  // icon,
 } from "@fortawesome/fontawesome-svg-core/import.macro"; // <-- import styles to be used
 import { Search } from "@mui/icons-material";
 

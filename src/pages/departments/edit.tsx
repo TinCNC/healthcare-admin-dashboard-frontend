@@ -1,3 +1,5 @@
+import { SaveOutlined } from "@mui/icons-material";
+import { LoadingButton } from "@mui/lab";
 import { useTranslate, HttpError } from "@pankod/refine-core";
 import { Edit, Box, TextField } from "@pankod/refine-mui";
 import { useForm } from "@pankod/refine-react-hook-form";
@@ -8,13 +10,29 @@ export const DepartmentEdit: React.FC = () => {
   const t = useTranslate();
 
   const {
+    refineCore: { formLoading },
     saveButtonProps,
     register,
     formState: { errors },
   } = useForm<IDepartment, HttpError, IDepartment>();
 
   return (
-    <Edit saveButtonProps={saveButtonProps}>
+    <Edit
+      isLoading={formLoading}
+      footerButtons={
+        <LoadingButton
+          type="submit"
+          startIcon={<SaveOutlined />}
+          loadingPosition="start"
+          loading={formLoading}
+          variant="contained"
+          onClick={async (e) => saveButtonProps.onClick(e)}
+        >
+          {t("buttons.save")}
+        </LoadingButton>
+      }
+      // saveButtonProps={saveButtonProps}
+    >
       <Box
         component="form"
         sx={{ display: "flex", flexDirection: "column" }}

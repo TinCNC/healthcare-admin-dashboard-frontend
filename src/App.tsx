@@ -33,8 +33,13 @@ import {
   ProductCreate,
   ProductEdit,
 } from "pages/products";
+import {
+  TechnicianList,
+  TechnicianCreate,
+  TechnicianEdit,
+  TechnicianShow,
+} from "pages/technicians";
 import { CategoriesList } from "pages/categories";
-
 import {
   DoctorList,
   DoctorShow,
@@ -53,6 +58,13 @@ import {
   DepartmentCreate,
   DepartmentEdit,
 } from "pages/departments";
+
+import {
+  SpecialityList,
+  SpecialityCreate,
+  SpecialityEdit,
+  SpecialityShow,
+} from "pages/specialities";
 
 import {
   OrganizationList,
@@ -135,6 +147,14 @@ function App() {
                 icon: <FontAwesomeIcon icon={solid("sitemap")} />,
               },
               {
+                name: "medical_specialities",
+                list: SpecialityList,
+                show: SpecialityShow,
+                create: SpecialityCreate,
+                edit: SpecialityEdit,
+                icon: <FontAwesomeIcon icon={solid("sitemap")} />,
+              },
+              {
                 name: "organizations",
                 list: OrganizationList,
                 create: OrganizationCreate,
@@ -179,6 +199,14 @@ function App() {
                 edit: PatientEdit,
                 show: PatientShow,
                 icon: <FontAwesomeIcon icon={solid("hospital-user")} />,
+              },
+              {
+                name: "technicians",
+                list: TechnicianList,
+                create: TechnicianCreate,
+                edit: TechnicianEdit,
+                show: TechnicianShow,
+                icon: <FontAwesomeIcon icon={solid("user-secret")} />,
               },
               // {
               //   name: "implants",

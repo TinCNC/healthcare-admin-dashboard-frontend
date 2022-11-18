@@ -24,6 +24,7 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
+  Tooltip,
 } from "@pankod/refine-mui";
 
 import { IProduct, ICategory } from "interfaces";
@@ -36,6 +37,8 @@ import {
   // brands,
   // icon,
 } from "@fortawesome/fontawesome-svg-core/import.macro"; // <-- import styles to be used
+
+import { AddShoppingCart } from "@mui/icons-material";
 
 export const ProductList: React.FC = () => {
   const t = useTranslate();
@@ -54,10 +57,6 @@ export const ProductList: React.FC = () => {
   // const { tableQueryResult, setFilters: setFilters2 } = useTable<IPatient>();
 
   const [nameSearch, setNameSearch] = useState<string>("");
-
-  const [firstNameSearch, setFirstNameSearch] = useState<string>("");
-
-  const [lastNameSearch, setLastNameSearch] = useState<string>("");
 
   const [minManufacturingCost, setMinManufacturingCost] = useState<
     number | undefined
@@ -102,8 +101,6 @@ export const ProductList: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     nameSearch,
-    firstNameSearch,
-    lastNameSearch,
     selectCategories,
     minManufacturingCost,
     maxManufacturingCost,
@@ -177,15 +174,30 @@ export const ProductList: React.FC = () => {
       renderCell: function render({ row }) {
         return (
           <Stack direction="row" spacing={1}>
-            <ShowButton hideText recordItemId={row.id} />
-            <EditButton size="small" hideText recordItemId={row.id} />
-            <DeleteButton size="small" hideText recordItemId={row.id} />
+            <Tooltip title="Add to order cart">
+              <IconButton
+                color="primary"
+                aria-label="add to shopping cart"
+                size="small"
+              >
+                <AddShoppingCart fontSize="small" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="View Product Details">
+              <ShowButton size="small" hideText recordItemId={row.id} />
+            </Tooltip>
+            <Tooltip title="Edit Product information">
+              <EditButton size="small" hideText recordItemId={row.id} />
+            </Tooltip>
+            <Tooltip title="Delete Product">
+              <DeleteButton size="small" hideText recordItemId={row.id} />
+            </Tooltip>
           </Stack>
         );
       },
       align: "center",
       headerAlign: "center",
-      minWidth: 120,
+      minWidth: 200,
       // flex: 1,
     },
   ];
