@@ -1,4 +1,4 @@
-import React from "react";
+// import React from "react";
 
 import { Refine } from "@pankod/refine-core";
 import {
@@ -47,7 +47,12 @@ import {
   DoctorEdit,
 } from "pages/doctors";
 
-import { DiseaseList, DiseaseShow } from "pages/diseases";
+import {
+  DiseaseList,
+  DiseaseShow,
+  DiseaseEdit,
+  DiseaseCreate,
+} from "pages/diseases";
 
 import { DiseaseGroupList, DiseaseGroupShow } from "pages/diseases_groups";
 
@@ -165,16 +170,16 @@ function App() {
                 name: "diseases",
                 list: DiseaseList,
                 show: DiseaseShow,
-                // create: PostCreate,
-                // edit: PostEdit,
+                create: DiseaseCreate,
+                edit: DiseaseEdit,
                 icon: <FontAwesomeIcon icon={solid("disease")} />,
               },
               {
                 name: "diseases_groups",
                 list: DiseaseGroupList,
                 show: DiseaseGroupShow,
-                // create: PostCreate,
-                // edit: PostEdit,
+                // create: DiseaseGroupCreate,
+                // edit: DiseaseGroupEdit,
                 icon: <FontAwesomeIcon icon={solid("viruses")} />,
               },
               {
@@ -227,8 +232,8 @@ function App() {
               {
                 name: "categories",
                 list: CategoriesList,
-                // create: PostCreate,
-                // edit: PostEdit,
+                // create: CategoriesCreate,
+                // edit: CategoriesEdit,
                 icon: <Category />,
               },
             ]}

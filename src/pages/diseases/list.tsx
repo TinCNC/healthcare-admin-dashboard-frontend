@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useTranslate, useMany, CrudFilters } from "@pankod/refine-core";
+import { useTranslate, CrudFilters } from "@pankod/refine-core";
 import {
   useDataGrid,
   DataGrid,
@@ -23,9 +23,9 @@ import { IDisease } from "interfaces";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   solid,
-  regular,
-  brands,
-  icon,
+  // regular,
+  // brands,
+  // icon,
 } from "@fortawesome/fontawesome-svg-core/import.macro"; // <-- import styles to be used
 import { Search } from "@mui/icons-material";
 

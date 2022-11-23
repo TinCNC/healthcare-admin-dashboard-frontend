@@ -64,10 +64,14 @@ export const DiseaseShow: React.FC = () => {
           </Typography>
           <Typography variant="body2">
             {record?.body_parts !== undefined &&
-              record?.body_parts.length > 0 &&
+            record?.body_parts !== null &&
+            record?.body_parts.length > 0 ? (
               record?.body_parts.map((item) => {
                 return <TagField sx={{ marginRight: "12px" }} value={item} />;
-              })}
+              })
+            ) : (
+              <TagField sx={{ marginRight: "12px" }} value={"Not specified"} />
+            )}
           </Typography>
           <Typography variant="body1" fontWeight="bold">
             {t("diseases.fields.severity")}
