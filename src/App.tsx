@@ -54,7 +54,12 @@ import {
   DiseaseCreate,
 } from "pages/diseases";
 
-import { DiseaseGroupList, DiseaseGroupShow } from "pages/diseases_groups";
+import {
+  DiseaseGroupList,
+  DiseaseGroupShow,
+  DiseaseGroupEdit,
+  // DiseaseGroupCreate,
+} from "pages/diseases_groups";
 
 import { ClinicList, ClinicCreate, ClinicEdit } from "pages/clinics";
 
@@ -179,7 +184,7 @@ function App() {
                 list: DiseaseGroupList,
                 show: DiseaseGroupShow,
                 // create: DiseaseGroupCreate,
-                // edit: DiseaseGroupEdit,
+                edit: DiseaseGroupEdit,
                 icon: <FontAwesomeIcon icon={solid("viruses")} />,
               },
               {

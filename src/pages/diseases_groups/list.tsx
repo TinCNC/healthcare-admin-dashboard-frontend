@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useTranslate, useMany, CrudFilters } from "@pankod/refine-core";
+import { useTranslate, CrudFilters } from "@pankod/refine-core";
 import {
   useDataGrid,
   DataGrid,
@@ -9,13 +9,13 @@ import {
   ShowButton,
   EditButton,
   DeleteButton,
-  Autocomplete,
+  // Autocomplete,
   Divider,
-  FormControl,
+  // FormControl,
   IconButton,
   InputBase,
   Paper,
-  TextField,
+  // TextField,
 } from "@pankod/refine-mui";
 
 import { IDiseasesGroup } from "interfaces";

@@ -24,6 +24,7 @@
     "@testing-library/user-event": "^12.8.3",
     "@types/jest": "^26.0.23",
     "babel-plugin-macros": "^3.1.0",
+    "dayjs": "^1.11.6",
     "i18next": "^20.1.0",
     "i18next-browser-languagedetector": "^6.1.1",
     "i18next-xhr-backend": "^3.2.2",
@@ -31,6 +32,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-i18next": "^11.8.11",
+    "react-quill": "^2.0.0",
     "react-scripts": "^5.0.0",
     "recharts": "^2.1.16",
     "web-vitals": "^1.1.1"
