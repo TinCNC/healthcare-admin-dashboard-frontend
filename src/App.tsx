@@ -82,6 +82,8 @@ import {
   OrganizationEdit,
 } from "pages/organizations";
 
+import { LaboratoryList, LaboratoryShow } from "pages/laboratories";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   solid,
@@ -155,6 +157,14 @@ function App() {
                 create: DepartmentCreate,
                 edit: DepartmentEdit,
                 icon: <FontAwesomeIcon icon={solid("sitemap")} />,
+              },
+              {
+                name: "laboratories",
+                list: LaboratoryList,
+                show: LaboratoryShow,
+                // create: LaboratoryCreate,
+                // edit: LaboratoryEdit,
+                icon: <FontAwesomeIcon icon={solid("flask-vial")} />,
               },
               {
                 name: "medical_specialities",

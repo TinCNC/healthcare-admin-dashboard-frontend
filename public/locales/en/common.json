@@ -307,6 +307,27 @@
       "show": "Show Speciality"
     }
   },
+  "laboratories": {
+    "laboratories": "Laboratories",
+    "fields": {
+      "id": "Id",
+      "name": "Name",
+      "address": "Address",
+      "email": "Email",
+      "director": "Director",
+      "speciality": "Speciality",
+      "workload_capacity": "Workload Capacity",
+      "phone": "Phone",
+      "website": "Website",
+      "createdAt": "Created At"
+    },
+    "titles": {
+      "create": "Create Laboratory",
+      "edit": "Edit Laboratory",
+      "list": "Laboratories",
+      "show": "Show Laboratory"
+    }
+  },
   "organizations": {
     "organizations": "Organizations",
     "fields": {

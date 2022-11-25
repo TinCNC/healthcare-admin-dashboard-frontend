@@ -101,8 +101,8 @@ export interface IDisease {
 export interface ILaboratory {
   id: number;
   name: string;
-  location: string;
-  director: string;
+  address: string;
+  director: number;
   speciality: number[];
   email: string;
   phone: string;
