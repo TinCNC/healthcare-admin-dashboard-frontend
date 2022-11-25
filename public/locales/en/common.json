@@ -307,6 +307,26 @@
       "show": "Show Speciality"
     }
   },
+  "orders": {
+    "orders": "Orders",
+    "fields": {
+      "id": "Id",
+      "product_id": "Product ID",
+      "product": "Product",
+      "material": "Material",
+      "laboratory": "Laboratory",
+      "delivery_time": "Delivery Time",
+      "quantity": "Quantity",
+      "status": "Status",
+      "createdAt": "Created At"
+    },
+    "titles": {
+      "create": "Create Order",
+      "edit": "Edit Order",
+      "list": "Orders",
+      "show": "Show Order"
+    }
+  },
   "laboratories": {
     "laboratories": "Laboratories",
     "fields": {
