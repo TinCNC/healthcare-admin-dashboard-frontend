@@ -107,7 +107,7 @@ export interface ILaboratory {
   email: string;
   phone: string;
   website: string;
-  workload_capacity: string;
+  workload_capacity: number;
   created_at: string;
 }
 
