@@ -39,22 +39,21 @@ import {
   IOrganization,
   IMedicalSpeciality,
 } from "interfaces";
-import { CertificateDetailDialog } from "./components/CertificateDetail";
-import { CertificateEditorDialog } from "./components/CertificateEditor";
+import {
+  CertificateDetailDialog,
+  CertificateEditorDialog,
+} from "../../components/professional-certificate-dialog";
 
 export const DoctorShow: React.FC = () => {
   const t = useTranslate();
 
   const { queryResult } = useShow<IDoctor>();
 
-  const {
-    queryResult: certificateQueryResult,
-    // showId,
-    setShowId,
-  } = useShow<IProfessionalCertificates>({
-    resource: "professional_certificates",
-    id: "0",
-  });
+  const { queryResult: certificateQueryResult, setShowId } =
+    useShow<IProfessionalCertificates>({
+      resource: "professional_certificates",
+      id: "0",
+    });
 
   const { data: certificateData, isLoading: certificateLoading } =
     certificateQueryResult;
