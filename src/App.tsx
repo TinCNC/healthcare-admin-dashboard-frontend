@@ -1,15 +1,7 @@
 // import React from "react";
 
 import { Refine } from "@pankod/refine-core";
-import {
-  notificationProvider,
-  RefineSnackbarProvider,
-  CssBaseline,
-  GlobalStyles,
-  ReadyPage,
-  ErrorComponent,
-  AuthPage,
-} from "@pankod/refine-mui";
+import { notificationProvider, RefineSnackbarProvider, CssBaseline, GlobalStyles, ReadyPage, ErrorComponent, AuthPage } from "@pankod/refine-mui";
 
 import routerProvider from "@pankod/refine-react-router-v6";
 import { dataProvider, liveProvider } from "@pankod/refine-supabase";
@@ -21,38 +13,15 @@ import { Title, Sider, Layout, Header } from "components/layout";
 import { OffLayoutArea } from "components/offLayoutArea";
 import authProvider from "./authProvider";
 
-import {
-  PatientList,
-  PatientCreate,
-  PatientEdit,
-  PatientShow,
-} from "pages/patients";
-import {
-  ProductList,
-  ProductShow,
-  ProductCreate,
-  ProductEdit,
-} from "pages/products";
-import {
-  TechnicianList,
-  TechnicianCreate,
-  TechnicianEdit,
-  TechnicianShow,
-} from "pages/technicians";
-import { CategoriesList } from "pages/categories";
-import {
-  DoctorList,
-  DoctorShow,
-  DoctorCreate,
-  DoctorEdit,
-} from "pages/doctors";
+import { Wallet } from "pages/payment-solana";
 
-import {
-  DiseaseList,
-  DiseaseShow,
-  DiseaseEdit,
-  DiseaseCreate,
-} from "pages/diseases";
+import { PatientList, PatientCreate, PatientEdit, PatientShow } from "pages/patients";
+import { ProductList, ProductShow, ProductCreate, ProductEdit } from "pages/products";
+import { TechnicianList, TechnicianCreate, TechnicianEdit, TechnicianShow } from "pages/technicians";
+import { CategoriesList } from "pages/categories";
+import { DoctorList, DoctorShow, DoctorCreate, DoctorEdit } from "pages/doctors";
+
+import { DiseaseList, DiseaseShow, DiseaseEdit, DiseaseCreate } from "pages/diseases";
 
 import {
   DiseaseGroupList,
@@ -63,31 +32,13 @@ import {
 
 import { ClinicList, ClinicCreate, ClinicEdit } from "pages/clinics";
 
-import {
-  DepartmentList,
-  DepartmentCreate,
-  DepartmentEdit,
-} from "pages/departments";
+import { DepartmentList, DepartmentCreate, DepartmentEdit } from "pages/departments";
 
-import {
-  SpecialityList,
-  SpecialityCreate,
-  SpecialityEdit,
-  SpecialityShow,
-} from "pages/specialities";
+import { SpecialityList, SpecialityCreate, SpecialityEdit, SpecialityShow } from "pages/specialities";
 
-import {
-  OrganizationList,
-  OrganizationCreate,
-  OrganizationEdit,
-} from "pages/organizations";
+import { OrganizationList, OrganizationCreate, OrganizationEdit } from "pages/organizations";
 
-import {
-  LaboratoryList,
-  LaboratoryShow,
-  LaboratoryEdit,
-  LaboratoryCreate,
-} from "pages/laboratories";
+import { LaboratoryList, LaboratoryShow, LaboratoryEdit, LaboratoryCreate } from "pages/laboratories";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -156,6 +107,11 @@ function App() {
               />
             )}
             resources={[
+              {
+                name: "SolanaPayment",
+                list: Wallet,
+                icon: <FontAwesomeIcon icon={solid("wallet")} />,
+              },
               {
                 name: "departments",
                 list: DepartmentList,
