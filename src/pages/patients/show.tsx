@@ -35,8 +35,8 @@ import {
   IDoctor,
   IDisease,
 } from "interfaces";
-import { CertificateDetailDialog } from "./components/CertificateDetail";
-import { CertificateEditorDialog } from "./components/CertificateEditor";
+
+import { CertificateEditorDialog, CertificateDetailDialog } from "components/health-status-certificate-dialog";
 
 export const PatientShow: React.FC = () => {
   const t = useTranslate();

@@ -111,6 +111,25 @@ export interface ILaboratory {
   created_at: string;
 }
 
+export interface IOrder {
+  id: number;
+  product_id: number;
+  laboratory: number;
+  material: number;
+  delivery_time: number;
+  status: "Not Send" | "Pending" | "Printed" | "Product Arrived";
+  quantity: number;
+  created_at: string;
+}
+
+export interface IMaterial {
+  id: number;
+  laboratory: string;
+  material_name: string;
+  description: string;
+  created_at: string;
+}
+
 export interface IProduct {
   id: number;
   name: string;

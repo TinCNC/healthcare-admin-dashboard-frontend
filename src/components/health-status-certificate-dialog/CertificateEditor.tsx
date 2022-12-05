@@ -28,11 +28,11 @@ import {
 } from "@pankod/refine-react-hook-form";
 import { useTranslate } from "@pankod/refine-core";
 
-export type DataProps = UseModalFormReturnType & {
+export type EditorDataProps = UseModalFormReturnType & {
   submitButtonText?: string;
 };
 
-export const CertificateEditorDialog: React.FC<DataProps> = ({
+export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
   register,
   control,
   formState: { errors },

@@ -327,6 +327,21 @@
       "show": "Show Order"
     }
   },
+  "materials": {
+    "materials": "Materials",
+    "fields": {
+      "id": "Id",
+      "material_name": "Material Name",
+      "description": "Description",
+      "createdAt": "Created At"
+    },
+    "titles": {
+      "create": "Create Material",
+      "edit": "Edit Material",
+      "list": "Materials",
+      "show": "Show Material"
+    }
+  },
   "laboratories": {
     "laboratories": "Laboratories",
     "fields": {
