@@ -23,6 +23,8 @@ import {
 } from "@pankod/refine-mui";
 
 import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
+
+import { Wallet } from "components/payment-solana";
 import {
   DarkModeOutlined,
   LightModeOutlined,
@@ -57,6 +59,7 @@ export const Header: React.FC = () => {
           justifyContent="flex-end"
           alignItems="center"
         >
+          <Wallet />
           <IconButton
             onClick={() => {
               setMode();

@@ -208,9 +208,7 @@ export const OrderEditorDialog: React.FC<DataProps> = ({
                   setValue("delivery_time", newValue?.toDate().toDateString());
                   setIssuedDate(newValue);
                 }}
-                renderInput={(
-                  params: JSX.IntrinsicAttributes & TextFieldProps
-                ) => (
+                renderInput={(params) => (
                   <TextField
                     required
                     error={!!errors?.issued_date}
@@ -363,7 +361,7 @@ export const OrderEditorDialog: React.FC<DataProps> = ({
                 hidden
                 id="product_id"
                 name="product_id"
-                // value={holder}
+              // value={holder}
               />
               {/* <TextField
                 {...register("program", {

@@ -196,9 +196,7 @@ export const CertificateEditorDialog: React.FC<DataProps> = ({
                   setValue("issued_date", newValue?.toDate().toDateString());
                   setIssuedDate(newValue);
                 }}
-                renderInput={(
-                  params: JSX.IntrinsicAttributes & TextFieldProps
-                ) => (
+                renderInput={(params) => (
                   <TextField
                     required
                     error={!!errors?.issued_date}
@@ -206,7 +204,6 @@ export const CertificateEditorDialog: React.FC<DataProps> = ({
                     fullWidth
                     variant="standard"
                     margin="dense"
-                    // name="issued_date"
                     {...params}
                   />
                 )}
@@ -228,9 +225,7 @@ export const CertificateEditorDialog: React.FC<DataProps> = ({
                   }
                   setExpiredDate(newValue);
                 }}
-                renderInput={(
-                  params: JSX.IntrinsicAttributes & TextFieldProps
-                ) => (
+                renderInput={(params) => (
                   <TextField
                     error={!!errors?.expired_date}
                     helperText={errors.expired_date?.message as string}
@@ -255,10 +250,10 @@ export const CertificateEditorDialog: React.FC<DataProps> = ({
                     getOptionLabel={(item) => {
                       return item.username
                         ? item.username +
-                            ": " +
-                            item.first_name +
-                            " " +
-                            item.last_name
+                        ": " +
+                        item.first_name +
+                        " " +
+                        item.last_name
                         : "";
                     }}
                     isOptionEqualToValue={(option, value) =>
@@ -323,10 +318,10 @@ export const CertificateEditorDialog: React.FC<DataProps> = ({
                     getOptionLabel={(item) => {
                       return item.username
                         ? item.username +
-                            ": " +
-                            item.first_name +
-                            " " +
-                            item.last_name
+                        ": " +
+                        item.first_name +
+                        " " +
+                        item.last_name
                         : "";
                     }}
                     isOptionEqualToValue={(option, value) =>
@@ -353,7 +348,7 @@ export const CertificateEditorDialog: React.FC<DataProps> = ({
                 hidden
                 id="holder"
                 name="holder"
-                // value={holder}
+              // value={holder}
               />
               <TextField
                 {...register("status", {

@@ -13,7 +13,7 @@ import { Title, Sider, Layout, Header } from "components/layout";
 import { OffLayoutArea } from "components/offLayoutArea";
 import authProvider from "./authProvider";
 
-import { Wallet } from "pages/payment-solana";
+// import { Wallet } from "pages/payment-solana";
 
 import { PatientList, PatientCreate, PatientEdit, PatientShow } from "pages/patients";
 import { ProductList, ProductShow, ProductCreate, ProductEdit } from "pages/products";
@@ -107,11 +107,11 @@ function App() {
               />
             )}
             resources={[
-              {
-                name: "SolanaPayment",
-                list: Wallet,
-                icon: <FontAwesomeIcon icon={solid("wallet")} />,
-              },
+              // {
+              //   name: "SolanaPayment",
+              //   list: Wallet,
+              //   icon: <FontAwesomeIcon icon={solid("wallet")} />,
+              // },
               {
                 name: "departments",
                 list: DepartmentList,

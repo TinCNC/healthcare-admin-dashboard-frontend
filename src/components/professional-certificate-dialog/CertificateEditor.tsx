@@ -177,9 +177,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
                   setValue("issued_date", newValue?.toDate().toDateString());
                   setIssuedDate(newValue);
                 }}
-                renderInput={(
-                  params: JSX.IntrinsicAttributes & TextFieldProps
-                ) => (
+                renderInput={(params) => (
                   <TextField
                     required
                     error={!!errors?.issued_date}
@@ -187,7 +185,6 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
                     fullWidth
                     variant="standard"
                     margin="dense"
-                    // name="issued_date"
                     {...params}
                   />
                 )}
@@ -214,9 +211,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
                   setExpiredAt(newValue);
                   console.log(getValues());
                 }}
-                renderInput={(
-                  params: JSX.IntrinsicAttributes & TextFieldProps
-                ) => (
+                renderInput={(params) => (
                   <TextField
                     // required
                     // error={!!errors?.expired_at}
@@ -273,10 +268,10 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
                     getOptionLabel={(item) => {
                       return item.username
                         ? item.username +
-                            ": " +
-                            item.first_name +
-                            " " +
-                            item.last_name
+                        ": " +
+                        item.first_name +
+                        " " +
+                        item.last_name
                         : "";
                     }}
                     isOptionEqualToValue={(option, value) =>
@@ -332,7 +327,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
                 hidden
                 id="holder"
                 name="holder"
-                // value={holder}
+              // value={holder}
               />
               <TextField
                 {...register("program", {
