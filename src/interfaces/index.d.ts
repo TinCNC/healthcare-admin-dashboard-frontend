@@ -126,6 +126,7 @@ export interface IMaterial {
   id: number;
   laboratory: string;
   material_name: string;
+  price: number;
   description: string;
   created_at: string;
 }

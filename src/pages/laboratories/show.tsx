@@ -99,8 +99,15 @@ export const LaboratoryShow: React.FC = () => {
       {
         field: "material_name",
         headerName: t("materials.fields.material_name"),
-        minWidth: 600,
-        // maxWidth: 600,
+        // minWidth: 600,
+        maxWidth: 640,
+        flex: 1,
+      },
+      {
+        field: "price",
+        headerName: t("materials.fields.price"),
+        minWidth: 80,
+        maxWidth: 80,
         flex: 1,
       },
       {

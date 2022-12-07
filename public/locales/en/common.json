@@ -332,6 +332,7 @@
     "fields": {
       "id": "Id",
       "material_name": "Material Name",
+      "price": "Price",
       "description": "Description",
       "createdAt": "Created At"
     },

@@ -77,6 +77,20 @@ export const MaterialEditorDialog: React.FC<DataProps> = ({
               variant="standard"
             />
             <TextField
+              {...register("price", {
+                required: "Price is required",
+              })}
+              margin="dense"
+              error={!!errors?.price}
+              helperText={errors.price?.message as string}
+              id="price"
+              label={t("materials.fields.price")}
+              name="price"
+              type="number"
+              fullWidth
+              variant="standard"
+            />
+            <TextField
               {...register("description")}
               multiline
               rows={4}

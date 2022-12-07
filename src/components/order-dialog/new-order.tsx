@@ -146,7 +146,9 @@ export const OrderEditorDialog: React.FC<DataProps> = ({
                       field.onChange(value?.id);
                     }}
                     getOptionLabel={(item) => {
-                      return item.material_name ? item.material_name : "";
+                      return item.material_name
+                        ? item.material_name + " $" + item.price
+                        : "";
                     }}
                     isOptionEqualToValue={(option, value) =>
                       value === undefined || option.id === value.id
