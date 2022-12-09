@@ -86,6 +86,7 @@ export interface I3DObject {
   id: number;
   name: string;
   main_file: string;
+  cover: string;
   metadata: JSON;
   designer: number;
   size_x_mm: number;

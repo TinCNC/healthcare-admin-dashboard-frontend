@@ -48,10 +48,7 @@ import {
   DoctorCreate,
   DoctorEdit,
 } from "pages/doctors";
-import {
-  _3DObjectList,
-  // _3DObjectShow
-} from "pages/3d_objects";
+import { _3DObjectList, _3DObjectShow } from "pages/3d_objects";
 import {
   DiseaseList,
   DiseaseShow,
@@ -259,7 +256,7 @@ function App() {
                 name: "3d_objects",
                 parentName: "Prosthetics",
                 list: _3DObjectList,
-                // show: _3DObjectShow,
+                show: _3DObjectShow,
                 // create: _3DObjectCreate,
                 // edit: _3DObjectEdit,
                 icon: <FontAwesomeIcon icon={solid("cubes")} />,
