@@ -76,12 +76,31 @@ export interface IClinic {
   created_at: string;
 }
 
+export interface I3DObjectMetadata {
+  title: string;
+  type_of_object: string;
+  style: string;
+}
+
+export interface I3DObject {
+  id: number;
+  name: string;
+  main_file: string;
+  metadata: JSON;
+  designer: number;
+  size_x_mm: number;
+  size_y_mm: number;
+  size_z_mm: number;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface IDiseasesGroup {
   id: number;
   group_name: string;
   icd10_code: string;
   vn_code: string;
-  statistics: json;
+  statistics: JSON;
   created_at: string;
 }
 

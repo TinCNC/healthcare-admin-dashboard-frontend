@@ -327,6 +327,28 @@
       "show": "Show Order"
     }
   },
+  "3d_objects": {
+    "3d_objects": "3D Objects",
+    "fields": {
+      "id": "Id",
+      "name": "Object Name",
+      "main_file": "Main File",
+      "metadata": "Metadata",
+      "designer": "Designer",
+      "size": "Size (x*y*z)(mm)",
+      "size_x_mm": "X Size (mm)",
+      "size_y_mm": "Y Size (mm)",
+      "size_z_mm": "Z Size (mm)",
+      "created_at": "Created At",
+      "updated_at": "Updated At"
+    },
+    "titles": {
+      "create": "Create 3D Object",
+      "edit": "Edit 3D Object",
+      "list": "3D Objects",
+      "show": "Show 3D Object"
+    }
+  },
   "materials": {
     "materials": "Materials",
     "fields": {
