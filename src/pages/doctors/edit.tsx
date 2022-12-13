@@ -1,4 +1,4 @@
-import { HttpError, useTranslate } from "@pankod/refine-core";
+import { HttpError, useMany, useTranslate } from "@pankod/refine-core";
 import {
   Box,
   TextField,
@@ -15,7 +15,7 @@ import { IDoctor, IDepartment } from "interfaces";
 
 import { FileUpload, SaveOutlined } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
-import { BaseSyntheticEvent, useState } from "react";
+import { BaseSyntheticEvent, useState, useEffect } from "react";
 
 import {
   uploadImage,
@@ -43,6 +43,11 @@ export const DoctorEdit: React.FC = () => {
   const [imagePreview, setImagePreview] = useState<string>("");
 
   const [imageFile, setImageFile] = useState<File>();
+
+  const [departments, setDepartments] = useState<IDepartment[]>([]);
+
+  // const [getAutocompleteValue, setGetAutocompleteValue] =
+  //   useState<boolean>(true);
 
   const [creatingPatient, setCreatingPatient] = useState<boolean>(false);
 
@@ -96,22 +101,32 @@ export const DoctorEdit: React.FC = () => {
     }
   };
 
-  const {
-    autocompleteProps,
-    // defaultValueQueryResult
-  } = useAutocomplete<IDepartment>({
-    resource: "departments",
-    onSearch: (value) => [
-      {
-        field: "name",
-        operator: "containss",
-        value,
-      },
-    ],
-    defaultValue: queryResult?.data?.data.departments,
-  });
+  const { autocompleteProps, defaultValueQueryResult } =
+    useAutocomplete<IDepartment>({
+      resource: "departments",
+      onSearch: (value) => [
+        {
+          field: "name",
+          operator: "containss",
+          value,
+        },
+      ],
+      defaultValue: queryResult?.data?.data.departments || [],
+    });
 
-  // console.log(defaultValueQueryResult?.data?.data[0]);
+  console.log(autocompleteProps?.options);
+
+  console.log(defaultValueQueryResult?.data?.data);
+
+  console.log({ ...autocompleteProps });
+
+  useEffect(() => {
+    if (defaultValueQueryResult?.isFetched) {
+      console.log("loaded");
+      setDepartments(defaultValueQueryResult?.data?.data || []);
+      // setGetAutocompleteValue(false);
+    }
+  }, [defaultValueQueryResult?.isFetched, defaultValueQueryResult?.data?.data]); // Only re-run the effect if count changes
 
   return (
     <Edit
@@ -250,8 +265,10 @@ export const DoctorEdit: React.FC = () => {
                   multiple
                   {...autocompleteProps}
                   {...field}
-                  // defaultValue={defaultValueQueryResult?.data?.data[0]}
+                  value={departments}
                   onChange={(_, value) => {
+                    console.log(value);
+                    setDepartments(value);
                     field.onChange(value?.map((item) => item.id));
                   }}
                   getOptionLabel={(item) => {
@@ -263,7 +280,6 @@ export const DoctorEdit: React.FC = () => {
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      // placeholder={defaultValueQueryResult?.data?.data[0].name}
                       label={t("doctors.fields.departments")}
                       margin="normal"
                       variant="outlined"

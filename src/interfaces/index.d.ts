@@ -63,6 +63,7 @@ export interface IDoctor {
   first_name: string;
   last_name: string;
   departments: number[];
+  // departments_isnotnumber?: iDepartment[];
   image: string;
   created_at: string;
   updated_at: string;
@@ -179,6 +180,7 @@ export interface IProfessionalCertificates {
     | "Specialized Medical Degree"
     | "Permission of Medical Professional Practices";
   level: number;
+  image: string;
   created_at: string;
 }
 
