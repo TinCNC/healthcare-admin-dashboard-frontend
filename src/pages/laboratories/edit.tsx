@@ -19,7 +19,7 @@ export const LaboratoryEdit: React.FC = () => {
 
   const [name, setName] = useState<string>("");
 
-  const [director, setDirector] = useState<number>();
+  const [director, setDirector] = useState<ITechnician | null>(null);
 
   const [address, setAddress] = useState<string>("");
 
@@ -48,6 +48,7 @@ export const LaboratoryEdit: React.FC = () => {
   const { autocompleteProps, defaultValueQueryResult } =
     useAutocomplete<ITechnician>({
       resource: "technicians",
+      pagination: { current: 1, pageSize: 10000 },
       onSearch: (value) => [
         {
           field: "name",
@@ -59,11 +60,23 @@ export const LaboratoryEdit: React.FC = () => {
     });
 
   useEffect(() => {
+    if (defaultValueQueryResult?.isFetched && !formLoading) {
+      console.log("loaded");
+      setDirector(defaultValueQueryResult?.data?.data.at(0) || null);
+      // setGetAutocompleteValue(false);
+    }
+  }, [
+    formLoading,
+    defaultValueQueryResult?.isFetched,
+    defaultValueQueryResult?.data?.data,
+  ]); // Only re-run the effect if count changes
+
+  useEffect(() => {
     if (!formLoading && !queryResult?.isLoading) {
       console.log(getValues());
       reset();
       setName(getValues("name"));
-      setDirector(getValues("director") || undefined);
+      // setDirector(getValues("director") || undefined);
       setAddress(getValues("address"));
       setEmail(getValues("email"));
       setPhone(getValues("phone"));
@@ -121,28 +134,14 @@ export const LaboratoryEdit: React.FC = () => {
           control={control}
           name="director"
           rules={{ required: "Director is required" }}
-          // defaultValue={2 as number}
           render={({ field }) => (
             <Autocomplete
-              // multiple
               {...autocompleteProps}
               {...field}
-              // value={
-              //   defaultValueQueryResult?.data?.data.at(
-              //     director as number
-              //   ) as ITechnician
-              // }
-              // value={defaultValueQueryResult?.data?.data[1]}
-              // onChange={(
-              //   event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-              // ) => {
-              //   setName(event.target.value);
-              // }}
+              value={director}
               onChange={(_, value) => {
+                setDirector(value);
                 field.onChange(value?.id);
-                // console.log(value);
-                setDirector(value?.id);
-                // field.onChange(value?.map((item) => item.id));
               }}
               getOptionLabel={(item) => {
                 return item.username
@@ -159,50 +158,17 @@ export const LaboratoryEdit: React.FC = () => {
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  // placeholder={defaultValueQueryResult?.data?.data[0].name}
                   label={t("laboratories.fields.director")}
                   margin="normal"
                   variant="outlined"
                   error={!!errors.director}
                   helperText={errors.director?.message as string}
-                  // value={defaultValueQueryResult?.data?.data[1]}
                   required
                 />
               )}
             />
           )}
         />
-        {/* <Controller
-          control={control}
-          name="type"
-          rules={{
-            required: t("errors.required.field", { field: "Type" }),
-          }}
-          render={({ field }) => (
-            <Autocomplete
-              // {...autocompleteProps}
-              options={["University", "College"]}
-              {...field}
-              onChange={(_, value) => {
-                field.onChange(value);
-              }}
-              isOptionEqualToValue={(option, value) =>
-                value === undefined || option.toString() === value.toString()
-              }
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label={t("laboratories.fields.director")}
-                  margin="normal"
-                  variant="outlined"
-                  error={!!errors.director}
-                  helperText={errors.director?.message}
-                  required
-                />
-              )}
-            />
-          )}
-        /> */}
         <TextField
           {...register("address", {
             required: t("errors.required.field", { field: "Address" }),

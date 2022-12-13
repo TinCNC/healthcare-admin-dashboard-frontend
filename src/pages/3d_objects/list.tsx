@@ -123,7 +123,7 @@ export const _3DObjectList: React.FC = () => {
     ];
     if (selectDesigners !== undefined && selectDesigners.length !== 0) {
       filter.push({
-        field: "category",
+        field: "designer",
         operator: "in",
         value: selectDesigners,
       });

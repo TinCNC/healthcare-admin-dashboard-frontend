@@ -14,7 +14,7 @@ import { IProduct, ICategory } from "interfaces";
 
 import { FileUpload, SaveOutlined } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
-import { BaseSyntheticEvent, useState } from "react";
+import { BaseSyntheticEvent, useState, useEffect } from "react";
 
 import { uploadImage, getPublicImageUrl } from "api";
 
@@ -25,7 +25,6 @@ export const ProductEdit: React.FC = () => {
     saveButtonProps,
     register,
     control,
-    // watch,
     getValues,
     setValue,
     formState: { errors },
@@ -37,16 +36,11 @@ export const ProductEdit: React.FC = () => {
 
   const [imageFile, setImageFile] = useState<File>();
 
+  const [category, setCategory] = useState<ICategory | null>(null);
+
   const [creatingProduct, setCreatingProduct] = useState<boolean>(false);
 
   const handleSubmit = async (e: BaseSyntheticEvent<object, any, any>) => {
-    // console.log(saveButtonProps);
-
-    // console.log(watch("username"));
-    // console.log(getValues());
-    // setValue("image", "fegsegsegse");
-    // console.log(imageFile);
-
     try {
       if (imageFile !== undefined) {
         setCreatingProduct(true);
@@ -92,17 +86,30 @@ export const ProductEdit: React.FC = () => {
     }
   };
 
-  const { autocompleteProps } = useAutocomplete<ICategory>({
-    resource: "categories",
-    onSearch: (value) => [
-      {
-        field: "title",
-        operator: "containss",
-        value,
-      },
-    ],
-    defaultValue: queryResult?.data?.data.category,
-  });
+  const { autocompleteProps, defaultValueQueryResult } =
+    useAutocomplete<ICategory>({
+      resource: "categories",
+      onSearch: (value) => [
+        {
+          field: "title",
+          operator: "containss",
+          value,
+        },
+      ],
+      defaultValue: queryResult?.data?.data.category,
+    });
+
+  useEffect(() => {
+    if (defaultValueQueryResult?.isFetched && !formLoading) {
+      console.log("loaded");
+      setCategory(defaultValueQueryResult?.data?.data.at(0) || null);
+      // setGetAutocompleteValue(false);
+    }
+  }, [
+    formLoading,
+    defaultValueQueryResult?.isFetched,
+    defaultValueQueryResult?.data?.data,
+  ]); // Only re-run the effect if count changes
 
   return (
     <Edit
@@ -195,7 +202,9 @@ export const ProductEdit: React.FC = () => {
                 <Autocomplete
                   {...autocompleteProps}
                   {...field}
+                  value={category}
                   onChange={(_, value) => {
+                    setCategory(value);
                     field.onChange(value?.id);
                   }}
                   getOptionLabel={(item) => {

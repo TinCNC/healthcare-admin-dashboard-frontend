@@ -8,6 +8,7 @@ import {
   Input,
   Stack,
   Avatar,
+  Skeleton,
 } from "@pankod/refine-mui";
 import { useForm, Controller } from "@pankod/refine-react-hook-form";
 
@@ -155,11 +156,26 @@ export const DoctorEdit: React.FC = () => {
         spacing={{ xs: 1, sm: 2, md: 4 }}
       >
         <Stack gap={1}>
-          <Avatar
+          {/* <Avatar
             alt={getValues("username")}
             src={imagePreview || getValues("image")}
             sx={{ width: 320, height: 320 }}
-          />
+          /> */}
+          {formLoading ? (
+            <Skeleton width="auto" variant="circular">
+              <Avatar
+                // alt={getValues("username")}
+                // src={imagePreview || getValues("image")}
+                sx={{ width: 320, height: 320 }}
+              />
+            </Skeleton>
+          ) : (
+            <Avatar
+              alt={getValues("username")}
+              src={imagePreview || getValues("image")}
+              sx={{ width: 320, height: 320 }}
+            />
+          )}
           <label htmlFor="images-input">
             <Input
               id="images-input"
@@ -172,11 +188,12 @@ export const DoctorEdit: React.FC = () => {
             />
             <input id="file" {...register("image")} type="hidden" />
             <LoadingButton
-              // loading={isUploadLoading}
+              loading={formLoading}
               loadingPosition="start"
               startIcon={<FileUpload />}
               variant="contained"
               component="span"
+              // disabled={formLoading}
             >
               Upload
             </LoadingButton>
@@ -194,43 +211,63 @@ export const DoctorEdit: React.FC = () => {
             // sx={{ display: "flex", flexDirection: "column" }}
             autoComplete="off"
           >
-            <TextField
-              {...register("username", { required: "Username is required" })}
-              error={!!errors?.username}
-              helperText={errors.username?.message}
-              margin="normal"
-              required
-              fullWidth
-              id="username"
-              label={t("doctors.fields.username")}
-              name="username"
-              autoFocus
-            />
+            {formLoading ? (
+              <Skeleton width="auto">
+                <TextField margin="normal" fullWidth disabled />
+              </Skeleton>
+            ) : (
+              <TextField
+                {...register("username", { required: "Username is required" })}
+                error={!!errors?.username}
+                helperText={errors.username?.message}
+                margin="normal"
+                required
+                fullWidth
+                id="username"
+                label={t("doctors.fields.username")}
+                name="username"
+                autoFocus
+              />
+            )}
+            {formLoading ? (
+              <Skeleton width="auto">
+                <TextField margin="normal" fullWidth disabled />
+              </Skeleton>
+            ) : (
+              <TextField
+                {...register("first_name", {
+                  required: "First Name is required",
+                })}
+                error={!!errors?.first_name}
+                helperText={errors.first_name?.message}
+                margin="normal"
+                required
+                fullWidth
+                id="first_name"
+                label={t("doctors.fields.first_name")}
+                name="first_name"
+              />
+            )}
+            {formLoading ? (
+              <Skeleton width="auto">
+                <TextField margin="normal" fullWidth disabled />
+              </Skeleton>
+            ) : (
+              <TextField
+                {...register("last_name", {
+                  required: "Last Name is required",
+                })}
+                error={!!errors?.last_name}
+                helperText={errors.last_name?.message}
+                margin="normal"
+                required
+                fullWidth
+                id="last_name"
+                label={t("doctors.fields.last_name")}
+                name="last_name"
+              />
+            )}
 
-            <TextField
-              {...register("first_name", {
-                required: "First Name is required",
-              })}
-              error={!!errors?.first_name}
-              helperText={errors.first_name?.message}
-              margin="normal"
-              required
-              fullWidth
-              id="first_name"
-              label={t("doctors.fields.first_name")}
-              name="first_name"
-            />
-            <TextField
-              {...register("last_name", { required: "Last Name is required" })}
-              error={!!errors?.last_name}
-              helperText={errors.last_name?.message}
-              margin="normal"
-              required
-              fullWidth
-              id="last_name"
-              label={t("doctors.fields.last_name")}
-              name="last_name"
-            />
             {/* <Controller
           control={control}
           name="status"
@@ -256,41 +293,48 @@ export const DoctorEdit: React.FC = () => {
             />
           )}
         /> */}
-            <Controller
-              control={control}
-              name="departments"
-              rules={{ required: "Departments is required" }}
-              render={({ field }) => (
-                <Autocomplete
-                  multiple
-                  {...autocompleteProps}
-                  {...field}
-                  value={departments}
-                  onChange={(_, value) => {
-                    console.log(value);
-                    setDepartments(value);
-                    field.onChange(value?.map((item) => item.id));
-                  }}
-                  getOptionLabel={(item) => {
-                    return item.name ? item.name : "";
-                  }}
-                  isOptionEqualToValue={(option, value) =>
-                    value === undefined || option.id === value.id
-                  }
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label={t("doctors.fields.departments")}
-                      margin="normal"
-                      variant="outlined"
-                      error={!!errors.departments}
-                      helperText={errors.departments?.message}
-                      required
-                    />
-                  )}
-                />
-              )}
-            />
+
+            {formLoading ? (
+              <Skeleton width="auto">
+                <TextField margin="normal" fullWidth disabled />
+              </Skeleton>
+            ) : (
+              <Controller
+                control={control}
+                name="departments"
+                rules={{ required: "Departments is required" }}
+                render={({ field }) => (
+                  <Autocomplete
+                    multiple
+                    {...autocompleteProps}
+                    {...field}
+                    value={departments}
+                    onChange={(_, value) => {
+                      console.log(value);
+                      setDepartments(value);
+                      field.onChange(value?.map((item) => item.id));
+                    }}
+                    getOptionLabel={(item) => {
+                      return item.name ? item.name : "";
+                    }}
+                    isOptionEqualToValue={(option, value) =>
+                      value === undefined || option.id === value.id
+                    }
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label={t("doctors.fields.departments")}
+                        margin="normal"
+                        variant="outlined"
+                        error={!!errors.departments}
+                        helperText={errors.departments?.message}
+                        required
+                      />
+                    )}
+                  />
+                )}
+              />
+            )}
           </Box>
         </Stack>
       </Stack>

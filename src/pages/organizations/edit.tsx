@@ -4,6 +4,8 @@ import { useTranslate, HttpError } from "@pankod/refine-core";
 import { Edit, Box, TextField, Autocomplete } from "@pankod/refine-mui";
 import { Controller, useForm } from "@pankod/refine-react-hook-form";
 
+import { useState, useEffect } from "react";
+
 import { IOrganization } from "interfaces";
 
 export const OrganizationEdit: React.FC = () => {
@@ -13,9 +15,20 @@ export const OrganizationEdit: React.FC = () => {
     saveButtonProps,
     register,
     control,
+    getValues,
     formState: { errors },
     refineCore: { formLoading },
   } = useForm<IOrganization, HttpError, IOrganization>();
+
+  const [type, setType] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!formLoading) {
+      console.log("loaded");
+      setType(getValues("type") || null);
+      // setGetAutocompleteValue(false);
+    }
+  }, [formLoading, getValues]); // Only re-run the effect if count changes
 
   return (
     <Edit
@@ -62,7 +75,9 @@ export const OrganizationEdit: React.FC = () => {
               // {...autocompleteProps}
               options={["University", "College"]}
               {...field}
+              value={type}
               onChange={(_, value) => {
+                setType(value);
                 field.onChange(value);
               }}
               isOptionEqualToValue={(option, value) =>

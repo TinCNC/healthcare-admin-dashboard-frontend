@@ -194,7 +194,12 @@ function App() {
                 icon: <FontAwesomeIcon icon={solid("building")} />,
               },
               {
+                name: "Diseases",
+                icon: <FontAwesomeIcon icon={solid("disease")} />,
+              },
+              {
                 name: "diseases",
+                parentName: "Diseases",
                 list: DiseaseList,
                 show: DiseaseShow,
                 create: DiseaseCreate,
@@ -203,6 +208,7 @@ function App() {
               },
               {
                 name: "diseases_groups",
+                parentName: "Diseases",
                 list: DiseaseGroupList,
                 show: DiseaseGroupShow,
                 // create: DiseaseGroupCreate,
@@ -273,6 +279,7 @@ function App() {
               },
               {
                 name: "categories",
+                parentName: "Prosthetics",
                 list: CategoriesList,
                 // create: CategoriesCreate,
                 // edit: CategoriesEdit,

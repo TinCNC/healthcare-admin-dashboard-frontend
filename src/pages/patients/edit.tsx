@@ -18,7 +18,7 @@ import { IPatient, IClinic } from "interfaces";
 
 import { FileUpload } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
-import { BaseSyntheticEvent, useState } from "react";
+import { BaseSyntheticEvent, useState, useEffect } from "react";
 
 import {
   uploadImage,
@@ -97,20 +97,33 @@ export const PatientEdit: React.FC = () => {
     }
   };
 
-  const {
-    autocompleteProps,
-    // defaultValueQueryResult
-  } = useAutocomplete<IClinic>({
-    resource: "clinics",
-    onSearch: (value) => [
-      {
-        field: "name",
-        operator: "containss",
-        value,
-      },
-    ],
-    defaultValue: queryResult?.data?.data.clinic,
-  });
+  const [clinic, setClinic] = useState<IClinic | null>(null);
+
+  const { autocompleteProps, defaultValueQueryResult } =
+    useAutocomplete<IClinic>({
+      resource: "clinics",
+      pagination: { current: 1, pageSize: 10000 },
+      onSearch: (value) => [
+        {
+          field: "name",
+          operator: "containss",
+          value,
+        },
+      ],
+      defaultValue: queryResult?.data?.data.clinic,
+    });
+
+  useEffect(() => {
+    if (defaultValueQueryResult?.isFetched && !formLoading) {
+      console.log("loaded");
+      setClinic(defaultValueQueryResult?.data?.data.at(0) || null);
+      // setGetAutocompleteValue(false);
+    }
+  }, [
+    formLoading,
+    defaultValueQueryResult?.isFetched,
+    defaultValueQueryResult?.data?.data,
+  ]); // Only re-run the effect if count changes
 
   // console.log(defaultValueQueryResult?.data?.data[0]);
 
@@ -244,9 +257,11 @@ export const PatientEdit: React.FC = () => {
                 <Autocomplete
                   {...autocompleteProps}
                   {...field}
+                  value={clinic}
                   // defaultValue={defaultValueQueryResult?.data?.data[0]}
                   onChange={(_, value) => {
                     console.log(value);
+                    setClinic(value);
                     field.onChange(value?.id);
                   }}
                   getOptionLabel={(item) => {

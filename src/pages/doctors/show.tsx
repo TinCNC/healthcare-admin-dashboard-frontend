@@ -1,17 +1,7 @@
 import React from "react";
-import {
-  // useOne,
-  useShow,
-  useTranslate,
-  useMany,
-  useModal,
-  // useList,
-  // HttpError,
-} from "@pankod/refine-core";
+import { useShow, useTranslate, useMany, useModal } from "@pankod/refine-core";
 
 import { useModalForm } from "@pankod/refine-react-hook-form";
-
-// import parse from "html-react-parser";
 
 import {
   Show,
@@ -55,7 +45,7 @@ export const DoctorShow: React.FC = () => {
       id: "0",
     });
 
-  const { data: certificateData, isLoading: certificateLoading } =
+  const { data: certificateData, isFetching: certificateFetching } =
     certificateQueryResult;
 
   const {
@@ -188,7 +178,7 @@ export const DoctorShow: React.FC = () => {
         // },
         renderCell: ({ row }) => {
           if (row.expired_at === undefined || row.expired_at === null)
-            return "Never Expire";
+            return t("professional_certificates.values.never_expire");
           return new Date(row.expired_at).toLocaleDateString();
         },
       },
@@ -352,83 +342,6 @@ export const DoctorShow: React.FC = () => {
     ]
   );
 
-  //   const { data: categoryData } = useOne<ICategory>({
-  //     resource: "categories",
-  //     id: record?.category.id || "",
-  //     queryOptions: {
-  //       enabled: !!record?.category.id,
-  //     },
-  //   });
-
-  // const { data: servicesData, isLoading: servicesLoading } = useMany<IService>({
-  //   resource: "services",
-  //   ids: record?.services || [],
-  //   queryOptions: {
-  //     enabled: record !== undefined ? record?.services.length > 0 : false,
-  //   },
-  // });
-
-  // const { data: certificationsData, isLoading: certificationsLoading } =
-  //   useMany<ICertification>({
-  //     resource: "certificates",
-  //     ids: record?.certifications || [],
-  //     queryOptions: {
-  //       enabled:
-  //         record !== undefined ? record?.certifications.length > 0 : false,
-  //     },
-  //   });
-
-  // console.log(servicesData);
-
-  // const { data: galleryData, isLoading: galleryLoading } = useList<IGallery>({
-  //   resource: "image_gallery",
-  //   config: {
-  //     filters: [
-  //       {
-  //         field: "user_id",
-  //         operator: "eq",
-  //         value: record?.id || null,
-  //       },
-  //     ],
-  //   },
-  // });
-
-  // const { data: productData, isLoading: productLoading } = useList<IProduct>({
-  //   resource: "products",
-  //   config: {
-  //     filters: [
-  //       {
-  //         field: "user_id",
-  //         operator: "eq",
-  //         value: record?.id || null,
-  //       },
-  //     ],
-  //   },
-  // });
-
-  // const { data: postsData, isLoading: postsLoading } = useList<IPost>({
-  //   resource: "posts",
-  //   config: {
-  //     filters: [
-  //       {
-  //         field: "user_id",
-  //         operator: "eq",
-  //         value: record?.id || null,
-  //       },
-  //     ],
-  //   },
-  // });
-
-  // console.log(galleryData);
-
-  // const { data: galleryData, isLoading: galleryLoading } = useMany<IGallery>({
-  //   resource: "image_gallery",
-  //   ids: record?.services || [],
-  //   queryOptions: {
-  //     enabled: record !== undefined ? record?.services.length > 0 : false,
-  //   },
-  // });
-
   return (
     <Show isLoading={isLoading}>
       <CertificateEditorDialog
@@ -440,7 +353,7 @@ export const DoctorShow: React.FC = () => {
         {...editModalFormReturnValues}
       />
       <CertificateDetailDialog
-        loading={certificateLoading}
+        loading={certificateFetching}
         data={certificateData?.data}
         creatorsData={creatorsData?.data}
         validatorsData={validatorsData?.data}
