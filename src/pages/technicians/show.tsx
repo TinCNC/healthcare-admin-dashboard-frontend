@@ -12,7 +12,6 @@ import { useModalForm } from "@pankod/refine-react-hook-form";
 // import parse from "html-react-parser";
 
 import {
-  Show,
   Stack,
   Typography,
   Avatar,
@@ -25,6 +24,8 @@ import {
   DeleteButton,
   ShowButton,
 } from "@pankod/refine-mui";
+
+import { Show } from "components/crud/show";
 
 import { AddBoxOutlined, CardMembership } from "@mui/icons-material";
 

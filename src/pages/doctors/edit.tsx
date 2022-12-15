@@ -132,24 +132,25 @@ export const DoctorEdit: React.FC = () => {
   return (
     <Edit
       isLoading={formLoading}
-      footerButtons={
-        <LoadingButton
-          type="submit"
-          startIcon={<SaveOutlined />}
-          loadingPosition="start"
-          loading={formLoading || creatingPatient}
-          variant="contained"
-          onClick={async (e) => handleSubmit(e)}
-        >
-          {t("buttons.save")}
-        </LoadingButton>
-      }
-      // saveButtonProps={{
-      //   disabled: creatingPatient || formLoading,
-      //   onClick: (e: BaseSyntheticEvent<object, any, any>) => {
-      //     handleSubmit(e);
-      //   },
-      // }}
+      // footerButtons={
+      //   <LoadingButton
+      //     type="submit"
+      //     startIcon={<SaveOutlined />}
+      //     loadingPosition="start"
+      //     loading={formLoading || creatingPatient}
+      //     variant="contained"
+      //     onClick={async (e) => handleSubmit(e)}
+      //   >
+      //     {t("buttons.save")}
+      //   </LoadingButton>
+      // }
+      saveButtonProps={{
+        loading: creatingPatient || formLoading,
+        // disabled: creatingPatient || formLoading,
+        onClick: (e: BaseSyntheticEvent<object, any, any>) => {
+          handleSubmit(e);
+        },
+      }}
     >
       <Stack
         direction={{ sm: "column", md: "row" }}

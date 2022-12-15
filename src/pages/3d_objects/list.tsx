@@ -4,13 +4,11 @@ import {
   useMany,
   CrudFilters,
   useList,
-  // useTable,
 } from "@pankod/refine-core";
 import {
   useDataGrid,
   DataGrid,
   GridColumns,
-  List,
   Stack,
   ShowButton,
   EditButton,
@@ -27,16 +25,10 @@ import {
   Tooltip,
 } from "@pankod/refine-mui";
 
+import { List } from "components/crud/list";
+
 import { I3DObject, ITechnician } from "interfaces";
 import { Search } from "@mui/icons-material";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  solid,
-  // regular,
-  // brands,
-  // icon,
-} from "@fortawesome/fontawesome-svg-core/import.macro"; // <-- import styles to be used
 
 import { AddShoppingCart } from "@mui/icons-material";
 
@@ -341,14 +333,7 @@ export const _3DObjectList: React.FC = () => {
           />
         </FormControl> */}
       </Paper>
-      <List
-        title={
-          <React.Fragment>
-            <FontAwesomeIcon icon={solid("cubes")} />
-            &nbsp;{t("3d_objects.titles.list")}
-          </React.Fragment>
-        }
-      >
+      <List>
         <DataGrid
           {...dataGridProps}
           filterModel={undefined}

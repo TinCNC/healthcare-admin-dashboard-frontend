@@ -1,5 +1,7 @@
 import { useShow, useTranslate } from "@pankod/refine-core";
-import { Show, Stack, Typography, Container } from "@pankod/refine-mui";
+import { Stack, Typography, Container } from "@pankod/refine-mui";
+
+import { Show } from "components/crud/show";
 
 import { IMedicalSpeciality } from "interfaces";
 

@@ -4,11 +4,12 @@ import {
   useDataGrid,
   DataGrid,
   GridColumns,
-  List,
   Stack,
   EditButton,
   DeleteButton,
 } from "@pankod/refine-mui";
+
+import { List } from "components/crud/list";
 
 import { ICategory, IPost } from "interfaces";
 

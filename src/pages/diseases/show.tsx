@@ -1,5 +1,7 @@
 import { useShow, useTranslate } from "@pankod/refine-core";
-import { Show, Stack, Typography, TagField } from "@pankod/refine-mui";
+import { Stack, Typography, TagField } from "@pankod/refine-mui";
+
+import { Show } from "components/crud/show";
 
 import { IDisease } from "interfaces";
 

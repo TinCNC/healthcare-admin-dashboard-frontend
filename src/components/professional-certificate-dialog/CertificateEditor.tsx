@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
+// import path from "path";
 // import axios, { isCancel, AxiosError } from "axios";
 
 import {
@@ -273,7 +274,23 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
     if (fileImg) {
       try {
         const formData = new FormData();
-        formData.append("file", fileImg);
+
+        // const baseFileName = path.parse(fileImg.name).base;
+
+        // const fileNameWithoutExt = path.parse(baseFileName);
+
+        // const fileExt = path.extname(fileImg.name);
+
+        console.log(queryResult?.data?.data?.id);
+
+        const preName = `prof_cert_doc_${getValues("holder")}_cert_${
+          queryResult?.data?.data?.id
+        }_`;
+
+        const newName = preName + fileImg.name;
+
+        // formData.append("file", fileImg);
+        formData.append("file", new File([fileImg], newName));
 
         const resFile = await axios({
           method: "post",
@@ -304,8 +321,8 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
     if (getValues("expired_at") === "") setValue("expired_at", null);
     try {
       if (imageFile !== undefined) {
-        await sendFileToIPFS(imageFile);
         setEditingCertificate(true);
+        await sendFileToIPFS(imageFile);
       }
       saveButtonProps.onClick(e);
       setEditingCertificate(false);
@@ -472,6 +489,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
                       value={expiredAt}
                       onChange={(newValue) => {
                         console.log(newValue);
+                        // console.log(queryResult?.data?.data?.id);
                         if (newValue === null) setValue("expired_at", null);
                         else {
                           setValue(

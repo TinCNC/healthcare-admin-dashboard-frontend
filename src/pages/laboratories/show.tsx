@@ -2,7 +2,6 @@ import { AddBoxOutlined, Blender } from "@mui/icons-material";
 import { useShow, useTranslate, useOne, useModal } from "@pankod/refine-core";
 import { useModalForm } from "@pankod/refine-react-hook-form";
 import {
-  Show,
   Stack,
   Typography,
   TagField,
@@ -16,6 +15,8 @@ import {
   useDataGrid,
   Container,
 } from "@pankod/refine-mui";
+
+import { Show } from "components/crud/show";
 
 import { ILaboratory, IMaterial, ITechnician } from "interfaces";
 import { MaterialEditorDialog } from "components/material-dialog";

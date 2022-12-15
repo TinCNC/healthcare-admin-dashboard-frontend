@@ -4,29 +4,20 @@ import {
   useDataGrid,
   DataGrid,
   GridColumns,
-  List,
   Stack,
   EditButton,
   DeleteButton,
   ShowButton,
   Divider,
-  FormControl,
   IconButton,
   InputBase,
   Paper,
-  Autocomplete,
-  TextField,
 } from "@pankod/refine-mui";
+
+import { List } from "components/crud/list";
 
 import { ILaboratory } from "interfaces";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  solid,
-  // regular,
-  // brands,
-  // icon,
-} from "@fortawesome/fontawesome-svg-core/import.macro"; // <-- import styles to be used
 import { Search } from "@mui/icons-material";
 
 export const LaboratoryList: React.FC = () => {
@@ -271,14 +262,7 @@ export const LaboratoryList: React.FC = () => {
           />
         </FormControl> */}
       </Paper>
-      <List
-        title={
-          <React.Fragment>
-            <FontAwesomeIcon icon={solid("flask-vial")} />
-            &nbsp;{t("laboratories.titles.list")}
-          </React.Fragment>
-        }
-      >
+      <List>
         <DataGrid
           {...dataGridProps}
           filterModel={undefined}

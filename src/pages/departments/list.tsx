@@ -4,21 +4,14 @@ import {
   useDataGrid,
   DataGrid,
   GridColumns,
-  List,
   Stack,
   EditButton,
   DeleteButton,
 } from "@pankod/refine-mui";
 
-import { IDepartment } from "interfaces";
+import { List } from "components/crud/list";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  solid,
-  // regular,
-  // brands,
-  // icon,
-} from "@fortawesome/fontawesome-svg-core/import.macro"; // <-- import styles to be used
+import { IDepartment } from "interfaces";
 
 export const DepartmentList: React.FC = () => {
   const t = useTranslate();
@@ -78,14 +71,7 @@ export const DepartmentList: React.FC = () => {
   );
 
   return (
-    <List
-      title={
-        <React.Fragment>
-          <FontAwesomeIcon icon={solid("sitemap")} />
-          &nbsp;{t("departments.titles.list")}
-        </React.Fragment>
-      }
-    >
+    <List>
       <DataGrid {...dataGridProps} columns={columns} autoHeight />
     </List>
   );

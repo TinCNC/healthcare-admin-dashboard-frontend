@@ -4,7 +4,6 @@ import { useShow, useTranslate, useMany, useModal } from "@pankod/refine-core";
 import { useModalForm } from "@pankod/refine-react-hook-form";
 
 import {
-  Show,
   Stack,
   Typography,
   TagField,
@@ -18,6 +17,8 @@ import {
   DeleteButton,
   ShowButton,
 } from "@pankod/refine-mui";
+
+import { Show } from "components/crud/show";
 
 import { AddBoxOutlined, CardMembership } from "@mui/icons-material";
 

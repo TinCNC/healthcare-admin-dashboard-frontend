@@ -12,7 +12,6 @@ import {
 // import parse from "html-react-parser";
 
 import {
-  Show,
   Stack,
   Typography,
   TagField,
@@ -20,6 +19,8 @@ import {
   Grid,
   LoadingButton,
 } from "@pankod/refine-mui";
+
+import { Show } from "components/crud/show";
 
 import { I3DObject, ITechnician } from "interfaces";
 

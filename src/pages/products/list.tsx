@@ -10,7 +10,6 @@ import {
   useDataGrid,
   DataGrid,
   GridColumns,
-  List,
   Stack,
   ShowButton,
   EditButton,
@@ -27,16 +26,10 @@ import {
   Tooltip,
 } from "@pankod/refine-mui";
 
+import { List } from "components/crud/list";
+
 import { IProduct, ICategory } from "interfaces";
 import { Search } from "@mui/icons-material";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  solid,
-  // regular,
-  // brands,
-  // icon,
-} from "@fortawesome/fontawesome-svg-core/import.macro"; // <-- import styles to be used
 
 import { AddShoppingCart } from "@mui/icons-material";
 
@@ -353,14 +346,7 @@ export const ProductList: React.FC = () => {
           />
         </FormControl>
       </Paper>
-      <List
-        title={
-          <React.Fragment>
-            <FontAwesomeIcon icon={solid("bone")} />
-            &nbsp;{t("products.titles.list")}
-          </React.Fragment>
-        }
-      >
+      <List>
         <DataGrid
           {...dataGridProps}
           // rows={

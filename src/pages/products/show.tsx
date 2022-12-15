@@ -10,14 +10,9 @@ import {
 
 // import parse from "html-react-parser";
 
-import {
-  Show,
-  Stack,
-  Typography,
-  TagField,
-  Box,
-  Button,
-} from "@pankod/refine-mui";
+import { Stack, Typography, TagField, Box } from "@pankod/refine-mui";
+
+import { Show } from "components/crud/show";
 
 import { IProduct, ICategory } from "interfaces";
 
@@ -239,8 +234,8 @@ export const ProductShow: React.FC = () => {
     </Show>
   );
 };
-function methodDoesNotExist():
-  | React.MouseEventHandler<HTMLButtonElement>
-  | undefined {
-  throw new Error("Function not implemented.");
-}
+// function methodDoesNotExist():
+//   | React.MouseEventHandler<HTMLButtonElement>
+//   | undefined {
+//   throw new Error("Function not implemented.");
+// }

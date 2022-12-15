@@ -1,39 +1,23 @@
 import React, { useState, useEffect } from "react";
-import {
-  useTranslate,
-  // useList,
-  CrudFilters,
-} from "@pankod/refine-core";
+import { useTranslate, CrudFilters } from "@pankod/refine-core";
 import {
   useDataGrid,
   DataGrid,
   GridColumns,
-  List,
   Stack,
   ShowButton,
   EditButton,
   DeleteButton,
-  // FormControl,
-  // Select,
   Divider,
   Paper,
   InputBase,
   IconButton,
-  // InputLabel,
-  // SelectChangeEvent,
-  // MenuItem,
 } from "@pankod/refine-mui";
+
+import { List } from "components/crud/list";
 
 import { ITechnician } from "interfaces";
 import { Search } from "@mui/icons-material";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  solid,
-  // regular,
-  // brands,
-  // icon,
-} from "@fortawesome/fontawesome-svg-core/import.macro"; // <-- import styles to be used
 
 export const TechnicianList: React.FC = () => {
   const t = useTranslate();
@@ -275,14 +259,7 @@ export const TechnicianList: React.FC = () => {
           </Select>
         </FormControl> */}
       </Paper>
-      <List
-        title={
-          <React.Fragment>
-            <FontAwesomeIcon icon={solid("user-secret")} />
-            &nbsp;{t("technicians.titles.list")}
-          </React.Fragment>
-        }
-      >
+      <List>
         <DataGrid
           {...dataGridProps}
           // rows={
