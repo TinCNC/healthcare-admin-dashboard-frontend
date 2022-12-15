@@ -5,15 +5,6 @@ export interface ICategory {
   created_at: string;
 }
 
-export interface IPost {
-  id: number;
-  title: string;
-  content: string;
-  status: "published" | "draft" | "rejected";
-  createdAt: string;
-  category: { id: number };
-}
-
 export interface IDepartment {
   id: number;
   name: string;

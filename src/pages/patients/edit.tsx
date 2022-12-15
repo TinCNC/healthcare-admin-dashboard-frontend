@@ -1,17 +1,13 @@
 import { HttpError } from "@pankod/refine-core";
 import {
   Box,
-  TextField,
   Autocomplete,
   useAutocomplete,
   Edit,
   Input,
-  // Typography,
   Stack,
-  // Button,
-  Avatar,
-  // FormControl,
 } from "@pankod/refine-mui";
+import { LoadingTextField } from "components/form-fields/loading-text-field";
 import { useForm, Controller } from "@pankod/refine-react-hook-form";
 
 import { IPatient, IClinic } from "interfaces";
@@ -20,26 +16,19 @@ import { FileUpload } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { BaseSyntheticEvent, useState, useEffect } from "react";
 
-import {
-  uploadImage,
-  getPublicImageUrl,
-  // getSignedImageUrl,
-  // downloadImage,
-} from "api";
+import { uploadImage, getPublicImageUrl } from "api";
+import { LoadingAvatar } from "components/form-fields/loading-avatar";
 
 export const PatientEdit: React.FC = () => {
   const {
     refineCore: { formLoading, queryResult },
+    formState: { errors, isSubmitting },
     saveButtonProps,
     register,
     control,
-    // watch,
     getValues,
     setValue,
-    formState: { errors },
   } = useForm<IPatient, HttpError, IPatient & { clinic: IClinic }>();
-
-  // const imageInput = watch("image");
 
   const [imagePreview, setImagePreview] = useState<string>("");
 
@@ -49,11 +38,6 @@ export const PatientEdit: React.FC = () => {
 
   const handleSubmit = async (e: BaseSyntheticEvent<object, any, any>) => {
     // console.log(saveButtonProps);
-
-    // console.log(watch("username"));
-    // console.log(getValues());
-    // setValue("image", "fegsegsegse");
-    // console.log(imageFile);
 
     try {
       if (imageFile !== undefined) {
@@ -142,7 +126,8 @@ export const PatientEdit: React.FC = () => {
         spacing={{ xs: 1, sm: 2, md: 4 }}
       >
         <Stack gap={1}>
-          <Avatar
+          <LoadingAvatar
+            loading={queryResult?.isFetching}
             alt={getValues("username")}
             src={imagePreview || getValues("image")}
             sx={{ width: 320, height: 320 }}
@@ -187,8 +172,12 @@ export const PatientEdit: React.FC = () => {
             // sx={{ display: "flex", flexDirection: "column" }}
             autoComplete="off"
           >
-            <TextField
-              {...register("username", { required: "Username is required" })}
+            <LoadingTextField
+              loading={queryResult?.isFetching}
+              disabled={isSubmitting}
+              registerProps={register("username", {
+                required: "Username is required",
+              })}
               error={!!errors?.username}
               helperText={errors.username?.message}
               margin="normal"
@@ -200,8 +189,10 @@ export const PatientEdit: React.FC = () => {
               autoFocus
             />
 
-            <TextField
-              {...register("first_name", {
+            <LoadingTextField
+              loading={queryResult?.isFetching}
+              disabled={isSubmitting}
+              registerProps={register("first_name", {
                 required: "First Name is required",
               })}
               error={!!errors?.first_name}
@@ -213,8 +204,12 @@ export const PatientEdit: React.FC = () => {
               label="First Name"
               name="first_name"
             />
-            <TextField
-              {...register("last_name", { required: "Last Name is required" })}
+            <LoadingTextField
+              loading={queryResult?.isFetching}
+              disabled={isSubmitting}
+              registerProps={register("last_name", {
+                required: "Last Name is required",
+              })}
               error={!!errors?.last_name}
               helperText={errors.last_name?.message}
               margin="normal"
@@ -270,8 +265,10 @@ export const PatientEdit: React.FC = () => {
                   isOptionEqualToValue={(option, value) =>
                     value === undefined || option.id === value.id
                   }
+                  disabled={isSubmitting}
                   renderInput={(params) => (
-                    <TextField
+                    <LoadingTextField
+                      loading={queryResult?.isFetching}
                       {...params}
                       // placeholder={defaultValueQueryResult?.data?.data[0].name}
                       label="Clinic"

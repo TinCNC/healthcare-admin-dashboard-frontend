@@ -15,11 +15,9 @@ import {
   Stack,
   Typography,
   Avatar,
-  Button,
   GridColumns,
   DataGrid,
   useDataGrid,
-  List,
   EditButton,
   DeleteButton,
   ShowButton,
@@ -27,7 +25,7 @@ import {
 
 import { Show } from "components/crud/show";
 
-import { AddBoxOutlined, CardMembership } from "@mui/icons-material";
+import { CardMembership } from "@mui/icons-material";
 
 import {
   IHealthStatusCertificates,
@@ -41,6 +39,7 @@ import {
   CertificateEditorDialog,
   CertificateDetailDialog,
 } from "components/health-status-certificate-dialog";
+import { SubresourceList } from "components/crud/list-subresource";
 
 export const PatientShow: React.FC = () => {
   const t = useTranslate();
@@ -88,7 +87,6 @@ export const PatientShow: React.FC = () => {
   } = createModalFormReturnValues;
 
   const {
-    // setValue,
     modal: {
       show: showEditModal,
       // close: closeCreateModal,
@@ -333,75 +331,6 @@ export const PatientShow: React.FC = () => {
     },
   });
 
-  // const { data: servicesData, isLoading: servicesLoading } = useMany<IService>({
-  //   resource: "services",
-  //   ids: record?.services || [],
-  //   queryOptions: {
-  //     enabled: record !== undefined ? record?.services.length > 0 : false,
-  //   },
-  // });
-
-  // const { data: certificationsData, isLoading: certificationsLoading } =
-  //   useMany<ICertification>({
-  //     resource: "certificates",
-  //     ids: record?.certifications || [],
-  //     queryOptions: {
-  //       enabled:
-  //         record !== undefined ? record?.certifications.length > 0 : false,
-  //     },
-  //   });
-
-  // console.log(servicesData);
-
-  // const { data: galleryData, isLoading: galleryLoading } = useList<IGallery>({
-  //   resource: "image_gallery",
-  //   config: {
-  //     filters: [
-  //       {
-  //         field: "user_id",
-  //         operator: "eq",
-  //         value: record?.id || null,
-  //       },
-  //     ],
-  //   },
-  // });
-
-  // const { data: productData, isLoading: productLoading } = useList<IProduct>({
-  //   resource: "products",
-  //   config: {
-  //     filters: [
-  //       {
-  //         field: "user_id",
-  //         operator: "eq",
-  //         value: record?.id || null,
-  //       },
-  //     ],
-  //   },
-  // });
-
-  // const { data: postsData, isLoading: postsLoading } = useList<IPost>({
-  //   resource: "posts",
-  //   config: {
-  //     filters: [
-  //       {
-  //         field: "user_id",
-  //         operator: "eq",
-  //         value: record?.id || null,
-  //       },
-  //     ],
-  //   },
-  // });
-
-  // console.log(galleryData);
-
-  // const { data: galleryData, isLoading: galleryLoading } = useMany<IGallery>({
-  //   resource: "image_gallery",
-  //   ids: record?.services || [],
-  //   queryOptions: {
-  //     enabled: record !== undefined ? record?.services.length > 0 : false,
-  //   },
-  // });
-
   return (
     <Show isLoading={isLoading}>
       <CertificateEditorDialog
@@ -449,31 +378,18 @@ export const PatientShow: React.FC = () => {
         </Stack>
       </Stack>
       <Stack gap={1} marginTop={4}>
-        <List
+        <SubresourceList
           resource="health_status_certificates"
-          title={
-            <React.Fragment>
-              <CardMembership sx={{ verticalAlign: "middle" }} />{" "}
-              {t("health_status_certificates.titles.list")}
-            </React.Fragment>
-          }
-          headerButtons={
-            <Button variant="contained" onClick={() => showCreateModal()}>
-              <AddBoxOutlined
-                fontSize="small"
-                sx={{ marginLeft: "-4px", marginRight: "8px" }}
-              />
-              {t("health_status_certificates.titles.create")}
-            </Button>
-          }
-          breadcrumb={false}
+          modalToggle={showCreateModal}
+          icon={<CardMembership sx={{ verticalAlign: "middle" }} />}
+          canCreate={true}
         >
           <DataGrid
             {...dataGridProps}
             columns={certificatesColumns}
             autoHeight
           />
-        </List>
+        </SubresourceList>
       </Stack>
     </Show>
   );

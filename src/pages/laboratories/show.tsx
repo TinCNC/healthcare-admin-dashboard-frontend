@@ -1,4 +1,4 @@
-import { AddBoxOutlined, Blender } from "@mui/icons-material";
+import { Blender } from "@mui/icons-material";
 import { useShow, useTranslate, useOne, useModal } from "@pankod/refine-core";
 import { useModalForm } from "@pankod/refine-react-hook-form";
 import {
@@ -6,8 +6,6 @@ import {
   Typography,
   TagField,
   DataGrid,
-  List,
-  Button,
   GridColumns,
   ShowButton,
   EditButton,
@@ -15,6 +13,8 @@ import {
   useDataGrid,
   Container,
 } from "@pankod/refine-mui";
+
+import { SubresourceList } from "components/crud/list-subresource";
 
 import { Show } from "components/crud/show";
 
@@ -238,31 +238,18 @@ export const LaboratoryShow: React.FC = () => {
           </Stack>
           <Container>
             <Stack gap={1} marginTop={4} padding="12px">
-              <List
+              <SubresourceList
                 resource="materials"
-                title={
-                  <React.Fragment>
-                    <Blender sx={{ verticalAlign: "middle" }} />{" "}
-                    {t("materials.titles.list")}
-                  </React.Fragment>
-                }
-                headerButtons={
-                  <Button variant="contained" onClick={() => showCreateModal()}>
-                    <AddBoxOutlined
-                      fontSize="small"
-                      sx={{ marginLeft: "-4px", marginRight: "8px" }}
-                    />
-                    {t("materials.titles.create")}
-                  </Button>
-                }
-                breadcrumb={false}
+                modalToggle={showCreateModal}
+                icon={<Blender sx={{ verticalAlign: "middle" }} />}
+                canCreate={true}
               >
                 <DataGrid
                   {...dataGridProps}
                   columns={materialsColumns}
                   autoHeight
                 />
-              </List>
+              </SubresourceList>
             </Stack>
           </Container>
         </React.Fragment>

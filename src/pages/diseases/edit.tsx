@@ -3,20 +3,20 @@ import { LoadingButton } from "@mui/lab";
 import { HttpError, useTranslate } from "@pankod/refine-core";
 import {
   Box,
-  TextField,
-  // Autocomplete,
-  // useAutocomplete,
   Edit,
-  FormControl,
   InputLabel,
   MenuItem,
   Select,
   SelectChangeEvent,
 } from "@pankod/refine-mui";
-import { useForm, Controller } from "@pankod/refine-react-hook-form";
+
+import { LoadingTextField } from "components/form-fields/loading-text-field";
+
+import { useForm } from "@pankod/refine-react-hook-form";
 
 import { IDisease } from "interfaces";
 import { useState, useEffect, ChangeEvent } from "react";
+import { LoadingFormControl } from "components/form-fields/loading-form-control-field";
 
 export const DiseaseEdit: React.FC = () => {
   const t = useTranslate();
@@ -31,12 +31,11 @@ export const DiseaseEdit: React.FC = () => {
 
   const {
     refineCore: { formLoading, queryResult },
+    formState: { errors, isSubmitting },
     saveButtonProps,
     register,
-    control,
     reset,
     getValues,
-    formState: { errors },
   } = useForm<IDisease, HttpError, IDisease>();
 
   useEffect(() => {
@@ -83,14 +82,15 @@ export const DiseaseEdit: React.FC = () => {
         sx={{ display: "flex", flexDirection: "column" }}
         autoComplete="off"
       >
-        <TextField
-          {...register("name", { required: "Name is required" })}
+        <LoadingTextField
+          loading={queryResult?.isFetching}
+          disabled={isSubmitting}
+          registerProps={register("name", { required: "Name is required" })}
           error={!!errors?.name}
           helperText={errors.name?.message}
           margin="normal"
           required
           fullWidth
-          disabled={formLoading}
           id="name"
           label={t("diseases.fields.name")}
           name="name"
@@ -102,8 +102,10 @@ export const DiseaseEdit: React.FC = () => {
           }}
           autoFocus
         />
-        <TextField
-          {...register("scientific_name", {
+        <LoadingTextField
+          loading={queryResult?.isFetching}
+          disabled={isSubmitting}
+          registerProps={register("scientific_name", {
             required: "Scientific name is required",
           })}
           error={!!errors?.scientific_name}
@@ -111,7 +113,6 @@ export const DiseaseEdit: React.FC = () => {
           margin="normal"
           required
           fullWidth
-          disabled={formLoading}
           id="scientific_name"
           label={t("diseases.fields.scientific_name")}
           name="scientific_name"
@@ -122,8 +123,10 @@ export const DiseaseEdit: React.FC = () => {
             setScientificName(event.target.value as string);
           }}
         />
-        <TextField
-          {...register("classification", {
+        <LoadingTextField
+          loading={queryResult?.isFetching}
+          disabled={isSubmitting}
+          registerProps={register("classification", {
             required: "Classification is required",
           })}
           error={!!errors?.classification}
@@ -131,7 +134,6 @@ export const DiseaseEdit: React.FC = () => {
           margin="normal"
           required
           fullWidth
-          disabled={formLoading}
           id="classification"
           label={t("diseases.fields.classification")}
           name="classification"
@@ -142,7 +144,9 @@ export const DiseaseEdit: React.FC = () => {
             setClassification(event.target.value as string);
           }}
         />
-        <FormControl
+        <LoadingFormControl
+          loading={queryResult?.isFetching}
+          disabled={isSubmitting}
           // sx={{ marginTop: "12px", marginBottom: "12px" }}
           margin="normal"
           fullWidth
@@ -165,7 +169,7 @@ export const DiseaseEdit: React.FC = () => {
             <MenuItem value="Medium">Medium</MenuItem>
             <MenuItem value="Low">Low</MenuItem>
           </Select>
-        </FormControl>
+        </LoadingFormControl>
       </Box>
     </Edit>
   );

@@ -1,20 +1,22 @@
 import { HttpError, useTranslate } from "@pankod/refine-core";
 import {
   Box,
-  TextField,
   Autocomplete,
   useAutocomplete,
   Edit,
   Input,
   Stack,
 } from "@pankod/refine-mui";
+
+import { LoadingTextField } from "components/form-fields/loading-text-field";
+
 import { useForm, Controller } from "@pankod/refine-react-hook-form";
 
 import { IProduct, ICategory } from "interfaces";
 
 import { FileUpload, SaveOutlined } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
-import { BaseSyntheticEvent, useState } from "react";
+import { BaseSyntheticEvent, useState, useEffect } from "react";
 
 import { uploadImage, getPublicImageUrl } from "api";
 
@@ -22,13 +24,12 @@ export const ProductEdit: React.FC = () => {
   const t = useTranslate();
   const {
     refineCore: { formLoading, queryResult },
+    formState: { errors, isSubmitting },
     saveButtonProps,
     register,
     control,
-    // watch,
     getValues,
     setValue,
-    formState: { errors },
   } = useForm<IProduct, HttpError, IProduct & { category: ICategory }>();
 
   // const imageInput = watch("image");
@@ -37,16 +38,11 @@ export const ProductEdit: React.FC = () => {
 
   const [imageFile, setImageFile] = useState<File>();
 
+  const [category, setCategory] = useState<ICategory | null>(null);
+
   const [creatingProduct, setCreatingProduct] = useState<boolean>(false);
 
   const handleSubmit = async (e: BaseSyntheticEvent<object, any, any>) => {
-    // console.log(saveButtonProps);
-
-    // console.log(watch("username"));
-    // console.log(getValues());
-    // setValue("image", "fegsegsegse");
-    // console.log(imageFile);
-
     try {
       if (imageFile !== undefined) {
         setCreatingProduct(true);
@@ -92,17 +88,30 @@ export const ProductEdit: React.FC = () => {
     }
   };
 
-  const { autocompleteProps } = useAutocomplete<ICategory>({
-    resource: "categories",
-    onSearch: (value) => [
-      {
-        field: "title",
-        operator: "containss",
-        value,
-      },
-    ],
-    defaultValue: queryResult?.data?.data.category,
-  });
+  const { autocompleteProps, defaultValueQueryResult } =
+    useAutocomplete<ICategory>({
+      resource: "categories",
+      onSearch: (value) => [
+        {
+          field: "title",
+          operator: "containss",
+          value,
+        },
+      ],
+      defaultValue: queryResult?.data?.data.category,
+    });
+
+  useEffect(() => {
+    if (defaultValueQueryResult?.isFetched && !formLoading) {
+      console.log("loaded");
+      setCategory(defaultValueQueryResult?.data?.data.at(0) || null);
+      // setGetAutocompleteValue(false);
+    }
+  }, [
+    formLoading,
+    defaultValueQueryResult?.isFetched,
+    defaultValueQueryResult?.data?.data,
+  ]); // Only re-run the effect if count changes
 
   return (
     <Edit
@@ -175,8 +184,10 @@ export const ProductEdit: React.FC = () => {
             sx={{ display: "flex", flexDirection: "column" }}
             autoComplete="off"
           >
-            <TextField
-              {...register("name", { required: "Name is required" })}
+            <LoadingTextField
+              loading={queryResult?.isFetching}
+              disabled={isSubmitting}
+              registerProps={register("name", { required: "Name is required" })}
               error={!!errors?.name}
               helperText={errors.name?.message}
               margin="normal"
@@ -195,7 +206,10 @@ export const ProductEdit: React.FC = () => {
                 <Autocomplete
                   {...autocompleteProps}
                   {...field}
+                  value={category}
+                  disabled={isSubmitting}
                   onChange={(_, value) => {
+                    setCategory(value);
                     field.onChange(value?.id);
                   }}
                   getOptionLabel={(item) => {
@@ -205,8 +219,9 @@ export const ProductEdit: React.FC = () => {
                     value === undefined || option.id === value.id
                   }
                   renderInput={(params) => (
-                    <TextField
+                    <LoadingTextField
                       {...params}
+                      loading={queryResult?.isFetching}
                       label={t("products.fields.category")}
                       margin="normal"
                       variant="outlined"
@@ -218,8 +233,10 @@ export const ProductEdit: React.FC = () => {
                 />
               )}
             />
-            <TextField
-              {...register("application", {
+            <LoadingTextField
+              loading={queryResult?.isFetching}
+              disabled={isSubmitting}
+              registerProps={register("application", {
                 required: "Application is required",
               })}
               error={!!errors?.application}
@@ -231,8 +248,10 @@ export const ProductEdit: React.FC = () => {
               label={t("products.fields.application")}
               name="application"
             />
-            <TextField
-              {...register("description")}
+            <LoadingTextField
+              loading={queryResult?.isFetching}
+              disabled={isSubmitting}
+              registerProps={register("description")}
               error={!!errors?.description}
               helperText={errors.description?.message}
               margin="normal"
@@ -244,8 +263,10 @@ export const ProductEdit: React.FC = () => {
               label={t("products.fields.description")}
               name="description"
             />
-            <TextField
-              {...register("manufacturing_cost", {
+            <LoadingTextField
+              loading={queryResult?.isFetching}
+              disabled={isSubmitting}
+              registerProps={register("manufacturing_cost", {
                 required: "manufacturing Cost is required",
               })}
               error={!!errors?.manufacturing_cost}
@@ -258,8 +279,10 @@ export const ProductEdit: React.FC = () => {
               label={t("products.fields.manufacturing_cost")}
               name="manufacturing_cost"
             />
-            <TextField
-              {...register("sale_price", {
+            <LoadingTextField
+              loading={queryResult?.isFetching}
+              disabled={isSubmitting}
+              registerProps={register("sale_price", {
                 required: "Sale Price is required",
               })}
               error={!!errors?.sale_price}

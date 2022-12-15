@@ -1,14 +1,7 @@
 import { HttpError, useTranslate } from "@pankod/refine-core";
-import {
-  Box,
-  TextField,
-  // Autocomplete,
-  // useAutocomplete,
-  Edit,
-  Input,
-  Stack,
-  Avatar,
-} from "@pankod/refine-mui";
+import { Box, Edit, Input, Stack } from "@pankod/refine-mui";
+
+import { LoadingTextField } from "components/form-fields/loading-text-field";
 import { useForm } from "@pankod/refine-react-hook-form";
 
 import { ITechnician } from "interfaces";
@@ -18,17 +11,18 @@ import { LoadingButton } from "@mui/lab";
 import { BaseSyntheticEvent, useState } from "react";
 
 import { uploadImage, getPublicImageUrl } from "api";
+import { LoadingAvatar } from "components/form-fields/loading-avatar";
 
 export const TechnicianEdit: React.FC = () => {
   const t = useTranslate();
   const {
-    refineCore: { formLoading },
     saveButtonProps,
     register,
     // control,
     getValues,
     setValue,
-    formState: { errors },
+    formState: { errors, isSubmitting },
+    refineCore: { formLoading, queryResult },
   } = useForm<ITechnician, HttpError, ITechnician>();
 
   // const imageInput = watch("image");
@@ -130,7 +124,8 @@ export const TechnicianEdit: React.FC = () => {
         spacing={{ xs: 1, sm: 2, md: 4 }}
       >
         <Stack gap={1}>
-          <Avatar
+          <LoadingAvatar
+            loading={queryResult?.isFetching}
             alt={getValues("username")}
             src={imagePreview || getValues("image")}
             sx={{ width: 320, height: 320 }}
@@ -166,8 +161,11 @@ export const TechnicianEdit: React.FC = () => {
             // sx={{ display: "flex", flexDirection: "column" }}
             autoComplete="off"
           >
-            <TextField
-              {...register("username", { required: "Username is required" })}
+            <LoadingTextField
+              loading={queryResult?.isFetching}
+              registerProps={register("username", {
+                required: "Username is required",
+              })}
               error={!!errors?.username}
               helperText={errors.username?.message}
               margin="normal"
@@ -176,11 +174,14 @@ export const TechnicianEdit: React.FC = () => {
               id="username"
               label="Username"
               name="username"
+              disabled={isSubmitting}
               autoFocus
             />
 
-            <TextField
-              {...register("first_name", {
+            <LoadingTextField
+              loading={queryResult?.isFetching}
+              disabled={isSubmitting}
+              registerProps={register("first_name", {
                 required: "First Name is required",
               })}
               error={!!errors?.first_name}
@@ -192,8 +193,11 @@ export const TechnicianEdit: React.FC = () => {
               label="First Name"
               name="first_name"
             />
-            <TextField
-              {...register("last_name", { required: "Last Name is required" })}
+            <LoadingTextField
+              loading={queryResult?.isFetching}
+              registerProps={register("last_name", {
+                required: "Last Name is required",
+              })}
               error={!!errors?.last_name}
               helperText={errors.last_name?.message}
               margin="normal"
@@ -202,6 +206,7 @@ export const TechnicianEdit: React.FC = () => {
               id="last_name"
               label="Last Name"
               name="last_name"
+              disabled={isSubmitting}
             />
             {/* <Controller
           control={control}

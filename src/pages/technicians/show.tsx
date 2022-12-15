@@ -15,11 +15,9 @@ import {
   Stack,
   Typography,
   Avatar,
-  Button,
   GridColumns,
   DataGrid,
   useDataGrid,
-  List,
   EditButton,
   DeleteButton,
   ShowButton,
@@ -27,15 +25,19 @@ import {
 
 import { Show } from "components/crud/show";
 
-import { AddBoxOutlined, CardMembership } from "@mui/icons-material";
+import { SubresourceList } from "components/crud/list-subresource";
+
+import { CardMembership } from "@mui/icons-material";
 
 import {
   ITechnicianCertificates,
   ITechnician,
   IOrganization,
 } from "interfaces";
-import { CertificateDetailDialog } from "./components/CertificateDetail";
-import { CertificateEditorDialog } from "./components/CertificateEditor";
+import {
+  CertificateDetailDialog,
+  CertificateEditorDialog,
+} from "components/technician-certificate-dialog";
 
 export const TechnicianShow: React.FC = () => {
   const t = useTranslate();
@@ -307,31 +309,18 @@ export const TechnicianShow: React.FC = () => {
         </Stack>
       </Stack>
       <Stack gap={1} marginTop={4}>
-        <List
+        <SubresourceList
           resource="technician_certificates"
-          title={
-            <React.Fragment>
-              <CardMembership sx={{ verticalAlign: "middle" }} />{" "}
-              {t("technician_certificates.titles.list")}
-            </React.Fragment>
-          }
-          headerButtons={
-            <Button variant="contained" onClick={() => showCreateModal()}>
-              <AddBoxOutlined
-                fontSize="small"
-                sx={{ marginLeft: "-4px", marginRight: "8px" }}
-              />
-              {t("technician_certificates.titles.create")}
-            </Button>
-          }
-          breadcrumb={false}
+          modalToggle={showCreateModal}
+          icon={<CardMembership sx={{ verticalAlign: "middle" }} />}
+          canCreate={true}
         >
           <DataGrid
             {...dataGridProps}
             columns={certificatesColumns}
             autoHeight
           />
-        </List>
+        </SubresourceList>
       </Stack>
     </Show>
   );

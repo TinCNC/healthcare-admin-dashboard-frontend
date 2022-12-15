@@ -1,16 +1,17 @@
 import React from "react";
 
 import {
-  TextField,
+  // TextField,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  TextFieldProps,
   useAutocomplete,
   Autocomplete,
 } from "@pankod/refine-mui";
+
+import { LoadingTextField } from "components/form-fields/loading-text-field";
 
 import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -28,15 +29,15 @@ import {
 } from "@pankod/refine-react-hook-form";
 import { useTranslate } from "@pankod/refine-core";
 
-export type DataProps = UseModalFormReturnType & {
+export type EditorDataProps = UseModalFormReturnType & {
   submitButtonText?: string;
 };
 
-export const CertificateEditorDialog: React.FC<DataProps> = ({
+export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
   register,
   control,
-  formState: { errors },
-  refineCore: { onFinish, formLoading },
+  formState: { errors, isSubmitting },
+  refineCore: { onFinish, formLoading, queryResult },
   handleSubmit,
   getValues,
   setValue,
@@ -100,8 +101,12 @@ export const CertificateEditorDialog: React.FC<DataProps> = ({
           </DialogContentText>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <form className="form" onSubmit={handleSubmit(onFinish)}>
-              <TextField
-                {...register("name", { required: "Name is required" })}
+              <LoadingTextField
+                loading={queryResult?.isFetching}
+                disabled={isSubmitting}
+                registerProps={register("name", {
+                  required: "Name is required",
+                })}
                 error={!!errors?.name}
                 helperText={errors.name?.message as string}
                 autoFocus
@@ -136,8 +141,10 @@ export const CertificateEditorDialog: React.FC<DataProps> = ({
                   setValue("issued_date", newValue?.toDate().toDateString());
                   setIssuedDate(newValue);
                 }}
+                disabled={isSubmitting}
                 renderInput={(params) => (
-                  <TextField
+                  <LoadingTextField
+                    loading={queryResult?.isFetching}
                     required
                     error={!!errors?.issued_date}
                     helperText={errors.issued_date?.message as string}
@@ -166,8 +173,10 @@ export const CertificateEditorDialog: React.FC<DataProps> = ({
                   }
                   setExpiredDate(newValue);
                 }}
+                disabled={isSubmitting}
                 renderInput={(params) => (
-                  <TextField
+                  <LoadingTextField
+                    loading={queryResult?.isFetching}
                     error={!!errors?.expired_date}
                     helperText={errors.expired_date?.message as string}
                     fullWidth
@@ -194,9 +203,11 @@ export const CertificateEditorDialog: React.FC<DataProps> = ({
                     isOptionEqualToValue={(option, value) =>
                       value === undefined || option.id === value.id
                     }
+                    disabled={isSubmitting}
                     renderInput={(params) => (
-                      <TextField
+                      <LoadingTextField
                         {...params}
+                        loading={queryResult?.isFetching}
                         label={t("technician_certificates.fields.issuer")}
                         margin="normal"
                         variant="standard"
@@ -222,18 +233,20 @@ export const CertificateEditorDialog: React.FC<DataProps> = ({
                     getOptionLabel={(item) => {
                       return item.username
                         ? item.username +
-                        ": " +
-                        item.first_name +
-                        " " +
-                        item.last_name
+                            ": " +
+                            item.first_name +
+                            " " +
+                            item.last_name
                         : "";
                     }}
                     isOptionEqualToValue={(option, value) =>
                       value === undefined || option.id === value.id
                     }
+                    disabled={isSubmitting}
                     renderInput={(params) => (
-                      <TextField
+                      <LoadingTextField
                         {...params}
+                        loading={queryResult?.isFetching}
                         label={t("technician_certificates.fields.validator")}
                         margin="normal"
                         variant="standard"
@@ -245,8 +258,12 @@ export const CertificateEditorDialog: React.FC<DataProps> = ({
                   />
                 )}
               />
-              <TextField
-                {...register("program", { required: "Program is required" })}
+              <LoadingTextField
+                loading={queryResult?.isFetching}
+                disabled={isSubmitting}
+                registerProps={register("program", {
+                  required: "Program is required",
+                })}
                 error={!!errors?.program}
                 helperText={errors.program?.message as string}
                 autoFocus
@@ -265,10 +282,13 @@ export const CertificateEditorDialog: React.FC<DataProps> = ({
                 hidden
                 id="holder"
                 name="holder"
-              // value={holder}
               />
-              <TextField
-                {...register("level", { required: "Level is required" })}
+              <LoadingTextField
+                loading={queryResult?.isFetching}
+                disabled={isSubmitting}
+                registerProps={register("level", {
+                  required: "Level is required",
+                })}
                 error={!!errors?.level}
                 helperText={errors.level?.message as string}
                 autoFocus

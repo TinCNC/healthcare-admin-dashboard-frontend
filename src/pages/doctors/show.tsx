@@ -8,19 +8,19 @@ import {
   Typography,
   TagField,
   Avatar,
-  Button,
   GridColumns,
   DataGrid,
   useDataGrid,
-  List,
   EditButton,
   DeleteButton,
   ShowButton,
 } from "@pankod/refine-mui";
 
+import { SubresourceList } from "components/crud/list-subresource";
+
 import { Show } from "components/crud/show";
 
-import { AddBoxOutlined, CardMembership } from "@mui/icons-material";
+import { CardMembership } from "@mui/icons-material";
 
 import {
   IDoctor,
@@ -399,31 +399,19 @@ export const DoctorShow: React.FC = () => {
         </Stack>
       </Stack>
       <Stack gap={1} marginTop={4}>
-        <List
+        <SubresourceList
           resource="professional_certificates"
-          title={
-            <React.Fragment>
-              <CardMembership sx={{ verticalAlign: "middle" }} />{" "}
-              {t("professional_certificates.titles.list")}
-            </React.Fragment>
-          }
-          headerButtons={
-            <Button variant="contained" onClick={() => showCreateModal()}>
-              <AddBoxOutlined
-                fontSize="small"
-                sx={{ marginLeft: "-4px", marginRight: "8px" }}
-              />
-              {t("professional_certificates.titles.create")}
-            </Button>
-          }
-          breadcrumb={false}
+          modalToggle={showCreateModal}
+          icon={<CardMembership sx={{ verticalAlign: "middle" }} />}
+          canCreate={true}
+          // breadcrumb={false}
         >
           <DataGrid
             {...dataGridProps}
             columns={certificatesColumns}
             autoHeight
           />
-        </List>
+        </SubresourceList>
       </Stack>
     </Show>
   );
