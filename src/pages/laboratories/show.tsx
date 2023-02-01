@@ -21,7 +21,7 @@ import { Show } from "components/crud/show";
 import { ILaboratory, IMaterial, ITechnician } from "interfaces";
 import { MaterialEditorDialog } from "components/material-dialog";
 
-import React from "react";
+import React, { useEffect } from "react";
 
 export const LaboratoryShow: React.FC = () => {
   const t = useTranslate();
@@ -78,7 +78,13 @@ export const LaboratoryShow: React.FC = () => {
   const { data, isLoading } = queryResult;
   const record = data?.data;
 
-  setValue("laboratory", record?.id);
+  useEffect(() => {
+    if (!isLoading) {
+      console.log("loaded");
+      setValue("holder", record?.id);
+      // setGetAutocompleteValue(false);
+    }
+  }, [isLoading, record?.id, setValue]);
 
   const { data: directorData, isLoading: directorLoading } =
     useOne<ITechnician>({

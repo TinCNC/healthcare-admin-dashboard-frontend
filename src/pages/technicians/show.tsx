@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   useShow,
   useTranslate,
@@ -87,7 +87,13 @@ export const TechnicianShow: React.FC = () => {
   const { data, isLoading } = queryResult;
   const record = data?.data;
 
-  setValue("holder", record?.id);
+  useEffect(() => {
+    if (!isLoading) {
+      console.log("loaded");
+      setValue("holder", record?.id);
+      // setGetAutocompleteValue(false);
+    }
+  }, [isLoading, record?.id, setValue]);
 
   const { dataGridProps } = useDataGrid<ITechnicianCertificates>({
     resource: "technician_certificates",

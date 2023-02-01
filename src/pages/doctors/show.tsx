@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useShow, useTranslate, useMany, useModal } from "@pankod/refine-core";
 
 import { useModalForm } from "@pankod/refine-react-hook-form";
@@ -92,7 +92,13 @@ export const DoctorShow: React.FC = () => {
   const { data, isLoading } = queryResult;
   const record = data?.data;
 
-  setValue("holder", record?.id);
+  useEffect(() => {
+    if (!isLoading) {
+      console.log("loaded");
+      setValue("holder", record?.id);
+      // setGetAutocompleteValue(false);
+    }
+  }, [isLoading, record?.id, setValue]);
 
   const { dataGridProps } = useDataGrid<IProfessionalCertificates>({
     resource: "professional_certificates",
