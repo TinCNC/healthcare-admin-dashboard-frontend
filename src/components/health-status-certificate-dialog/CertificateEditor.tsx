@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import {
   Dialog,
@@ -47,77 +47,195 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
 }) => {
   const t = useTranslate();
 
-  const { autocompleteProps: autocompleteDiseaseProps } =
-    useAutocomplete<IDisease>({
-      resource: "diseases",
-      pagination: { current: 1, pageSize: 10000 },
-      onSearch: (value) => [
-        {
-          field: "name",
-          operator: "containss",
-          value,
-        },
-      ],
-    });
+  const [disease, setDisease] = useState<IDisease | null>(null);
+  const [issuer, setIssuer] = useState<IDoctor | null>(null);
+  const [validator, setValidator] = useState<IClinic | null>(null);
+  const [examiner, setExaminer] = useState<IDoctor | null>(null);
+  const [submitted, setSubmitted] = useState<boolean>(false);
 
-  const { autocompleteProps: autocompleteIssuerProps } =
-    useAutocomplete<IDoctor>({
-      resource: "doctors",
-      pagination: { current: 1, pageSize: 10000 },
-      onSearch: (value) => [
-        {
-          field: "username",
-          operator: "containss",
-          value,
-        },
-      ],
-    });
+  const handleClose = useCallback(() => {
+    // console.log(getValues());
+    // setImageFile(undefined);
+    // setImagePreview("");
+    // setValue("image", "");
+    reset();
+    // console.log(getValues());
+    setDisease(null);
+    setIssuer(null);
+    setValidator(null);
+    setExaminer(null);
+    setIssuedDate(dayjs());
+    setExpiredDate(null);
+    setSubmitted(false);
+    close();
+    return;
+  }, [
+    close,
+    // getValues,
+    // imagePreview,
+    reset,
+    // setValue,
+    setSubmitted,
+  ]);
 
-  const { autocompleteProps: autocompleteValidatorProps } =
-    useAutocomplete<IClinic>({
-      resource: "clinics",
-      pagination: { current: 1, pageSize: 10000 },
-      onSearch: (value) => [
-        {
-          field: "name",
-          operator: "containss",
-          value,
-        },
-      ],
-    });
+  useEffect(() => {
+    console.log("submitted:" + submitted);
+    console.log("formLoading:" + formLoading);
+    if (formLoading === false && submitted) {
+      handleClose();
+    }
+  }, [formLoading, handleClose, submitted]);
 
-  const { autocompleteProps: autocompleteExaminerProps } =
-    useAutocomplete<IDoctor>({
-      resource: "doctors",
-      pagination: { current: 1, pageSize: 10000 },
-      onSearch: (value) => [
-        {
-          field: "username",
-          operator: "containss",
-          value,
-        },
-      ],
-    });
+  const {
+    autocompleteProps: autocompleteDiseaseProps,
+    defaultValueQueryResult: defaultValueDiseaseQueryResult,
+  } = useAutocomplete<IDisease>({
+    resource: "diseases",
+    defaultValue: queryResult?.data?.data?.disease,
+    pagination: { current: 1, pageSize: 10000 },
+    onSearch: (value) => [
+      {
+        field: "name",
+        operator: "containss",
+        value,
+      },
+    ],
+  });
+
+  const {
+    autocompleteProps: autocompleteIssuerProps,
+    defaultValueQueryResult: defaultValueIssuerQueryResult,
+  } = useAutocomplete<IDoctor>({
+    resource: "doctors",
+    defaultValue: queryResult?.data?.data?.issuer,
+    pagination: { current: 1, pageSize: 10000 },
+    onSearch: (value) => [
+      {
+        field: "username",
+        operator: "containss",
+        value,
+      },
+    ],
+  });
+
+  const {
+    autocompleteProps: autocompleteValidatorProps,
+    defaultValueQueryResult: defaultValueValidatorQueryResult,
+  } = useAutocomplete<IClinic>({
+    resource: "clinics",
+    defaultValue: queryResult?.data?.data?.validator,
+    pagination: { current: 1, pageSize: 10000 },
+    onSearch: (value) => [
+      {
+        field: "name",
+        operator: "containss",
+        value,
+      },
+    ],
+  });
+
+  const {
+    autocompleteProps: autocompleteExaminerProps,
+    defaultValueQueryResult: defaultValueExaminerQueryResult,
+  } = useAutocomplete<IDoctor>({
+    resource: "doctors",
+    defaultValue: queryResult?.data?.data?.examiner,
+    pagination: { current: 1, pageSize: 10000 },
+    onSearch: (value) => [
+      {
+        field: "username",
+        operator: "containss",
+        value,
+      },
+    ],
+  });
 
   const [issuedDate, setIssuedDate] = React.useState<Dayjs | null>(dayjs());
 
   const [expiredDate, setExpiredDate] = React.useState<Dayjs | null>(null);
 
+  useEffect(() => {
+    if (defaultValueDiseaseQueryResult?.isFetched && !formLoading) {
+      // console.log("loaded validator");
+      setDisease(defaultValueDiseaseQueryResult?.data?.data.at(0) || null);
+      // setGetAutocompleteValue(false);
+    }
+  }, [
+    formLoading,
+    defaultValueDiseaseQueryResult?.isFetched,
+    defaultValueDiseaseQueryResult?.data?.data,
+  ]); // Only re-run the effect if count changes
+
+  useEffect(() => {
+    if (defaultValueIssuerQueryResult?.isFetched && !formLoading) {
+      // console.log("loaded validator");
+      setIssuer(defaultValueIssuerQueryResult?.data?.data.at(0) || null);
+      // setGetAutocompleteValue(false);
+    }
+  }, [
+    formLoading,
+    defaultValueIssuerQueryResult?.isFetched,
+    defaultValueIssuerQueryResult?.data?.data,
+  ]); // Only re-run the effect if count changes
+
+  useEffect(() => {
+    if (defaultValueValidatorQueryResult?.isFetched && !formLoading) {
+      // console.log("loaded validator");
+      setValidator(defaultValueValidatorQueryResult?.data?.data.at(0) || null);
+      // setGetAutocompleteValue(false);
+    }
+  }, [
+    formLoading,
+    defaultValueValidatorQueryResult?.isFetched,
+    defaultValueValidatorQueryResult?.data?.data,
+  ]); // Only re-run the effect if count changes
+
+  useEffect(() => {
+    if (defaultValueExaminerQueryResult?.isFetched && !formLoading) {
+      // console.log("loaded validator");
+      setExaminer(defaultValueExaminerQueryResult?.data?.data.at(0) || null);
+      // setGetAutocompleteValue(false);
+    }
+  }, [
+    formLoading,
+    defaultValueExaminerQueryResult?.isFetched,
+    defaultValueExaminerQueryResult?.data?.data,
+  ]); // Only re-run the effect if count changes
+
+  useEffect(() => {
+    if (queryResult?.isFetched && !formLoading) {
+      // console.log("loaded");
+
+      const returnedIssedDateValue = queryResult?.data?.data.issued_date;
+      const returnedExpiredAtValue = queryResult?.data?.data.expired_date;
+      if (returnedIssedDateValue !== null)
+        setIssuedDate(dayjs(returnedIssedDateValue));
+      else {
+        setExpiredDate(null);
+      }
+      if (returnedExpiredAtValue !== null)
+        setExpiredDate(dayjs(returnedExpiredAtValue));
+      else {
+        setExpiredDate(null);
+      }
+    }
+  }, [
+    formLoading,
+    queryResult?.data?.data.expired_date,
+    queryResult?.data?.data.issued_date,
+    queryResult?.isFetched,
+  ]); // Only re-run the effect if count changes
+
   const submitButtonClick = (e: React.BaseSyntheticEvent<object, any, any>) => {
     if (getValues("expired_date") === "") setValue("expired_date", null);
     console.log(getValues());
     saveButtonProps.onClick(e);
+    setSubmitted(true);
   };
 
   return (
     <div>
-      <Dialog
-        open={visible}
-        onClose={() => {
-          reset();
-          close();
-        }}
-      >
+      <Dialog open={visible} onClose={handleClose}>
         <DialogTitle>
           {t("professional_certificates.titles.create")}
         </DialogTitle>
@@ -156,7 +274,9 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
                     {...field}
                     onChange={(_, value) => {
                       field.onChange(value?.id);
+                      setDisease(value);
                     }}
+                    value={disease}
                     disabled={isSubmitting}
                     getOptionLabel={(item) => {
                       return item.name ? item.name : "";
@@ -256,7 +376,9 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
                     {...field}
                     onChange={(_, value) => {
                       field.onChange(value?.id);
+                      setIssuer(value);
                     }}
+                    value={issuer}
                     getOptionLabel={(item) => {
                       return item.username
                         ? item.username +
@@ -295,7 +417,9 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
                     {...field}
                     onChange={(_, value) => {
                       field.onChange(value?.id);
+                      setValidator(value);
                     }}
+                    value={validator}
                     getOptionLabel={(item) => {
                       return item.name ? item.name : "";
                     }}
@@ -328,7 +452,9 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
                     {...field}
                     onChange={(_, value) => {
                       field.onChange(value?.id);
+                      setExaminer(value);
                     }}
+                    value={examiner}
                     getOptionLabel={(item) => {
                       return item.username
                         ? item.username +
@@ -389,10 +515,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
           <LoadingButton
             color="error"
             startIcon={<CancelOutlined />}
-            onClick={() => {
-              reset();
-              close();
-            }}
+            onClick={handleClose}
           >
             Cancel
           </LoadingButton>
