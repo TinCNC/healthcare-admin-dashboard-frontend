@@ -1,4 +1,4 @@
-import React from "react";
+// import React from "react";
 
 import { Refine } from "@pankod/refine-core";
 import {
@@ -20,6 +20,8 @@ import { supabaseClient } from "utility";
 import { Title, Sider, Layout, Header } from "components/layout";
 import { OffLayoutArea } from "components/offLayoutArea";
 import authProvider from "./authProvider";
+
+// import { Wallet } from "pages/payment-solana";
 
 import {
   PatientList,
@@ -46,10 +48,20 @@ import {
   DoctorCreate,
   DoctorEdit,
 } from "pages/doctors";
+import { _3DObjectList, _3DObjectShow } from "pages/3d_objects";
+import {
+  DiseaseList,
+  DiseaseShow,
+  DiseaseEdit,
+  DiseaseCreate,
+} from "pages/diseases";
 
-import { DiseaseList, DiseaseShow } from "pages/diseases";
-
-import { DiseaseGroupList, DiseaseGroupShow } from "pages/diseases_groups";
+import {
+  DiseaseGroupList,
+  DiseaseGroupShow,
+  DiseaseGroupEdit,
+  // DiseaseGroupCreate,
+} from "pages/diseases_groups";
 
 import { ClinicList, ClinicCreate, ClinicEdit } from "pages/clinics";
 
@@ -71,6 +83,13 @@ import {
   OrganizationCreate,
   OrganizationEdit,
 } from "pages/organizations";
+
+import {
+  LaboratoryList,
+  LaboratoryShow,
+  LaboratoryEdit,
+  LaboratoryCreate,
+} from "pages/laboratories";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -139,12 +158,25 @@ function App() {
               />
             )}
             resources={[
+              // {
+              //   name: "SolanaPayment",
+              //   list: Wallet,
+              //   icon: <FontAwesomeIcon icon={solid("wallet")} />,
+              // },
               {
                 name: "departments",
                 list: DepartmentList,
                 create: DepartmentCreate,
                 edit: DepartmentEdit,
                 icon: <FontAwesomeIcon icon={solid("sitemap")} />,
+              },
+              {
+                name: "laboratories",
+                list: LaboratoryList,
+                show: LaboratoryShow,
+                create: LaboratoryCreate,
+                edit: LaboratoryEdit,
+                icon: <FontAwesomeIcon icon={solid("flask-vial")} />,
               },
               {
                 name: "medical_specialities",
@@ -162,19 +194,25 @@ function App() {
                 icon: <FontAwesomeIcon icon={solid("building")} />,
               },
               {
+                name: "Diseases",
+                icon: <FontAwesomeIcon icon={solid("disease")} />,
+              },
+              {
                 name: "diseases",
+                parentName: "Diseases",
                 list: DiseaseList,
                 show: DiseaseShow,
-                // create: PostCreate,
-                // edit: PostEdit,
+                create: DiseaseCreate,
+                edit: DiseaseEdit,
                 icon: <FontAwesomeIcon icon={solid("disease")} />,
               },
               {
                 name: "diseases_groups",
+                parentName: "Diseases",
                 list: DiseaseGroupList,
                 show: DiseaseGroupShow,
-                // create: PostCreate,
-                // edit: PostEdit,
+                // create: DiseaseGroupCreate,
+                edit: DiseaseGroupEdit,
                 icon: <FontAwesomeIcon icon={solid("viruses")} />,
               },
               {
@@ -216,8 +254,23 @@ function App() {
               //   icon: <FontAwesomeIcon icon={solid("teeth")} />,
               // },
               {
+                name: "Prosthetics",
+                icon: <FontAwesomeIcon icon={solid("bone")} />,
+              },
+              {
+                // name: "prosthetics",
+                name: "3d_objects",
+                parentName: "Prosthetics",
+                list: _3DObjectList,
+                show: _3DObjectShow,
+                // create: _3DObjectCreate,
+                // edit: _3DObjectEdit,
+                icon: <FontAwesomeIcon icon={solid("cubes")} />,
+              },
+              {
                 // name: "prosthetics",
                 name: "products",
+                parentName: "Prosthetics",
                 list: ProductList,
                 show: ProductShow,
                 create: ProductCreate,
@@ -226,9 +279,10 @@ function App() {
               },
               {
                 name: "categories",
+                parentName: "Prosthetics",
                 list: CategoriesList,
-                // create: PostCreate,
-                // edit: PostEdit,
+                // create: CategoriesCreate,
+                // edit: CategoriesEdit,
                 icon: <Category />,
               },
             ]}

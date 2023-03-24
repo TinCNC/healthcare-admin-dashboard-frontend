@@ -4,7 +4,6 @@ import {
   useDataGrid,
   DataGrid,
   GridColumns,
-  List,
   Stack,
   EditButton,
   DeleteButton,
@@ -18,15 +17,10 @@ import {
   TextField,
 } from "@pankod/refine-mui";
 
+import { List } from "components/crud/list";
+
 import { IOrganization } from "interfaces";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  solid,
-  // regular,
-  // brands,
-  // icon,
-} from "@fortawesome/fontawesome-svg-core/import.macro"; // <-- import styles to be used
 import { Search } from "@mui/icons-material";
 
 export const OrganizationList: React.FC = () => {
@@ -240,14 +234,7 @@ export const OrganizationList: React.FC = () => {
           </Select> */}
         </FormControl>
       </Paper>
-      <List
-        title={
-          <React.Fragment>
-            <FontAwesomeIcon icon={solid("building")} />
-            &nbsp;{t("organizations.titles.list")}
-          </React.Fragment>
-        }
-      >
+      <List>
         <DataGrid
           {...dataGridProps}
           filterModel={undefined}

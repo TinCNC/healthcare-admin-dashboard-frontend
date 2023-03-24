@@ -20,18 +20,21 @@ Refine offers lots of out-of-the box functionality for rapid development, withou
 ### Running the development server.
 
 ```bash
+    pnpm dev
     yarn dev
 ```
 
 ### Building for production.
 
 ```bash
+    pnpm build
     yarn build
 ```
 
 ### Running the production server.
 
 ```bash
+    pnpm start
     yarn start
 ```
 

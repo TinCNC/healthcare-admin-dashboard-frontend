@@ -1,33 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { useTranslate, useMany, CrudFilters } from "@pankod/refine-core";
+import { useTranslate, CrudFilters } from "@pankod/refine-core";
 import {
   useDataGrid,
   DataGrid,
   GridColumns,
-  List,
   Stack,
   ShowButton,
   EditButton,
   DeleteButton,
-  Autocomplete,
   Divider,
-  FormControl,
   IconButton,
   InputBase,
   Paper,
-  TextField,
 } from "@pankod/refine-mui";
+
+import { List } from "components/crud/list";
 
 import { IDiseasesGroup } from "interfaces";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-import {
-  solid,
-  regular,
-  brands,
-  icon,
-} from "@fortawesome/fontawesome-svg-core/import.macro"; // <-- import styles to be used
 import { Search } from "@mui/icons-material";
 
 export const DiseaseGroupList: React.FC = () => {
@@ -237,14 +227,7 @@ export const DiseaseGroupList: React.FC = () => {
           />
         </FormControl> */}
       </Paper>
-      <List
-        title={
-          <React.Fragment>
-            <FontAwesomeIcon icon={solid("viruses")} />
-            &nbsp;{t("diseases_groups.titles.list")}
-          </React.Fragment>
-        }
-      >
+      <List>
         <DataGrid
           {...dataGridProps}
           columns={columns}

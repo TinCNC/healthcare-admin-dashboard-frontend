@@ -1,34 +1,18 @@
 import { HttpError } from "@pankod/refine-core";
-import {
-  Box,
-  TextField,
-  // Autocomplete,
-  // useAutocomplete,
-  Edit,
-} from "@pankod/refine-mui";
-import { useForm, Controller } from "@pankod/refine-react-hook-form";
+import { Box, Edit } from "@pankod/refine-mui";
+import { useForm } from "@pankod/refine-react-hook-form";
+
+import { LoadingTextField } from "components/form-fields/loading-text-field";
 
 import { IClinic } from "interfaces";
 
 export const ClinicEdit: React.FC = () => {
   const {
-    refineCore: { formLoading },
+    refineCore: { formLoading, queryResult },
+    formState: { errors, isSubmitting },
     saveButtonProps,
     register,
-    control,
-    formState: { errors },
   } = useForm<IClinic, HttpError, IClinic>();
-
-  // const { autocompleteProps } = useAutocomplete<IClinic>({
-  //   resource: "clinics",
-  //   onSearch: (value) => [
-  //     {
-  //       field: "name",
-  //       operator: "containss",
-  //       value,
-  //     },
-  //   ],
-  // });
 
   return (
     <Edit isLoading={formLoading} saveButtonProps={saveButtonProps}>
@@ -37,8 +21,10 @@ export const ClinicEdit: React.FC = () => {
         sx={{ display: "flex", flexDirection: "column" }}
         autoComplete="off"
       >
-        <TextField
-          {...register("name", { required: "Name is required" })}
+        <LoadingTextField
+          loading={queryResult?.isFetching}
+          disabled={isSubmitting}
+          registerProps={register("name", { required: "Name is required" })}
           error={!!errors?.name}
           helperText={errors.name?.message}
           margin="normal"
@@ -49,8 +35,12 @@ export const ClinicEdit: React.FC = () => {
           name="name"
           autoFocus
         />
-        <TextField
-          {...register("address", { required: "Address is required" })}
+        <LoadingTextField
+          loading={queryResult?.isFetching}
+          disabled={isSubmitting}
+          registerProps={register("address", {
+            required: "Address is required",
+          })}
           error={!!errors?.address}
           helperText={errors.address?.message}
           margin="normal"
@@ -60,8 +50,10 @@ export const ClinicEdit: React.FC = () => {
           label="Address"
           name="address"
         />
-        <TextField
-          {...register("capacity", {
+        <LoadingTextField
+          loading={queryResult?.isFetching}
+          disabled={isSubmitting}
+          registerProps={register("capacity", {
             min: 10,
             max: 1000,
             required: "Capacity is required",

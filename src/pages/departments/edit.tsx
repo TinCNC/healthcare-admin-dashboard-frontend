@@ -1,8 +1,10 @@
 import { SaveOutlined } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { useTranslate, HttpError } from "@pankod/refine-core";
-import { Edit, Box, TextField } from "@pankod/refine-mui";
+import { Edit, Box } from "@pankod/refine-mui";
 import { useForm } from "@pankod/refine-react-hook-form";
+
+import { LoadingTextField } from "components/form-fields/loading-text-field";
 
 import { IDepartment } from "interfaces";
 
@@ -10,10 +12,10 @@ export const DepartmentEdit: React.FC = () => {
   const t = useTranslate();
 
   const {
-    refineCore: { formLoading },
+    refineCore: { formLoading, queryResult },
+    formState: { errors, isSubmitting },
     saveButtonProps,
     register,
-    formState: { errors },
   } = useForm<IDepartment, HttpError, IDepartment>();
 
   return (
@@ -38,8 +40,10 @@ export const DepartmentEdit: React.FC = () => {
         sx={{ display: "flex", flexDirection: "column" }}
         autoComplete="off"
       >
-        <TextField
-          {...register("name", {
+        <LoadingTextField
+          loading={queryResult?.isFetching}
+          disabled={isSubmitting}
+          registerProps={register("name", {
             required: t("errors.required.field", { field: "Name" }),
           })}
           error={!!errors.name}
@@ -50,8 +54,10 @@ export const DepartmentEdit: React.FC = () => {
           name="title"
           autoFocus
         />
-        <TextField
-          {...register("description", {
+        <LoadingTextField
+          loading={queryResult?.isFetching}
+          disabled={isSubmitting}
+          registerProps={register("description", {
             required: t("errors.required.field", { field: "Description" }),
           })}
           error={!!errors.description}

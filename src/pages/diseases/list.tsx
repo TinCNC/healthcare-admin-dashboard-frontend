@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useTranslate, useMany, CrudFilters } from "@pankod/refine-core";
+import { useTranslate, CrudFilters } from "@pankod/refine-core";
 import {
   useDataGrid,
   DataGrid,
   GridColumns,
-  List,
   Stack,
   ShowButton,
   EditButton,
@@ -18,15 +17,10 @@ import {
   TextField,
 } from "@pankod/refine-mui";
 
+import { List } from "components/crud/list";
+
 import { IDisease } from "interfaces";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  solid,
-  regular,
-  brands,
-  icon,
-} from "@fortawesome/fontawesome-svg-core/import.macro"; // <-- import styles to be used
 import { Search } from "@mui/icons-material";
 
 export const DiseaseList: React.FC = () => {
@@ -235,14 +229,7 @@ export const DiseaseList: React.FC = () => {
           </Select> */}
         </FormControl>
       </Paper>
-      <List
-        title={
-          <React.Fragment>
-            <FontAwesomeIcon icon={solid("disease")} />
-            &nbsp;{t("diseases.titles.list")}
-          </React.Fragment>
-        }
-      >
+      <List>
         <DataGrid
           {...dataGridProps}
           columns={columns}

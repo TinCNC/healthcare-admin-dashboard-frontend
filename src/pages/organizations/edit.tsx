@@ -1,10 +1,14 @@
 import { SaveOutlined } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { useTranslate, HttpError } from "@pankod/refine-core";
-import { Edit, Box, TextField, Autocomplete } from "@pankod/refine-mui";
+import { Edit, Box, Autocomplete } from "@pankod/refine-mui";
 import { Controller, useForm } from "@pankod/refine-react-hook-form";
 
+import { useState, useEffect } from "react";
+
 import { IOrganization } from "interfaces";
+
+import { LoadingTextField } from "components/form-fields/loading-text-field";
 
 export const OrganizationEdit: React.FC = () => {
   const t = useTranslate();
@@ -13,9 +17,20 @@ export const OrganizationEdit: React.FC = () => {
     saveButtonProps,
     register,
     control,
-    formState: { errors },
-    refineCore: { formLoading },
+    getValues,
+    formState: { errors, isSubmitting },
+    refineCore: { formLoading, queryResult },
   } = useForm<IOrganization, HttpError, IOrganization>();
+
+  const [type, setType] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!queryResult?.isFetching) {
+      console.log("loaded");
+      setType(getValues("type") || null);
+      // setGetAutocompleteValue(false);
+    }
+  }, [queryResult?.isFetching, getValues]); // Only re-run the effect if count changes
 
   return (
     <Edit
@@ -39,8 +54,9 @@ export const OrganizationEdit: React.FC = () => {
         sx={{ display: "flex", flexDirection: "column" }}
         autoComplete="off"
       >
-        <TextField
-          {...register("name", {
+        <LoadingTextField
+          loading={queryResult?.isFetching}
+          registerProps={register("name", {
             required: t("errors.required.field", { field: "Name" }),
           })}
           error={!!errors.name}
@@ -49,6 +65,7 @@ export const OrganizationEdit: React.FC = () => {
           fullWidth
           label={t("organizations.fields.name")}
           name="name"
+          disabled={isSubmitting}
           autoFocus
         />
         <Controller
@@ -61,29 +78,35 @@ export const OrganizationEdit: React.FC = () => {
             <Autocomplete
               // {...autocompleteProps}
               options={["University", "College"]}
+              disabled={isSubmitting}
               {...field}
+              value={type}
               onChange={(_, value) => {
+                setType(value);
                 field.onChange(value);
               }}
               isOptionEqualToValue={(option, value) =>
                 value === undefined || option.toString() === value.toString()
               }
               renderInput={(params) => (
-                <TextField
+                <LoadingTextField
+                  loading={queryResult?.isFetching}
                   {...params}
                   label={t("organizations.fields.type")}
                   margin="normal"
                   variant="outlined"
                   error={!!errors.type}
                   helperText={errors.type?.message}
+                  // disabled={isSubmitting}
                   required
                 />
               )}
             />
           )}
         />
-        <TextField
-          {...register("address", {
+        <LoadingTextField
+          loading={queryResult?.isFetching}
+          registerProps={register("address", {
             required: t("errors.required.field", { field: "Address" }),
           })}
           error={!!errors.address}
@@ -91,6 +114,7 @@ export const OrganizationEdit: React.FC = () => {
           margin="normal"
           fullWidth
           label={t("organizations.fields.address")}
+          disabled={isSubmitting}
           name="address"
         />
       </Box>

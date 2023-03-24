@@ -10,12 +10,10 @@ import {
   useDataGrid,
   DataGrid,
   GridColumns,
-  List,
   Stack,
   ShowButton,
   EditButton,
   DeleteButton,
-  Input,
   FormControl,
   Select,
   Divider,
@@ -27,16 +25,10 @@ import {
   MenuItem,
 } from "@pankod/refine-mui";
 
+import { List } from "components/crud/list";
+
 import { IClinic, IPatient } from "interfaces";
 import { Search } from "@mui/icons-material";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  solid,
-  regular,
-  brands,
-  icon,
-} from "@fortawesome/fontawesome-svg-core/import.macro"; // <-- import styles to be used
 
 export const PatientList: React.FC = () => {
   const t = useTranslate();
@@ -293,14 +285,7 @@ export const PatientList: React.FC = () => {
           </Select>
         </FormControl>
       </Paper>
-      <List
-        title={
-          <React.Fragment>
-            <FontAwesomeIcon icon={solid("hospital-user")} />
-            &nbsp;{t("patients.titles.list")}
-          </React.Fragment>
-        }
-      >
+      <List>
         <DataGrid
           {...dataGridProps}
           // rows={

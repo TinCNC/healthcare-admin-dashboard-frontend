@@ -1,5 +1,7 @@
 import { useShow, useTranslate } from "@pankod/refine-core";
-import { Show, Stack, Typography, TagField } from "@pankod/refine-mui";
+import { Stack, Typography, TagField } from "@pankod/refine-mui";
+
+import { Show } from "components/crud/show";
 
 import { IDisease } from "interfaces";
 
@@ -64,10 +66,14 @@ export const DiseaseShow: React.FC = () => {
           </Typography>
           <Typography variant="body2">
             {record?.body_parts !== undefined &&
-              record?.body_parts.length > 0 &&
+            record?.body_parts !== null &&
+            record?.body_parts.length > 0 ? (
               record?.body_parts.map((item) => {
                 return <TagField sx={{ marginRight: "12px" }} value={item} />;
-              })}
+              })
+            ) : (
+              <TagField sx={{ marginRight: "12px" }} value={"Not specified"} />
+            )}
           </Typography>
           <Typography variant="body1" fontWeight="bold">
             {t("diseases.fields.severity")}

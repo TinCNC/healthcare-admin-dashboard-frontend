@@ -5,15 +5,6 @@ export interface ICategory {
   created_at: string;
 }
 
-export interface IPost {
-  id: number;
-  title: string;
-  content: string;
-  status: "published" | "draft" | "rejected";
-  createdAt: string;
-  category: { id: number };
-}
-
 export interface IDepartment {
   id: number;
   name: string;
@@ -63,6 +54,7 @@ export interface IDoctor {
   first_name: string;
   last_name: string;
   departments: number[];
+  // departments_isnotnumber?: iDepartment[];
   image: string;
   created_at: string;
   updated_at: string;
@@ -76,12 +68,32 @@ export interface IClinic {
   created_at: string;
 }
 
+export interface I3DObjectMetadata {
+  title: string;
+  type_of_object: string;
+  style: string;
+}
+
+export interface I3DObject {
+  id: number;
+  name: string;
+  main_file: string;
+  cover: string;
+  metadata: JSON;
+  designer: number;
+  size_x_mm: number;
+  size_y_mm: number;
+  size_z_mm: number;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface IDiseasesGroup {
   id: number;
   group_name: string;
   icd10_code: string;
   vn_code: string;
-  statistics: json;
+  statistics: JSON;
   created_at: string;
 }
 
@@ -101,13 +113,33 @@ export interface IDisease {
 export interface ILaboratory {
   id: number;
   name: string;
-  location: string;
-  director: string;
+  address: string;
+  director: number;
   speciality: number[];
   email: string;
   phone: string;
   website: string;
-  workload_capacity: string;
+  workload_capacity: number;
+  created_at: string;
+}
+
+export interface IOrder {
+  id: number;
+  product_id: number;
+  laboratory: number;
+  material: number;
+  delivery_time: number;
+  status: "Not Send" | "Pending" | "Printed" | "Product Arrived";
+  quantity: number;
+  created_at: string;
+}
+
+export interface IMaterial {
+  id: number;
+  laboratory: string;
+  material_name: string;
+  price: number;
+  description: string;
   created_at: string;
 }
 
@@ -139,6 +171,7 @@ export interface IProfessionalCertificates {
     | "Specialized Medical Degree"
     | "Permission of Medical Professional Practices";
   level: number;
+  image: string;
   created_at: string;
 }
 

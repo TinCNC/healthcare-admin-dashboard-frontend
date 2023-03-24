@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   useShow,
   useTranslate,
@@ -12,21 +12,20 @@ import { useModalForm } from "@pankod/refine-react-hook-form";
 // import parse from "html-react-parser";
 
 import {
-  Show,
   Stack,
   Typography,
   Avatar,
-  Button,
   GridColumns,
   DataGrid,
   useDataGrid,
-  List,
   EditButton,
   DeleteButton,
   ShowButton,
 } from "@pankod/refine-mui";
 
-import { AddBoxOutlined, CardMembership } from "@mui/icons-material";
+import { Show } from "components/crud/show";
+
+import { CardMembership } from "@mui/icons-material";
 
 import {
   IHealthStatusCertificates,
@@ -35,8 +34,12 @@ import {
   IDoctor,
   IDisease,
 } from "interfaces";
-import { CertificateDetailDialog } from "./components/CertificateDetail";
-import { CertificateEditorDialog } from "./components/CertificateEditor";
+
+import {
+  CertificateEditorDialog,
+  CertificateDetailDialog,
+} from "components/health-status-certificate-dialog";
+import { SubresourceList } from "components/crud/list-subresource";
 
 export const PatientShow: React.FC = () => {
   const t = useTranslate();
@@ -84,7 +87,6 @@ export const PatientShow: React.FC = () => {
   } = createModalFormReturnValues;
 
   const {
-    // setValue,
     modal: {
       show: showEditModal,
       // close: closeCreateModal,
@@ -95,7 +97,13 @@ export const PatientShow: React.FC = () => {
   const { data, isLoading } = queryResult;
   const record = data?.data;
 
-  setValue("holder", record?.id);
+  useEffect(() => {
+    if (!isLoading) {
+      console.log("loaded");
+      setValue("holder", record?.id);
+      // setGetAutocompleteValue(false);
+    }
+  }, [isLoading, record?.id, setValue]);
 
   const { dataGridProps } = useDataGrid<IHealthStatusCertificates>({
     resource: "health_status_certificates",
@@ -329,75 +337,6 @@ export const PatientShow: React.FC = () => {
     },
   });
 
-  // const { data: servicesData, isLoading: servicesLoading } = useMany<IService>({
-  //   resource: "services",
-  //   ids: record?.services || [],
-  //   queryOptions: {
-  //     enabled: record !== undefined ? record?.services.length > 0 : false,
-  //   },
-  // });
-
-  // const { data: certificationsData, isLoading: certificationsLoading } =
-  //   useMany<ICertification>({
-  //     resource: "certificates",
-  //     ids: record?.certifications || [],
-  //     queryOptions: {
-  //       enabled:
-  //         record !== undefined ? record?.certifications.length > 0 : false,
-  //     },
-  //   });
-
-  // console.log(servicesData);
-
-  // const { data: galleryData, isLoading: galleryLoading } = useList<IGallery>({
-  //   resource: "image_gallery",
-  //   config: {
-  //     filters: [
-  //       {
-  //         field: "user_id",
-  //         operator: "eq",
-  //         value: record?.id || null,
-  //       },
-  //     ],
-  //   },
-  // });
-
-  // const { data: productData, isLoading: productLoading } = useList<IProduct>({
-  //   resource: "products",
-  //   config: {
-  //     filters: [
-  //       {
-  //         field: "user_id",
-  //         operator: "eq",
-  //         value: record?.id || null,
-  //       },
-  //     ],
-  //   },
-  // });
-
-  // const { data: postsData, isLoading: postsLoading } = useList<IPost>({
-  //   resource: "posts",
-  //   config: {
-  //     filters: [
-  //       {
-  //         field: "user_id",
-  //         operator: "eq",
-  //         value: record?.id || null,
-  //       },
-  //     ],
-  //   },
-  // });
-
-  // console.log(galleryData);
-
-  // const { data: galleryData, isLoading: galleryLoading } = useMany<IGallery>({
-  //   resource: "image_gallery",
-  //   ids: record?.services || [],
-  //   queryOptions: {
-  //     enabled: record !== undefined ? record?.services.length > 0 : false,
-  //   },
-  // });
-
   return (
     <Show isLoading={isLoading}>
       <CertificateEditorDialog
@@ -445,31 +384,18 @@ export const PatientShow: React.FC = () => {
         </Stack>
       </Stack>
       <Stack gap={1} marginTop={4}>
-        <List
+        <SubresourceList
           resource="health_status_certificates"
-          title={
-            <React.Fragment>
-              <CardMembership sx={{ verticalAlign: "middle" }} />{" "}
-              {t("health_status_certificates.titles.list")}
-            </React.Fragment>
-          }
-          headerButtons={
-            <Button variant="contained" onClick={() => showCreateModal()}>
-              <AddBoxOutlined
-                fontSize="small"
-                sx={{ marginLeft: "-4px", marginRight: "8px" }}
-              />
-              {t("health_status_certificates.titles.create")}
-            </Button>
-          }
-          breadcrumb={false}
+          modalToggle={showCreateModal}
+          icon={<CardMembership sx={{ verticalAlign: "middle" }} />}
+          canCreate={true}
         >
           <DataGrid
             {...dataGridProps}
             columns={certificatesColumns}
             autoHeight
           />
-        </List>
+        </SubresourceList>
       </Stack>
     </Show>
   );

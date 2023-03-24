@@ -5,6 +5,7 @@ import {
   useSetLocale,
   useLogout,
   useTranslate,
+  useNavigation,
 } from "@pankod/refine-core";
 import {
   AppBar,
@@ -20,9 +21,12 @@ import {
   Toolbar,
   Typography,
   Divider,
+  Badge,
 } from "@pankod/refine-mui";
 
 import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
+
+import { Wallet } from "components/payment-solana";
 import {
   DarkModeOutlined,
   LightModeOutlined,
@@ -30,12 +34,15 @@ import {
   PersonAdd,
   Settings,
   Person,
+  ShoppingCart,
 } from "@mui/icons-material";
 
 import { ColorModeContext } from "contexts";
 import i18n from "i18n";
 
 export const Header: React.FC = () => {
+  const { push } = useNavigation();
+
   const { mode, setMode } = useContext(ColorModeContext);
   const { mutate: mutateLogout } = useLogout();
 
@@ -57,12 +64,22 @@ export const Header: React.FC = () => {
           justifyContent="flex-end"
           alignItems="center"
         >
+          <Wallet />
           <IconButton
             onClick={() => {
               setMode();
             }}
           >
             {mode === "dark" ? <LightModeOutlined /> : <DarkModeOutlined />}
+          </IconButton>
+          <IconButton
+            onClick={() => {
+              push("/order");
+            }}
+          >
+            <Badge badgeContent={4} color="primary">
+              <ShoppingCart />
+            </Badge>
           </IconButton>
           <FormControl sx={{ m: 1, minWidth: 120 }}>
             <Select

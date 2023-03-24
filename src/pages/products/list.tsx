@@ -10,7 +10,6 @@ import {
   useDataGrid,
   DataGrid,
   GridColumns,
-  List,
   Stack,
   ShowButton,
   EditButton,
@@ -27,21 +26,52 @@ import {
   Tooltip,
 } from "@pankod/refine-mui";
 
+import { List } from "components/crud/list";
+
 import { IProduct, ICategory } from "interfaces";
 import { Search } from "@mui/icons-material";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  solid,
-  // regular,
-  // brands,
-  // icon,
-} from "@fortawesome/fontawesome-svg-core/import.macro"; // <-- import styles to be used
-
 import { AddShoppingCart } from "@mui/icons-material";
+
+import { OrderEditorDialog } from "../../components/order-dialog";
+import { useModalForm } from "@pankod/refine-react-hook-form";
 
 export const ProductList: React.FC = () => {
   const t = useTranslate();
+
+  const createModalFormReturnValues = useModalForm({
+    refineCoreProps: {
+      action: "create",
+      resource: "orders",
+      redirect: false,
+    },
+  });
+
+  const editModalFormReturnValues = useModalForm({
+    refineCoreProps: {
+      action: "edit",
+      resource: "orders",
+      redirect: false,
+    },
+  });
+
+  const {
+    setValue,
+    modal: {
+      show: showCreateModal,
+      // close: closeCreateModal,
+      // visible: createModalVisible,
+    },
+  } = createModalFormReturnValues;
+
+  const {
+    // setValue,
+    modal: {
+      show: showEditModal,
+      // close: closeCreateModal,
+      // visible: createModalVisible,
+    },
+  } = editModalFormReturnValues;
 
   const { dataGridProps, setFilters } = useDataGrid<IProduct>();
 
@@ -178,6 +208,10 @@ export const ProductList: React.FC = () => {
               <IconButton
                 color="primary"
                 aria-label="add to shopping cart"
+                onClick={() => {
+                  setValue("product_id", row.id);
+                  showCreateModal();
+                }}
                 size="small"
               >
                 <AddShoppingCart fontSize="small" />
@@ -204,6 +238,10 @@ export const ProductList: React.FC = () => {
 
   return (
     <Stack gap={1}>
+      <OrderEditorDialog
+        submitButtonText={t("orders.titles.create")}
+        {...createModalFormReturnValues}
+      />
       <Paper
         component="form"
         sx={{
@@ -308,14 +346,7 @@ export const ProductList: React.FC = () => {
           />
         </FormControl>
       </Paper>
-      <List
-        title={
-          <React.Fragment>
-            <FontAwesomeIcon icon={solid("bone")} />
-            &nbsp;{t("products.titles.list")}
-          </React.Fragment>
-        }
-      >
+      <List>
         <DataGrid
           {...dataGridProps}
           // rows={

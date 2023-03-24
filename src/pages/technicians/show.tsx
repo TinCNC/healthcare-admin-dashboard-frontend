@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   useShow,
   useTranslate,
@@ -12,29 +12,32 @@ import { useModalForm } from "@pankod/refine-react-hook-form";
 // import parse from "html-react-parser";
 
 import {
-  Show,
   Stack,
   Typography,
   Avatar,
-  Button,
   GridColumns,
   DataGrid,
   useDataGrid,
-  List,
   EditButton,
   DeleteButton,
   ShowButton,
 } from "@pankod/refine-mui";
 
-import { AddBoxOutlined, CardMembership } from "@mui/icons-material";
+import { Show } from "components/crud/show";
+
+import { SubresourceList } from "components/crud/list-subresource";
+
+import { CardMembership } from "@mui/icons-material";
 
 import {
   ITechnicianCertificates,
   ITechnician,
   IOrganization,
 } from "interfaces";
-import { CertificateDetailDialog } from "./components/CertificateDetail";
-import { CertificateEditorDialog } from "./components/CertificateEditor";
+import {
+  CertificateDetailDialog,
+  CertificateEditorDialog,
+} from "components/technician-certificate-dialog";
 
 export const TechnicianShow: React.FC = () => {
   const t = useTranslate();
@@ -84,7 +87,13 @@ export const TechnicianShow: React.FC = () => {
   const { data, isLoading } = queryResult;
   const record = data?.data;
 
-  setValue("holder", record?.id);
+  useEffect(() => {
+    if (!isLoading) {
+      console.log("loaded");
+      setValue("holder", record?.id);
+      // setGetAutocompleteValue(false);
+    }
+  }, [isLoading, record?.id, setValue]);
 
   const { dataGridProps } = useDataGrid<ITechnicianCertificates>({
     resource: "technician_certificates",
@@ -306,31 +315,18 @@ export const TechnicianShow: React.FC = () => {
         </Stack>
       </Stack>
       <Stack gap={1} marginTop={4}>
-        <List
+        <SubresourceList
           resource="technician_certificates"
-          title={
-            <React.Fragment>
-              <CardMembership sx={{ verticalAlign: "middle" }} />{" "}
-              {t("technician_certificates.titles.list")}
-            </React.Fragment>
-          }
-          headerButtons={
-            <Button variant="contained" onClick={() => showCreateModal()}>
-              <AddBoxOutlined
-                fontSize="small"
-                sx={{ marginLeft: "-4px", marginRight: "8px" }}
-              />
-              {t("technician_certificates.titles.create")}
-            </Button>
-          }
-          breadcrumb={false}
+          modalToggle={showCreateModal}
+          icon={<CardMembership sx={{ verticalAlign: "middle" }} />}
+          canCreate={true}
         >
           <DataGrid
             {...dataGridProps}
             columns={certificatesColumns}
             autoHeight
           />
-        </List>
+        </SubresourceList>
       </Stack>
     </Show>
   );

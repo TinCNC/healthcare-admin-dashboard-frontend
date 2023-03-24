@@ -1,48 +1,48 @@
 import { HttpError, useTranslate } from "@pankod/refine-core";
 import {
   Box,
-  TextField,
   Autocomplete,
   useAutocomplete,
   Edit,
   Input,
   Stack,
-  Avatar,
 } from "@pankod/refine-mui";
+
+import { LoadingAvatar } from "components/form-fields/loading-avatar";
+
+import { LoadingTextField } from "components/form-fields/loading-text-field";
+
 import { useForm, Controller } from "@pankod/refine-react-hook-form";
 
 import { IDoctor, IDepartment } from "interfaces";
 
-import { FileUpload, SaveOutlined } from "@mui/icons-material";
+import { FileUpload } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
-import { BaseSyntheticEvent, useState } from "react";
+import { BaseSyntheticEvent, useState, useEffect } from "react";
 
-import {
-  uploadImage,
-  getPublicImageUrl,
-  // getSignedImageUrl,
-  // downloadImage,
-} from "api";
+import { uploadImage, getPublicImageUrl } from "api";
 
 export const DoctorEdit: React.FC = () => {
   const t = useTranslate();
 
   const {
+    formState: { errors, isSubmitting },
     refineCore: { formLoading, queryResult },
     saveButtonProps,
     register,
     control,
-    // watch,
     getValues,
     setValue,
-    formState: { errors },
   } = useForm<IDoctor, HttpError, IDoctor & { departments: IDepartment[] }>();
-
-  // const imageInput = watch("image");
 
   const [imagePreview, setImagePreview] = useState<string>("");
 
   const [imageFile, setImageFile] = useState<File>();
+
+  const [departments, setDepartments] = useState<IDepartment[]>([]);
+
+  // const [getAutocompleteValue, setGetAutocompleteValue] =
+  //   useState<boolean>(true);
 
   const [creatingPatient, setCreatingPatient] = useState<boolean>(false);
 
@@ -96,51 +96,63 @@ export const DoctorEdit: React.FC = () => {
     }
   };
 
-  const {
-    autocompleteProps,
-    // defaultValueQueryResult
-  } = useAutocomplete<IDepartment>({
-    resource: "departments",
-    onSearch: (value) => [
-      {
-        field: "name",
-        operator: "containss",
-        value,
-      },
-    ],
-    defaultValue: queryResult?.data?.data.departments,
-  });
+  const { autocompleteProps, defaultValueQueryResult } =
+    useAutocomplete<IDepartment>({
+      resource: "departments",
+      onSearch: (value) => [
+        {
+          field: "name",
+          operator: "containss",
+          value,
+        },
+      ],
+      defaultValue: queryResult?.data?.data.departments || [],
+    });
 
-  // console.log(defaultValueQueryResult?.data?.data[0]);
+  console.log(autocompleteProps?.options);
+
+  console.log(defaultValueQueryResult?.data?.data);
+
+  console.log({ ...autocompleteProps });
+
+  useEffect(() => {
+    if (defaultValueQueryResult?.isFetched) {
+      console.log("loaded");
+      setDepartments(defaultValueQueryResult?.data?.data || []);
+      // setGetAutocompleteValue(false);
+    }
+  }, [defaultValueQueryResult?.isFetched, defaultValueQueryResult?.data?.data]); // Only re-run the effect if count changes
 
   return (
     <Edit
       isLoading={formLoading}
-      footerButtons={
-        <LoadingButton
-          type="submit"
-          startIcon={<SaveOutlined />}
-          loadingPosition="start"
-          loading={formLoading || creatingPatient}
-          variant="contained"
-          onClick={async (e) => handleSubmit(e)}
-        >
-          {t("buttons.save")}
-        </LoadingButton>
-      }
-      // saveButtonProps={{
-      //   disabled: creatingPatient || formLoading,
-      //   onClick: (e: BaseSyntheticEvent<object, any, any>) => {
-      //     handleSubmit(e);
-      //   },
-      // }}
+      // footerButtons={
+      //   <LoadingButton
+      //     type="submit"
+      //     startIcon={<SaveOutlined />}
+      //     loadingPosition="start"
+      //     loading={formLoading || creatingPatient}
+      //     variant="contained"
+      //     onClick={async (e) => handleSubmit(e)}
+      //   >
+      //     {t("buttons.save")}
+      //   </LoadingButton>
+      // }
+      saveButtonProps={{
+        loading: creatingPatient || formLoading,
+        // disabled: creatingPatient || formLoading,
+        onClick: (e: BaseSyntheticEvent<object, any, any>) => {
+          handleSubmit(e);
+        },
+      }}
     >
       <Stack
         direction={{ sm: "column", md: "row" }}
         spacing={{ xs: 1, sm: 2, md: 4 }}
       >
         <Stack gap={1}>
-          <Avatar
+          <LoadingAvatar
+            loading={queryResult?.isFetching}
             alt={getValues("username")}
             src={imagePreview || getValues("image")}
             sx={{ width: 320, height: 320 }}
@@ -157,11 +169,12 @@ export const DoctorEdit: React.FC = () => {
             />
             <input id="file" {...register("image")} type="hidden" />
             <LoadingButton
-              // loading={isUploadLoading}
+              loading={formLoading}
               loadingPosition="start"
               startIcon={<FileUpload />}
               variant="contained"
               component="span"
+              // disabled={formLoading}
             >
               Upload
             </LoadingButton>
@@ -179,8 +192,12 @@ export const DoctorEdit: React.FC = () => {
             // sx={{ display: "flex", flexDirection: "column" }}
             autoComplete="off"
           >
-            <TextField
-              {...register("username", { required: "Username is required" })}
+            <LoadingTextField
+              loading={queryResult?.isFetching}
+              disabled={isSubmitting}
+              registerProps={register("username", {
+                required: "Username is required",
+              })}
               error={!!errors?.username}
               helperText={errors.username?.message}
               margin="normal"
@@ -191,9 +208,10 @@ export const DoctorEdit: React.FC = () => {
               name="username"
               autoFocus
             />
-
-            <TextField
-              {...register("first_name", {
+            <LoadingTextField
+              loading={queryResult?.isFetching}
+              disabled={isSubmitting}
+              registerProps={register("first_name", {
                 required: "First Name is required",
               })}
               error={!!errors?.first_name}
@@ -205,8 +223,12 @@ export const DoctorEdit: React.FC = () => {
               label={t("doctors.fields.first_name")}
               name="first_name"
             />
-            <TextField
-              {...register("last_name", { required: "Last Name is required" })}
+            <LoadingTextField
+              loading={queryResult?.isFetching}
+              disabled={isSubmitting}
+              registerProps={register("last_name", {
+                required: "Last Name is required",
+              })}
               error={!!errors?.last_name}
               helperText={errors.last_name?.message}
               margin="normal"
@@ -250,8 +272,11 @@ export const DoctorEdit: React.FC = () => {
                   multiple
                   {...autocompleteProps}
                   {...field}
-                  // defaultValue={defaultValueQueryResult?.data?.data[0]}
+                  value={departments}
+                  disabled={isSubmitting}
                   onChange={(_, value) => {
+                    console.log(value);
+                    setDepartments(value);
                     field.onChange(value?.map((item) => item.id));
                   }}
                   getOptionLabel={(item) => {
@@ -261,9 +286,9 @@ export const DoctorEdit: React.FC = () => {
                     value === undefined || option.id === value.id
                   }
                   renderInput={(params) => (
-                    <TextField
+                    <LoadingTextField
+                      loading={queryResult?.isFetching}
                       {...params}
-                      // placeholder={defaultValueQueryResult?.data?.data[0].name}
                       label={t("doctors.fields.departments")}
                       margin="normal"
                       variant="outlined"

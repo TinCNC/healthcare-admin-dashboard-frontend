@@ -1,51 +1,27 @@
 import React, { useState, useEffect } from "react";
+import { useTranslate, useList, GetListResponse } from "@pankod/refine-core";
 import {
-  useTranslate,
-  // useMany,
-  useList,
-  GetListResponse,
-} from "@pankod/refine-core";
-import {
-  // useDataGrid,
-  // DataGrid,
-  // GridColumns,
-  List,
   Box,
-  // Stack,
-  // EditButton,
-  // DeleteButton,
   Grid,
-  CircularProgress,
-  Typography,
   Divider,
-  FormControl,
   IconButton,
   InputBase,
-  InputLabel,
-  MenuItem,
   Paper,
-  Select,
-  SelectChangeEvent,
   Stack,
 } from "@pankod/refine-mui";
+
+import { List } from "components/crud/list-gridview";
 
 import { IDoctor } from "interfaces";
 
 import { TrainerCard } from "../../components/doctor-card";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  solid,
-  regular,
-  brands,
-  icon,
-} from "@fortawesome/fontawesome-svg-core/import.macro"; // <-- import styles to be used
 import { Search } from "@mui/icons-material";
 
 export const DoctorList: React.FC = () => {
   const t = useTranslate();
 
-  const [isLoading, setIsLoading] = useState<Boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [doctorListResponse, setDoctorListResponse] =
     useState<GetListResponse<IDoctor>>();
@@ -176,7 +152,6 @@ export const DoctorList: React.FC = () => {
           orientation="vertical"
           flexItem
         />
-
         {/* <IconButton color="primary" sx={{ p: '10px' }} aria-label="directions">
         <DirectionsIcon />
       </IconButton> */}
@@ -212,28 +187,11 @@ export const DoctorList: React.FC = () => {
         </FormControl> */}
       </Paper>
       <List
-        title={
-          <React.Fragment>
-            <FontAwesomeIcon icon={solid("user-doctor")} />
-            &nbsp;{t("doctors.titles.list")}
-          </React.Fragment>
-        }
         wrapperProps={{ sx: { minHeight: "calc(100vh - 230px)" } }}
+        loading={isLoading}
+        loadingMsg={t("doctors.loading")}
       >
-        {isLoading ? (
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "column",
-              height: "calc(100vh - (340px))",
-            }}
-          >
-            <CircularProgress />
-            <Typography>{t("doctors.loading")}</Typography>
-          </Box>
-        ) : doctorListResponse !== undefined && doctorListResponse.total > 0 ? (
+        {doctorListResponse !== undefined && doctorListResponse.total > 0 ? (
           <Grid
             container
             spacing={{ xs: 2, md: 3 }}
@@ -251,7 +209,8 @@ export const DoctorList: React.FC = () => {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              height: "calc(100vh - 112px)",
+              verticalAlign: "middle",
+              height: "calc(100vh - (340px))",
             }}
           >
             No Doctors Found
