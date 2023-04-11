@@ -1,6 +1,6 @@
 // import React from "react";
 
-import { Refine } from "@pankod/refine-core";
+import { Authenticated, Refine } from "@pankod/refine-core";
 import {
   notificationProvider,
   RefineSnackbarProvider,
@@ -92,14 +92,23 @@ import {
 } from "pages/laboratories";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  solid,
-  // regular,
-  // brands,
-  // icon,
-} from "@fortawesome/fontawesome-svg-core/import.macro"; // <-- import styles to be used
 
-import { Category } from "@mui/icons-material";
+import {
+  faSitemap,
+  faFlaskVial,
+  faHospital,
+  faBuilding,
+  faDisease,
+  faViruses,
+  faUserDoctor,
+  faHospitalUser,
+  faUserSecret,
+  faBone,
+  faCubes,
+} from "@fortawesome/free-solid-svg-icons";
+
+import { Category, Google, ShoppingCart } from "@mui/icons-material";
+import { OrderList } from "pages/order";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -146,13 +155,14 @@ function App() {
                 providers={[
                   {
                     name: "google",
+                    icon: <Google />,
                     label: "Sign in with Google",
                   },
                 ]}
                 formProps={{
                   defaultValues: {
-                    email: "info@refine.dev",
-                    password: "refine-supabase",
+                    email: "dpcongdanh@gmail.com",
+                    password: "123456",
                   },
                 }}
               />
@@ -168,7 +178,7 @@ function App() {
                 list: DepartmentList,
                 create: DepartmentCreate,
                 edit: DepartmentEdit,
-                icon: <FontAwesomeIcon icon={solid("sitemap")} />,
+                icon: <FontAwesomeIcon icon={faSitemap} />,
               },
               {
                 name: "laboratories",
@@ -176,7 +186,7 @@ function App() {
                 show: LaboratoryShow,
                 create: LaboratoryCreate,
                 edit: LaboratoryEdit,
-                icon: <FontAwesomeIcon icon={solid("flask-vial")} />,
+                icon: <FontAwesomeIcon icon={faFlaskVial} />,
               },
               {
                 name: "medical_specialities",
@@ -184,18 +194,18 @@ function App() {
                 show: SpecialityShow,
                 create: SpecialityCreate,
                 edit: SpecialityEdit,
-                icon: <FontAwesomeIcon icon={solid("sitemap")} />,
+                icon: <FontAwesomeIcon icon={faSitemap} />,
               },
               {
                 name: "organizations",
                 list: OrganizationList,
                 create: OrganizationCreate,
                 edit: OrganizationEdit,
-                icon: <FontAwesomeIcon icon={solid("building")} />,
+                icon: <FontAwesomeIcon icon={faBuilding} />,
               },
               {
                 name: "Diseases",
-                icon: <FontAwesomeIcon icon={solid("disease")} />,
+                icon: <FontAwesomeIcon icon={faDisease} />,
               },
               {
                 name: "diseases",
@@ -204,7 +214,7 @@ function App() {
                 show: DiseaseShow,
                 create: DiseaseCreate,
                 edit: DiseaseEdit,
-                icon: <FontAwesomeIcon icon={solid("disease")} />,
+                icon: <FontAwesomeIcon icon={faDisease} />,
               },
               {
                 name: "diseases_groups",
@@ -213,14 +223,14 @@ function App() {
                 show: DiseaseGroupShow,
                 // create: DiseaseGroupCreate,
                 edit: DiseaseGroupEdit,
-                icon: <FontAwesomeIcon icon={solid("viruses")} />,
+                icon: <FontAwesomeIcon icon={faViruses} />,
               },
               {
                 name: "clinics",
                 list: ClinicList,
                 create: ClinicCreate,
                 edit: ClinicEdit,
-                icon: <FontAwesomeIcon icon={solid("hospital")} />,
+                icon: <FontAwesomeIcon icon={faHospital} />,
               },
               {
                 name: "doctors",
@@ -228,7 +238,7 @@ function App() {
                 show: DoctorShow,
                 create: DoctorCreate,
                 edit: DoctorEdit,
-                icon: <FontAwesomeIcon icon={solid("user-doctor")} />,
+                icon: <FontAwesomeIcon icon={faUserDoctor} />,
               },
               {
                 name: "patients",
@@ -236,7 +246,7 @@ function App() {
                 create: PatientCreate,
                 edit: PatientEdit,
                 show: PatientShow,
-                icon: <FontAwesomeIcon icon={solid("hospital-user")} />,
+                icon: <FontAwesomeIcon icon={faHospitalUser} />,
               },
               {
                 name: "technicians",
@@ -244,7 +254,7 @@ function App() {
                 create: TechnicianCreate,
                 edit: TechnicianEdit,
                 show: TechnicianShow,
-                icon: <FontAwesomeIcon icon={solid("user-secret")} />,
+                icon: <FontAwesomeIcon icon={faUserSecret} />,
               },
               // {
               //   name: "implants",
@@ -255,7 +265,7 @@ function App() {
               // },
               {
                 name: "Prosthetics",
-                icon: <FontAwesomeIcon icon={solid("bone")} />,
+                icon: <FontAwesomeIcon icon={faBone} />,
               },
               {
                 // name: "prosthetics",
@@ -265,7 +275,7 @@ function App() {
                 show: _3DObjectShow,
                 // create: _3DObjectCreate,
                 // edit: _3DObjectEdit,
-                icon: <FontAwesomeIcon icon={solid("cubes")} />,
+                icon: <FontAwesomeIcon icon={faCubes} />,
               },
               {
                 // name: "prosthetics",
@@ -275,7 +285,7 @@ function App() {
                 show: ProductShow,
                 create: ProductCreate,
                 edit: ProductEdit,
-                icon: <FontAwesomeIcon icon={solid("bone")} />,
+                icon: <FontAwesomeIcon icon={faBone} />,
               },
               {
                 name: "categories",
@@ -284,6 +294,14 @@ function App() {
                 // create: CategoriesCreate,
                 // edit: CategoriesEdit,
                 icon: <Category />,
+              },
+              {
+                name: "orders",
+                list: OrderList,
+                icon: <ShoppingCart />,
+                options: {
+                  hide: true,
+                },
               },
             ]}
             Title={Title}

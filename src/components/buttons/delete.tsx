@@ -6,13 +6,9 @@ import {
   useCan,
   useResource,
 } from "@pankod/refine-core";
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogTitle,
-  LoadingButton,
-} from "@pankod/refine-mui";
+import { Button, Dialog, DialogActions, DialogTitle } from "@mui/material";
+
+import { LoadingButton } from "@pankod/refine-mui";
 import type { DeleteButtonProps } from "@pankod/refine-mui";
 
 // We use @mui/icons-material for icons but you can use any icon library you want.

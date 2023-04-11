@@ -6,13 +6,13 @@ import {
   userFriendlyResourceName,
   useResource,
   useRouterContext,
-  IResourceItem,
+  // IResourceItem,
 } from "@pankod/refine-core";
-import { Button } from "@pankod/refine-mui";
+import { Button } from "@mui/material";
 import type { ListButtonProps } from "@pankod/refine-mui";
 
 // We use @mui/icons-material for icons but you can use any icon library you want.
-import { ListOutlined } from "@mui/icons-material";
+// import { ListOutlined } from "@mui/icons-material";
 
 /**
  * `<ListButton>` is using uses Material UI {@link https://mui.com/components/buttons/ `<Button>`} component.

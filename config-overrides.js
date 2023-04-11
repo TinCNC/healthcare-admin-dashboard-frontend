@@ -1,23 +1,35 @@
 const webpack = require("webpack");
 
-module.exports = function override(config) {
-  config.resolve.fallback = Object.assign(config.resolve.fallback || {}, {
-    ...config.resolve.fallback,
-    // fs: false,
-    // buffer: require.resolve("buffer"),
-    crypto: require.resolve("crypto-browserify"),
-    // stream: require.resolve("stream-browserify"),
-    // assert: require.resolve("assert"),
-    // http: require.resolve("stream-http"),
-    // https: require.resolve("https-browserify"),
-    // os: require.resolve("os-browserify"),
-    // url: require.resolve("url"),
+module.exports = function override(webpackConfig) {
+  // Disable resolving ESM paths as fully specified.
+  // See: https://github.com/webpack/webpack/issues/11467#issuecomment-691873586
+  webpackConfig.module.rules.push({
+    test: /\.m?js/,
+    resolve: {
+      fullySpecified: false,
+    },
   });
-  config.plugins = (config.plugins || []).concat([
-    new webpack.ProvidePlugin({
-      process: "process/browser",
-      Buffer: ["buffer", "Buffer"],
-    }),
-  ]);
-  return config;
+
+  // Ignore source map warnings from node_modules.
+  // See: https://github.com/facebook/create-react-app/pull/11752
+  webpackConfig.ignoreWarnings = [/Failed to parse source map/];
+
+  // Polyfill Buffer.
+  webpackConfig.plugins.push(
+    new webpack.ProvidePlugin({ Buffer: ["buffer", "Buffer"] })
+  );
+
+  // Polyfill other modules.
+  webpackConfig.resolve.fallback = {
+    crypto: require.resolve("crypto-browserify"),
+    stream: require.resolve("stream-browserify"),
+    util: require.resolve("util"),
+    assert: require.resolve("assert"),
+    fs: false,
+    process: false,
+    path: false,
+    zlib: false,
+  };
+
+  return webpackConfig;
 };

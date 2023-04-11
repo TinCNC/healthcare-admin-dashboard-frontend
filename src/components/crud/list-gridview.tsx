@@ -13,10 +13,10 @@ import {
   CardContent,
   Typography,
   Box,
-  CreateButton,
-  Breadcrumb,
   CircularProgress,
-} from "@pankod/refine-mui";
+} from "@mui/material";
+
+import { CreateButton, Breadcrumb } from "@pankod/refine-mui";
 import type { ListProps } from "@pankod/refine-mui";
 
 export type ListGridViewProps = ListProps & {

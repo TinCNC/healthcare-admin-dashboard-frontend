@@ -196,7 +196,7 @@ export const _3DObjectList: React.FC = () => {
                 color="primary"
                 aria-label="add to shopping cart"
                 onClick={() => {
-                  setValue("product_id", row.id);
+                  setValue("object_id", row.id);
                   showCreateModal();
                 }}
                 size="small"
@@ -204,13 +204,13 @@ export const _3DObjectList: React.FC = () => {
                 <AddShoppingCart fontSize="small" />
               </IconButton>
             </Tooltip>
-            <Tooltip title="View Product Details">
+            <Tooltip title="View 3D Object Details">
               <ShowButton size="small" hideText recordItemId={row.id} />
             </Tooltip>
-            <Tooltip title="Edit Product information">
+            <Tooltip title="Edit 3D Object information">
               <EditButton size="small" hideText recordItemId={row.id} />
             </Tooltip>
-            <Tooltip title="Delete Product">
+            <Tooltip title="Delete 3D Object">
               <DeleteButton size="small" hideText recordItemId={row.id} />
             </Tooltip>
           </Stack>

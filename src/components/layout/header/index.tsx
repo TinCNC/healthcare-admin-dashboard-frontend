@@ -74,7 +74,7 @@ export const Header: React.FC = () => {
           </IconButton>
           <IconButton
             onClick={() => {
-              push("/order");
+              push("/orders");
             }}
           >
             <Badge badgeContent={4} color="primary">

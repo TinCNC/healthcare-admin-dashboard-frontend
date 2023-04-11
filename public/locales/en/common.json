@@ -311,11 +311,15 @@
     "orders": "Orders",
     "fields": {
       "id": "Id",
+      "name": "Name",
+      "object_id": "Object ID",
       "product_id": "Product ID",
       "product": "Product",
+      "object": "Object",
       "material": "Material",
       "laboratory": "Laboratory",
-      "delivery_time": "Delivery Time",
+      "delivery_time": "Expected Delivery Time",
+      "price": "Price",
       "quantity": "Quantity",
       "status": "Status",
       "createdAt": "Created At"

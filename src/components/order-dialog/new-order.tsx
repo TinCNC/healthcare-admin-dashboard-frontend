@@ -203,12 +203,12 @@ export const OrderEditorDialog: React.FC<DataProps> = ({
                 )}
               />
               <input
-                {...register("product_id", {
-                  required: "Product is required",
+                {...register("object_id", {
+                  required: "3D Object is required",
                 })}
                 hidden
-                id="product_id"
-                name="product_id"
+                id="object_id"
+                name="object_id"
                 // value={holder}
               />
               <TextField

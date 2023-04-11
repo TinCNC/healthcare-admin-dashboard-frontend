@@ -126,10 +126,17 @@ export interface ILaboratory {
 export interface IOrder {
   id: number;
   product_id: number;
+  object_id: number;
   laboratory: number;
+  manufacturing_cost: number;
   material: number;
   delivery_time: number;
-  status: "Not Send" | "Pending" | "Printed" | "Product Arrived";
+  status:
+    | "Not Send"
+    | "Pending"
+    | "Payment Pending"
+    | "Printed"
+    | "Product Arrived";
   quantity: number;
   created_at: string;
 }
