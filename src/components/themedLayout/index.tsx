@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { ThemedHeader as DefaultHeader } from "./header";
+import { ThemedTitle as DefaulTitle } from "./title";
 import { ThemedSider as DefaultSider } from "./sider";
 import { Box } from "@mui/material";
 import type { RefineThemedLayoutProps } from "@refinedev/mui";
@@ -15,12 +16,13 @@ export const ThemedLayout: React.FC<RefineThemedLayoutProps> = ({
   const [isSiderOpen, setIsSiderOpen] = useState(true);
 
   const SiderToRender = Sider ?? DefaultSider;
+  const TitleToRender = Title ?? DefaulTitle;
   const HeaderToRender = Header ?? DefaultHeader;
 
   return (
     <Box display="flex" flexDirection="row">
       <SiderToRender
-        Title={Title}
+        Title={TitleToRender}
         isSiderOpen={isSiderOpen}
         onToggleSiderClick={(isOpen) => setIsSiderOpen(Boolean(isOpen))}
       />

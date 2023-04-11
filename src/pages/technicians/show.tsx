@@ -1,12 +1,19 @@
 import React, { useEffect } from "react";
 
 import {
-useShow, useTranslate, useMany, // useOne,
-useModal
+  useShow,
+  useTranslate,
+  useMany, // useOne,
+  useModal,
 } from "@refinedev/core";
 
 import { useModalForm } from "@refinedev/react-hook-form";
-import { useDataGrid, EditButton, DeleteButton, ShowButton } from "@refinedev/mui";
+import {
+  useDataGrid,
+  EditButton,
+  DeleteButton,
+  ShowButton,
+} from "@refinedev/mui";
 import { GridColumns, DataGrid } from "@mui/x-data-grid";
 import { Stack, Typography, Avatar } from "@mui/material";
 
@@ -84,14 +91,12 @@ export const TechnicianShow: React.FC = () => {
 
   const { dataGridProps } = useDataGrid<ITechnicianCertificates>({
     resource: "technician_certificates",
-
     queryOptions: {
       enabled: !isLoading,
     },
-
     filters: {
-      permanent: [{ field: "holder", value: record?.id, operator: "eq" }]
-    }
+      permanent: [{ field: "holder", value: record?.id, operator: "eq" }],
+    },
   });
 
   // const diseaseIds = dataGridProps.rows.map((item) => item.disease);

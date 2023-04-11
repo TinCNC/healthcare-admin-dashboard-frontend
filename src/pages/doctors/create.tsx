@@ -187,7 +187,7 @@ export const DoctorCreate: React.FC = () => {
           required
           fullWidth
           id="first_name"
-          label={t("doctors.fields.firstName")}
+          label={t("doctors.fields.first_name")}
           name="first_name"
         />
         <TextField
@@ -198,7 +198,7 @@ export const DoctorCreate: React.FC = () => {
           required
           fullWidth
           id="last_name"
-          label={t("doctors.fields.lastName")}
+          label={t("doctors.fields.last_name")}
           name="last_name"
         />
         {/* <Controller

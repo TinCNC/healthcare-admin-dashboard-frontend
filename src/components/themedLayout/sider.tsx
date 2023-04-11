@@ -354,7 +354,7 @@ export const ThemedSider: React.FC<RefineThemedLayoutSiderProps> = ({
       <>
         {dashboard}
         {items}
-        {logout}
+        {/* {logout} */}
       </>
     );
   };

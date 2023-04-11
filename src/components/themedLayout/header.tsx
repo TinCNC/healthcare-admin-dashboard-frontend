@@ -1,89 +1,40 @@
-// import React from "react";
-// import { useGetIdentity, useActiveAuthProvider } from "@refinedev/core";
-// import { Menu } from "@mui/icons-material";
-// import {
-//   AppBar,
-//   Stack,
-//   Toolbar,
-//   Typography,
-//   Avatar,
-//   IconButton,
-// } from "@mui/material";
-// import type { RefineThemedLayoutHeaderProps } from "@refinedev/mui";
-
-// export const ThemedHeader: React.FC<RefineThemedLayoutHeaderProps> = ({
-//   isSiderOpen,
-//   onToggleSiderClick,
-//   toggleSiderIcon: toggleSiderIconFromProps,
-// }) => {
-//   const authProvider = useActiveAuthProvider();
-//   const { data: user } = useGetIdentity({
-//     v3LegacyAuthProviderCompatible: Boolean(authProvider?.isLegacy),
-//   });
-
-//   const hasSidebarToggle = Boolean(onToggleSiderClick);
-
-//   return (
-//     <AppBar position="sticky">
-//       <Toolbar>
-//         {hasSidebarToggle && (
-//           <IconButton
-//             color="inherit"
-//             aria-label="open drawer"
-//             onClick={() => onToggleSiderClick?.()}
-//             edge="start"
-//             sx={{
-//               mr: 2,
-//               display: { xs: "none", md: "flex" },
-//               ...(isSiderOpen && { display: "none" }),
-//             }}
-//           >
-//             {toggleSiderIconFromProps?.(Boolean(isSiderOpen)) ?? <Menu />}
-//           </IconButton>
-//         )}
-//         <Stack
-//           direction="row"
-//           width="100%"
-//           justifyContent="flex-end"
-//           alignItems="center"
-//         >
-//           <Stack
-//             direction="row"
-//             gap="16px"
-//             alignItems="center"
-//             justifyContent="center"
-//           >
-//             <Typography
-//               sx={{
-//                 display: { xs: "none", md: "block" },
-//               }}
-//               variant="subtitle2"
-//             >
-//               {user?.name}
-//             </Typography>
-//             <Avatar src={user?.avatar} alt={user?.name} />
-//           </Stack>
-//         </Stack>
-//       </Toolbar>
-//     </AppBar>
-//   );
-// };
-
 import React, { useContext } from "react";
-import { useGetIdentity, useGetLocale, useSetLocale } from "@refinedev/core";
+import {
+  useGetIdentity,
+  useGetLocale,
+  useSetLocale,
+  useTranslate,
+  useLogout,
+  useActiveAuthProvider,
+  useNavigation,
+} from "@refinedev/core";
 import { RefineThemedLayoutHeaderProps } from "@refinedev/mui";
-import { DarkModeOutlined, LightModeOutlined, Menu } from "@mui/icons-material";
+import {
+  DarkModeOutlined,
+  LightModeOutlined,
+  Logout,
+  Menu as MenuIcon,
+  Person,
+  ShoppingCart,
+} from "@mui/icons-material";
 import {
   AppBar,
   Avatar,
   IconButton,
+  Menu,
   Stack,
   Toolbar,
   Typography,
   FormControl,
   MenuItem,
   Select,
+  Button,
+  Badge,
 } from "@mui/material";
+
+import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
+
+import { Wallet } from "components/payment-solana";
 
 import i18n from "i18n";
 
@@ -100,7 +51,14 @@ export const ThemedHeader: React.FC<RefineThemedLayoutHeaderProps> = ({
   onToggleSiderClick,
   toggleSiderIcon: toggleSiderIconFromProps,
 }) => {
+  const t = useTranslate();
+  const { push } = useNavigation();
+  const authProvider = useActiveAuthProvider();
   const { mode, setMode } = useContext(ColorModeContext);
+
+  const { mutate: mutateLogout } = useLogout({
+    v3LegacyAuthProviderCompatible: Boolean(authProvider?.isLegacy),
+  });
 
   const { data: user } = useGetIdentity<IUser>();
 
@@ -126,7 +84,7 @@ export const ThemedHeader: React.FC<RefineThemedLayoutHeaderProps> = ({
                 ...(isSiderOpen && { display: "none" }),
               }}
             >
-              {toggleSiderIconFromProps?.(Boolean(isSiderOpen)) ?? <Menu />}
+              {toggleSiderIconFromProps?.(Boolean(isSiderOpen)) ?? <MenuIcon />}
             </IconButton>
           )}
 
@@ -137,6 +95,16 @@ export const ThemedHeader: React.FC<RefineThemedLayoutHeaderProps> = ({
             alignItems="center"
             gap="16px"
           >
+            <Wallet />
+            <IconButton
+              onClick={() => {
+                push("/orders");
+              }}
+            >
+              <Badge badgeContent={4} color="success">
+                <ShoppingCart sx={{ color: "white" }} />
+              </Badge>
+            </IconButton>
             <FormControl sx={{ minWidth: 120 }}>
               <Select
                 disableUnderline
@@ -191,6 +159,53 @@ export const ThemedHeader: React.FC<RefineThemedLayoutHeaderProps> = ({
             </IconButton>
 
             {(user?.avatar || user?.name) && (
+              <PopupState variant="popover" popupId="demo-popup-menu">
+                {(popupState) => (
+                  <React.Fragment>
+                    <Button
+                      variant="text"
+                      {...bindTrigger(popupState)}
+                      sx={{
+                        textTransform: "none",
+                        color: "white",
+                        // color: "primary.contrastText",
+                      }}
+                    >
+                      <Stack
+                        direction="row"
+                        gap="16px"
+                        alignItems="center"
+                        justifyContent="center"
+                      >
+                        {user?.name && (
+                          <Typography variant="subtitle2">
+                            {user?.name}
+                          </Typography>
+                        )}
+                        <Avatar src={user?.avatar} alt={user?.name} />
+                      </Stack>
+                    </Button>
+                    <Menu {...bindMenu(popupState)}>
+                      {/* <MenuItem onClick={popupState.close}>Profile</MenuItem> */}
+                      <MenuItem onClick={popupState.close}>
+                        <Person /> {t("buttons.my_account", "My account")}
+                      </MenuItem>
+                      <MenuItem
+                        key="logout"
+                        onClick={() => {
+                          mutateLogout();
+                          popupState.close();
+                        }}
+                      >
+                        <Logout /> {t("buttons.logout", "Logout")}
+                      </MenuItem>
+                    </Menu>
+                  </React.Fragment>
+                )}
+              </PopupState>
+            )}
+            {/* 
+            {(user?.avatar || user?.name) && (
               <Stack
                 direction="row"
                 gap="16px"
@@ -202,7 +217,7 @@ export const ThemedHeader: React.FC<RefineThemedLayoutHeaderProps> = ({
                 )}
                 <Avatar src={user?.avatar} alt={user?.name} />
               </Stack>
-            )}
+            )} */}
           </Stack>
         </Stack>
       </Toolbar>
