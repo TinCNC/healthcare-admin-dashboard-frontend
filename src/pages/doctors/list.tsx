@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useTranslate, useList, GetListResponse } from "@pankod/refine-core";
-import {
-  Box,
-  Grid,
-  Divider,
-  IconButton,
-  InputBase,
-  Paper,
-  Stack,
-} from "@pankod/refine-mui";
+import { useTranslate, useList, GetListResponse } from "@refinedev/core";
+import { Box, Grid, Divider, IconButton, InputBase, Paper, Stack } from "@mui/material";
 
 import { List } from "components/crud/list-gridview";
 
@@ -36,14 +28,7 @@ export const DoctorList: React.FC = () => {
 
   const { refetch: refetchDoctors } = useList<IDoctor>({
     resource: "doctors",
-    config: {
-      filters: [
-        { field: "username", operator: "contains", value: userNameSearch },
-        { field: "first_name", operator: "contains", value: firstNameSearch },
-        { field: "last_name", operator: "contains", value: lastNameSearch },
-      ],
-      // pagination: { current: 1, pageSize: 10 },
-    },
+
     queryOptions: {
       enabled: false,
       onSuccess: (data) => {
@@ -53,6 +38,13 @@ export const DoctorList: React.FC = () => {
         }
       },
     },
+
+    // pagination: { current: 1, pageSize: 10 },
+    filters: [
+      { field: "username", operator: "contains", value: userNameSearch },
+      { field: "first_name", operator: "contains", value: firstNameSearch },
+      { field: "last_name", operator: "contains", value: lastNameSearch },
+    ]
   });
 
   useEffect(() => {

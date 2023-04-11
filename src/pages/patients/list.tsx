@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from "react";
+
 import {
   useTranslate,
   useMany,
-  useList,
+  useList, // useTable,
   CrudFilters,
-  // useTable,
-} from "@pankod/refine-core";
+} from "@refinedev/core";
+
 import {
   useDataGrid,
-  DataGrid,
-  GridColumns,
-  Stack,
   ShowButton,
   EditButton,
   DeleteButton,
+} from "@refinedev/mui";
+
+import {
+  Stack,
   FormControl,
   Select,
   Divider,
@@ -21,9 +23,11 @@ import {
   InputBase,
   IconButton,
   InputLabel,
-  SelectChangeEvent,
   MenuItem,
-} from "@pankod/refine-mui";
+  SelectChangeEvent,
+} from "@mui/material";
+
+import { DataGrid, GridColumns } from "@mui/x-data-grid";
 
 import { List } from "components/crud/list";
 

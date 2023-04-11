@@ -1,11 +1,9 @@
-import { useShow, useTranslate } from "@pankod/refine-core";
+import { useShow, useTranslate } from "@refinedev/core";
 import {
-  // Show,
-  Stack,
-  Typography,
-  // TagField,
-  Paper,
-} from "@pankod/refine-mui";
+// Show,
+Stack, Typography, // TagField,
+Paper
+} from "@mui/material";
 
 import { Show } from "components/crud/show";
 

@@ -1,13 +1,6 @@
 import React from "react";
 
-import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Typography,
-  Button,
-} from "@pankod/refine-mui";
+import { Dialog, DialogActions, DialogContent, DialogTitle, Typography, Button } from "@mui/material";
 
 // import dayjs, { Dayjs } from "dayjs";
 // import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -22,13 +15,7 @@ import {
   IDoctor,
   IDisease,
 } from "interfaces";
-// import { AddCircleOutlineOutlined, CancelOutlined } from "@mui/icons-material";
-
-// import {
-//   Controller,
-//   UseModalFormReturnType,
-// } from "@pankod/refine-react-hook-form";
-import { useTranslate } from "@pankod/refine-core";
+import { useTranslate } from "@refinedev/core";
 
 export type DataProps = {
   loading?: boolean;

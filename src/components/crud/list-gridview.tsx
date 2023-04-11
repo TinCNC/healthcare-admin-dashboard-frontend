@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import {
-  useResourceWithRoute,
   useTranslate,
-  useRouterContext,
   userFriendlyResourceName,
-  ResourceRouterParams,
   useRefineContext,
-} from "@pankod/refine-core";
+  useRouterType,
+  useResource,
+} from "@refinedev/core";
+import { CreateButton, Breadcrumb } from "@refinedev/mui";
 import {
   Card,
   CardHeader,
@@ -15,14 +15,7 @@ import {
   Box,
   CircularProgress,
 } from "@mui/material";
-
-import { CreateButton, Breadcrumb } from "@pankod/refine-mui";
-import type { ListProps } from "@pankod/refine-mui";
-
-export type ListGridViewProps = ListProps & {
-  loading?: boolean;
-  loadingMsg?: string;
-};
+import type { ListProps } from "@refinedev/mui";
 
 /**
  * `<List>` provides us a layout for displaying the page.
@@ -30,6 +23,12 @@ export type ListGridViewProps = ListProps & {
  *
  * @see {@link https://refine.dev/docs/ui-frameworks/mui/components/basic-views/list} for more details.
  */
+
+export type ListGridViewProps = ListProps & {
+  loading?: boolean;
+  loadingMsg?: string;
+};
+
 export const List: React.FC<ListGridViewProps> = ({
   title,
   loading,
@@ -38,9 +37,6 @@ export const List: React.FC<ListGridViewProps> = ({
   children,
   createButtonProps,
   resource: resourceFromProps,
-  cardProps,
-  cardHeaderProps,
-  cardContentProps,
   breadcrumb: breadcrumbFromProps,
   wrapperProps,
   headerProps,
@@ -48,7 +44,10 @@ export const List: React.FC<ListGridViewProps> = ({
   headerButtonProps,
   headerButtons,
 }) => {
-  const { useParams } = useRouterContext();
+  const translate = useTranslate();
+  const { options: { breadcrumb: globalBreadcrumb } = {} } = useRefineContext();
+
+  const routerType = useRouterType();
 
   const [preLoad, setPreLoad] = useState<boolean>(true);
 
@@ -60,21 +59,15 @@ export const List: React.FC<ListGridViewProps> = ({
     setPreLoad(false);
   }, delayInMilliseconds);
 
-  const { resource: routeResourceName } = useParams<ResourceRouterParams>();
-
-  const translate = useTranslate();
-
-  const resourceWithRoute = useResourceWithRoute();
-
-  const resource = resourceWithRoute(resourceFromProps ?? routeResourceName);
+  const { resource } = useResource(resourceFromProps);
 
   const isCreateButtonVisible =
-    canCreate ?? (resource.canCreate || createButtonProps);
+    canCreate ??
+    ((resource?.canCreate ?? !!resource?.create) || createButtonProps);
 
-  const { options } = useRefineContext();
   const breadcrumb =
     typeof breadcrumbFromProps === "undefined"
-      ? options?.breadcrumb
+      ? globalBreadcrumb
       : breadcrumbFromProps;
 
   const breadcrumbComponent =
@@ -86,13 +79,17 @@ export const List: React.FC<ListGridViewProps> = ({
 
   const defaultHeaderButtons = isCreateButtonVisible ? (
     <CreateButton
-      resourceNameOrRouteName={resource.route}
+      resource={
+        routerType === "legacy"
+          ? resource?.route
+          : resource?.identifier ?? resource?.name
+      }
       {...createButtonProps}
     />
   ) : null;
 
   return (
-    <Card {...(cardProps ?? {})} {...(wrapperProps ?? {})}>
+    <Card {...(wrapperProps ?? {})}>
       {breadcrumbComponent}
       <CardHeader
         sx={{ display: "flex", flexWrap: "wrap" }}
@@ -100,12 +97,15 @@ export const List: React.FC<ListGridViewProps> = ({
           title ?? (
             <Typography variant="h5">
               <Box component="span" marginRight="8px">
-                {resource.icon}
+                {resource?.meta?.icon ?? resource?.icon}
               </Box>
               {translate(
-                `${resource.name}.titles.list`,
+                `${resource?.name}.titles.list`,
                 userFriendlyResourceName(
-                  resource.label ?? resource.name,
+                  resource?.meta?.label ??
+                    resource?.options?.label ??
+                    resource?.label ??
+                    resource?.name,
                   "plural"
                 )
               )}
@@ -123,10 +123,9 @@ export const List: React.FC<ListGridViewProps> = ({
               : defaultHeaderButtons}
           </Box>
         }
-        {...(cardHeaderProps ?? {})}
         {...(headerProps ?? {})}
       />
-      <CardContent {...(cardContentProps ?? {})} {...(contentProps ?? {})}>
+      <CardContent {...(contentProps ?? {})}>
         {isLoading ? (
           <Box
             sx={{

@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from "react";
-import {
-  useTranslate,
-  useMany,
-  CrudFilters,
-  useList,
-} from "@pankod/refine-core";
+import { useTranslate, useMany, CrudFilters, useList } from "@refinedev/core";
+import { SelectChangeEvent } from "@mui/material";
 import {
   useDataGrid,
-  DataGrid,
-  GridColumns,
-  Stack,
   ShowButton,
   EditButton,
   DeleteButton,
+} from "@refinedev/mui";
+
+import {
+  Stack,
   Divider,
   Paper,
   InputBase,
@@ -21,9 +18,10 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  SelectChangeEvent,
   Tooltip,
-} from "@pankod/refine-mui";
+} from "@mui/material";
+
+import { DataGrid, GridColumns } from "@mui/x-data-grid";
 
 import { List } from "components/crud/list";
 
@@ -33,7 +31,7 @@ import { Search } from "@mui/icons-material";
 import { AddShoppingCart } from "@mui/icons-material";
 
 import { OrderEditorDialog } from "../../components/order-dialog";
-import { useModalForm } from "@pankod/refine-react-hook-form";
+import { useModalForm } from "@refinedev/react-hook-form";
 
 export const _3DObjectList: React.FC = () => {
   const t = useTranslate();

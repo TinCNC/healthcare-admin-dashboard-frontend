@@ -1,13 +1,8 @@
 import React from "react";
-import { useTranslate } from "@pankod/refine-core";
-import {
-  useDataGrid,
-  DataGrid,
-  GridColumns,
-  Stack,
-  EditButton,
-  DeleteButton,
-} from "@pankod/refine-mui";
+import { useTranslate } from "@refinedev/core";
+import { useDataGrid, EditButton, DeleteButton } from "@refinedev/mui";
+import { Stack } from "@mui/material";
+import { DataGrid, GridColumns } from "@mui/x-data-grid";
 
 import { List } from "components/crud/list";
 

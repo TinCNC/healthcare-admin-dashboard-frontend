@@ -1,8 +1,9 @@
 import { SaveOutlined } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
-import { useTranslate, HttpError } from "@pankod/refine-core";
-import { Edit, Box } from "@pankod/refine-mui";
-import { useForm } from "@pankod/refine-react-hook-form";
+import { useTranslate, HttpError } from "@refinedev/core";
+import { Edit } from "@refinedev/mui";
+import { Box } from "@mui/material";
+import { useForm } from "@refinedev/react-hook-form";
 
 import { LoadingTextField } from "components/form-fields/loading-text-field";
 

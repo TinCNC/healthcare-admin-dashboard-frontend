@@ -1,27 +1,9 @@
 import React, { useEffect } from "react";
-import {
-  useShow,
-  useTranslate,
-  useMany,
-  useModal,
-  useOne,
-} from "@pankod/refine-core";
-
-import { useModalForm } from "@pankod/refine-react-hook-form";
-
-// import parse from "html-react-parser";
-
-import {
-  Stack,
-  Typography,
-  Avatar,
-  GridColumns,
-  DataGrid,
-  useDataGrid,
-  EditButton,
-  DeleteButton,
-  ShowButton,
-} from "@pankod/refine-mui";
+import { useShow, useTranslate, useMany, useModal, useOne } from "@refinedev/core";
+import { useModalForm } from "@refinedev/react-hook-form";
+import { useDataGrid, EditButton, DeleteButton, ShowButton } from "@refinedev/mui";
+import { GridColumns, DataGrid } from "@mui/x-data-grid";
+import { Stack, Typography, Avatar } from "@mui/material";
 
 import { Show } from "components/crud/show";
 
@@ -107,10 +89,14 @@ export const PatientShow: React.FC = () => {
 
   const { dataGridProps } = useDataGrid<IHealthStatusCertificates>({
     resource: "health_status_certificates",
-    permanentFilter: [{ field: "holder", value: record?.id, operator: "eq" }],
+
     queryOptions: {
       enabled: !isLoading,
     },
+
+    filters: {
+      permanent: [{ field: "holder", value: record?.id, operator: "eq" }]
+    }
   });
 
   const diseaseIds = dataGridProps.rows.map((item) => item.disease);
@@ -287,7 +273,7 @@ export const PatientShow: React.FC = () => {
                   setShowId(row.id);
                   showDetailModal();
                 }}
-                resourceNameOrRouteName="health_status_certificates"
+                resource="health_status_certificates"
                 recordItemId={row.id}
               />
               <EditButton
@@ -296,13 +282,13 @@ export const PatientShow: React.FC = () => {
                 onClick={() => {
                   showEditModal(row.id);
                 }}
-                resourceNameOrRouteName="health_status_certificates"
+                resource="health_status_certificates"
                 recordItemId={row.id}
               />
               <DeleteButton
                 size="small"
                 hideText
-                resourceNameOrRouteName="health_status_certificates"
+                resource="health_status_certificates"
                 recordItemId={row.id}
               />
             </Stack>

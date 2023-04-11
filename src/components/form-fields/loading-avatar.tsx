@@ -1,6 +1,5 @@
 import React from "react";
-import { Skeleton, Avatar } from "@pankod/refine-mui";
-import type { AvatarProps } from "@pankod/refine-mui";
+import { Skeleton, Avatar, AvatarProps } from "@mui/material";
 
 export type AvatarPropsWithLoading = AvatarProps & {
   loading?: boolean;

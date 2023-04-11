@@ -1,14 +1,8 @@
-import { HttpError, useTranslate } from "@pankod/refine-core";
-import {
-  Box,
-  TextField,
-  Autocomplete,
-  useAutocomplete,
-  Create,
-  Input,
-  Stack,
-} from "@pankod/refine-mui";
-import { useForm, Controller } from "@pankod/refine-react-hook-form";
+import { HttpError, useTranslate } from "@refinedev/core";
+import { useAutocomplete, Create } from "@refinedev/mui";
+import { Box, TextField, Autocomplete, Input, Stack } from "@mui/material";
+import { useForm } from "@refinedev/react-hook-form";
+import { Controller } from "react-hook-form";
 
 import { IProduct, ICategory } from "interfaces";
 
@@ -58,9 +52,9 @@ export const ProductCreate: React.FC = () => {
         if (uploaded !== undefined) {
           const imageUrl = await getPublicImageUrl(
             "product-image",
-            uploaded?.Key.substring(uploaded?.Key.indexOf("/") + 1)
+            uploaded?.path.substring(uploaded?.path.indexOf("/") + 1)
           );
-          if (imageUrl !== undefined) setValue("image", imageUrl?.publicURL);
+          if (imageUrl !== undefined) setValue("image", imageUrl?.publicUrl);
         }
         // if (uploaded !== undefined) {
         //   const imageUrl = await getSignedImageUrl(
@@ -94,7 +88,7 @@ export const ProductCreate: React.FC = () => {
 
   const { autocompleteProps } = useAutocomplete<ICategory>({
     resource: "categories",
-    onSearch: (value) => [
+    onSearch: (value: any) => [
       {
         field: "title",
         operator: "containss",

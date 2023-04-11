@@ -1,8 +1,8 @@
 import React from "react";
-import { TextField, Skeleton } from "@pankod/refine-mui";
-import type { MuiTextFieldProps } from "@pankod/refine-mui";
+import { TextField, Skeleton, TextFieldProps } from "@mui/material";
+// import { MuiTextFieldProps } from "@refinedev/mui";
 
-export type TextFieldPropsWithLoading = MuiTextFieldProps & {
+export type TextFieldPropsWithLoading = TextFieldProps & {
   loading?: boolean;
   registerProps?: any;
 };

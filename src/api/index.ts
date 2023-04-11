@@ -34,11 +34,9 @@ export const uploadImage = async (
 };
 
 export const getPublicImageUrl = async (bucket: string, path: string) => {
-  const { data, error } = supabaseClient.storage
-    .from(bucket)
-    .getPublicUrl(path);
+  const { data } = supabaseClient.storage.from(bucket).getPublicUrl(path);
 
-  if (error) return Promise.reject(error);
+  // if (error) return Promise.reject(error);
 
   if (data) return Promise.resolve(data);
 };

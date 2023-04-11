@@ -1,14 +1,17 @@
 import React from "react";
 import {
+  useResourceWithRoute,
   useTranslate,
+  useRouterContext,
   userFriendlyResourceName,
-  useRefineContext,
-  useRouterType,
-  useResource,
+  // useRefineContext,
+  ResourceRouterParams,
 } from "@refinedev/core";
-import { CreateButton, Breadcrumb } from "@refinedev/mui";
 import { Card, CardHeader, CardContent, Typography, Box } from "@mui/material";
-import type { ListProps } from "@refinedev/mui";
+
+import { CreateButton } from "@refinedev/mui";
+
+import { ListProps } from "@refinedev/mui";
 
 /**
  * `<List>` provides us a layout for displaying the page.
@@ -30,50 +33,54 @@ export const SubresourceList: React.FC<ListPropsSubResource> = ({
   children,
   createButtonProps,
   resource: resourceFromProps,
-  breadcrumb: breadcrumbFromProps,
+  cardProps,
+  cardHeaderProps,
+  cardContentProps,
+  // breadcrumb: breadcrumbFromProps,
   wrapperProps,
   headerProps,
   contentProps,
   headerButtonProps,
   headerButtons,
 }) => {
+  const { useParams } = useRouterContext();
+
+  const { resource: routeResourceName } = useParams<ResourceRouterParams>();
+
   const translate = useTranslate();
-  const { options: { breadcrumb: globalBreadcrumb } = {} } = useRefineContext();
 
-  const routerType = useRouterType();
+  const resourceWithRoute = useResourceWithRoute();
 
-  const { resource } = useResource(resourceFromProps);
+  const resource = resourceWithRoute(resourceFromProps ?? routeResourceName);
 
   const isCreateButtonVisible =
-    canCreate ??
-    ((resource?.canCreate ?? !!resource?.create) || createButtonProps);
+    canCreate ?? (resource.canCreate || createButtonProps);
 
-  const breadcrumb =
-    typeof breadcrumbFromProps === "undefined"
-      ? globalBreadcrumb
-      : breadcrumbFromProps;
+  // const { options } = useRefineContext();
+  // const breadcrumb =
+  //   typeof breadcrumbFromProps === "undefined"
+  //     ? options?.breadcrumb
+  //     : breadcrumbFromProps;
 
-  const breadcrumbComponent =
-    typeof breadcrumb !== "undefined" ? (
-      <>{breadcrumb}</> ?? undefined
-    ) : (
-      <Breadcrumb />
-    );
+  // const breadcrumbComponent =
+  //   typeof breadcrumb !== "undefined" ? (
+  //     <>{breadcrumb}</> ?? undefined
+  //   ) : (
+  //     <Breadcrumb />
+  //   );
 
   const defaultHeaderButtons = isCreateButtonVisible ? (
     <CreateButton
+      resource={resource.route}
       onClick={modalToggle}
-      resource={
-        routerType === "legacy"
-          ? resource?.route
-          : resource?.identifier ?? resource?.name
-      }
       {...createButtonProps}
-    />
+    >
+      {translate(`${resource.name}.titles.create`)}
+    </CreateButton>
   ) : null;
 
   return (
-    <Card {...(wrapperProps ?? {})}>
+    <Card {...(cardProps ?? {})} {...(wrapperProps ?? {})}>
       {/* {breadcrumbComponent} */}
       <CardHeader
         sx={{ display: "flex", flexWrap: "wrap" }}
@@ -81,15 +88,13 @@ export const SubresourceList: React.FC<ListPropsSubResource> = ({
           title ?? (
             <Typography variant="h5">
               <Box component="span" marginRight="8px">
-                {resource?.meta?.icon ?? resource?.icon}
+                {/* {resource.icon} */}
+                {icon}
               </Box>
               {translate(
-                `${resource?.name}.titles.list`,
+                `${resource.name}.titles.list`,
                 userFriendlyResourceName(
-                  resource?.meta?.label ??
-                    resource?.options?.label ??
-                    resource?.label ??
-                    resource?.name,
+                  resource.label ?? resource.name,
                   "plural"
                 )
               )}
@@ -107,9 +112,12 @@ export const SubresourceList: React.FC<ListPropsSubResource> = ({
               : defaultHeaderButtons}
           </Box>
         }
+        {...(cardHeaderProps ?? {})}
         {...(headerProps ?? {})}
       />
-      <CardContent {...(contentProps ?? {})}>{children}</CardContent>
+      <CardContent {...(cardContentProps ?? {})} {...(contentProps ?? {})}>
+        {children}
+      </CardContent>
     </Card>
   );
 };

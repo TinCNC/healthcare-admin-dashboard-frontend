@@ -1,20 +1,15 @@
 import React, { useEffect } from "react";
-import { useShow, useTranslate, useMany, useModal } from "@pankod/refine-core";
-
-import { useModalForm } from "@pankod/refine-react-hook-form";
-
+import { useShow, useTranslate, useMany, useModal } from "@refinedev/core";
+import { useModalForm } from "@refinedev/react-hook-form";
 import {
-  Stack,
-  Typography,
   TagField,
-  Avatar,
-  GridColumns,
-  DataGrid,
   useDataGrid,
   EditButton,
   DeleteButton,
   ShowButton,
-} from "@pankod/refine-mui";
+} from "@refinedev/mui";
+import { GridColumns, DataGrid } from "@mui/x-data-grid";
+import { Stack, Typography, Avatar } from "@mui/material";
 
 import { SubresourceList } from "components/crud/list-subresource";
 
@@ -102,9 +97,13 @@ export const DoctorShow: React.FC = () => {
 
   const { dataGridProps } = useDataGrid<IProfessionalCertificates>({
     resource: "professional_certificates",
-    permanentFilter: [{ field: "holder", value: record?.id, operator: "eq" }],
+
     queryOptions: {
       enabled: !isLoading,
+    },
+
+    filters: {
+      permanent: [{ field: "holder", value: record?.id, operator: "eq" }],
     },
   });
 
@@ -309,7 +308,7 @@ export const DoctorShow: React.FC = () => {
                   setShowId(row.id);
                   showDetailModal();
                 }}
-                resourceNameOrRouteName="professional_certificates"
+                resource="professional_certificates"
                 recordItemId={row.id}
               />
               <EditButton
@@ -318,13 +317,13 @@ export const DoctorShow: React.FC = () => {
                 onClick={() => {
                   showEditModal(row.id);
                 }}
-                resourceNameOrRouteName="professional_certificates"
+                resource="professional_certificates"
                 recordItemId={row.id}
               />
               <DeleteButton
                 size="small"
                 hideText
-                resourceNameOrRouteName="professional_certificates"
+                resource="professional_certificates"
                 recordItemId={row.id}
               />
             </Stack>

@@ -9,7 +9,7 @@ import {
   Button,
   CircularProgress,
   Box,
-} from "@pankod/refine-mui";
+} from "@mui/material";
 
 import {
   IMedicalSpeciality,
@@ -17,9 +17,7 @@ import {
   IProfessionalCertificates,
   ITechnician,
 } from "interfaces";
-// import { AddCircleOutlineOutlined, CancelOutlined } from "@mui/icons-material";
-
-import { useTranslate } from "@pankod/refine-core";
+import { useTranslate } from "@refinedev/core";
 
 export type DataProps = {
   loading?: boolean;

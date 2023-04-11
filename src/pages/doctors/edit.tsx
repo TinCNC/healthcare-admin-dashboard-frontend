@@ -1,18 +1,13 @@
-import { HttpError, useTranslate } from "@pankod/refine-core";
-import {
-  Box,
-  Autocomplete,
-  useAutocomplete,
-  Edit,
-  Input,
-  Stack,
-} from "@pankod/refine-mui";
+import { HttpError, useTranslate } from "@refinedev/core";
+import { useAutocomplete, Edit } from "@refinedev/mui";
+import { Box, Autocomplete, Input, Stack } from "@mui/material";
 
 import { LoadingAvatar } from "components/form-fields/loading-avatar";
 
 import { LoadingTextField } from "components/form-fields/loading-text-field";
 
-import { useForm, Controller } from "@pankod/refine-react-hook-form";
+import { useForm } from "@refinedev/react-hook-form";
+import { Controller } from "react-hook-form";
 
 import { IDoctor, IDepartment } from "interfaces";
 
@@ -65,9 +60,9 @@ export const DoctorEdit: React.FC = () => {
         if (uploaded !== undefined) {
           const imageUrl = await getPublicImageUrl(
             "profile-image",
-            uploaded?.Key.substring(uploaded?.Key.indexOf("/") + 1)
+            uploaded?.path.substring(uploaded?.path.indexOf("/") + 1)
           );
-          if (imageUrl !== undefined) setValue("image", imageUrl?.publicURL);
+          if (imageUrl !== undefined) setValue("image", imageUrl?.publicUrl);
         }
       }
 
@@ -99,7 +94,7 @@ export const DoctorEdit: React.FC = () => {
   const { autocompleteProps, defaultValueQueryResult } =
     useAutocomplete<IDepartment>({
       resource: "departments",
-      onSearch: (value) => [
+      onSearch: (value: any) => [
         {
           field: "name",
           operator: "containss",

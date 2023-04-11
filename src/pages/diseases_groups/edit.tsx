@@ -1,21 +1,24 @@
 import { SaveOutlined } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
-import { HttpError, useTranslate } from "@pankod/refine-core";
+import { HttpError, useTranslate } from "@refinedev/core";
+
 import {
-  Box,
-  TextField,
-  // Autocomplete,
-  // useAutocomplete,
-  Edit,
-  Stack,
-  Typography,
-  // FormControl,
-  // InputLabel,
-  // MenuItem,
-  // Select,
-  // SelectChangeEvent,
-} from "@pankod/refine-mui";
-import { useForm, Controller } from "@pankod/refine-react-hook-form";
+// Autocomplete,
+// useAutocomplete,
+Edit
+} from "@refinedev/mui";
+
+import {
+Box, TextField, Stack, // FormControl,
+// InputLabel,
+// MenuItem,
+// Select,
+// SelectChangeEvent,
+Typography
+} from "@mui/material";
+
+import { useForm } from "@refinedev/react-hook-form";
+import { Controller } from "react-hook-form";
 
 import { IDiseasesGroup } from "interfaces";
 import { useState, useEffect, ChangeEvent } from "react";

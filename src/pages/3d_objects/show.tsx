@@ -1,24 +1,15 @@
 import React from "react";
-import {
-  useOne,
-  useShow,
-  useTranslate,
-  useModal,
-  // useMany,
-  // useList,
-  // HttpError,
-} from "@pankod/refine-core";
-
-// import parse from "html-react-parser";
 
 import {
-  Stack,
-  Typography,
-  TagField,
-  Box,
-  Grid,
-  LoadingButton,
-} from "@pankod/refine-mui";
+useOne, useShow, useTranslate, // useMany,
+// useList,
+// HttpError,
+useModal
+} from "@refinedev/core";
+
+import { TagField } from "@refinedev/mui";
+import { LoadingButton } from "@mui/lab";
+import { Stack, Typography, Box, Grid } from "@mui/material";
 
 import { Show } from "components/crud/show";
 

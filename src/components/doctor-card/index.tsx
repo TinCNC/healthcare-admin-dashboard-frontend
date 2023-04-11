@@ -1,17 +1,7 @@
 import React from "react";
-import {
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  ShowButton,
-  EditButton,
-  DeleteButton,
-  Typography,
-  TagField,
-} from "@pankod/refine-mui";
-
-import { useMany } from "@pankod/refine-core";
+import { ShowButton, EditButton, DeleteButton, TagField } from "@refinedev/mui";
+import { Card, CardActions, CardContent, CardMedia, Typography } from "@mui/material";
+import { useMany } from "@refinedev/core";
 import { IDepartment, IDoctor } from "interfaces";
 
 export type DataProps = {

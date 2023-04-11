@@ -1,6 +1,6 @@
-import { Stack, Typography, Box, TextField } from "@pankod/refine-mui";
+import { Stack, Typography, Box, TextField } from "@mui/material";
 import React, { ChangeEvent } from "react";
-import { useTranslate } from "@pankod/refine-core";
+import { useTranslate } from "@refinedev/core";
 
 interface IDataItem {
   age: string;

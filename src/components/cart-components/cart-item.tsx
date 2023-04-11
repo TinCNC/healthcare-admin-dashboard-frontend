@@ -6,19 +6,19 @@ import {
   useOne,
   DeleteOneResponse,
   BaseRecord,
-} from "@pankod/refine-core";
-
+} from "@refinedev/core";
 import {
   EditButton,
   ShowButton,
   DateField,
-  Checkbox,
-} from "@pankod/refine-mui";
+  DeleteButton,
+} from "@refinedev/mui";
+import { Checkbox } from "@mui/material";
 
 import { Stack, Typography, styled } from "@mui/material";
 
 import { I3DObject, IMaterial, IOrder } from "interfaces";
-import { DeleteButton } from "components/buttons/delete";
+// import { DeleteButton } from "components/buttons/delete";
 
 import { Token } from "@mui/icons-material";
 
@@ -145,7 +145,7 @@ export const CartItem: React.FC<CartItemProps> = ({
         <Stack direction="row" spacing={1}>
           <ShowButton
             size="small"
-            resourceNameOrRouteName="3d_objects"
+            resource="3d_objects"
             hideText
             recordItemId={item?.id}
           />

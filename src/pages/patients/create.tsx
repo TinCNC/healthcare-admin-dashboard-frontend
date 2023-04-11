@@ -1,16 +1,17 @@
-import { HttpError, useTranslate } from "@pankod/refine-core";
+import { HttpError, useTranslate } from "@refinedev/core";
+import { useAutocomplete, Create } from "@refinedev/mui";
+
 import {
   Box,
   TextField,
   Autocomplete,
-  useAutocomplete,
-  Create,
-  Input,
-  // Typography,
-  Stack,
+  Input, // Typography,
   // Button,
-} from "@pankod/refine-mui";
-import { useForm, Controller } from "@pankod/refine-react-hook-form";
+  Stack,
+} from "@mui/material";
+
+import { useForm } from "@refinedev/react-hook-form";
+import { Controller } from "react-hook-form";
 
 import { IPatient, IClinic } from "interfaces";
 
@@ -65,9 +66,9 @@ export const PatientCreate: React.FC = () => {
         if (uploaded !== undefined) {
           const imageUrl = await getPublicImageUrl(
             "profile-image",
-            uploaded?.Key.substring(uploaded?.Key.indexOf("/") + 1)
+            uploaded?.path.substring(uploaded?.path.indexOf("/") + 1)
           );
-          if (imageUrl !== undefined) setValue("image", imageUrl?.publicURL);
+          if (imageUrl !== undefined) setValue("image", imageUrl?.publicUrl);
         }
         // if (uploaded !== undefined) {
         //   const imageUrl = await getSignedImageUrl(
@@ -141,7 +142,7 @@ export const PatientCreate: React.FC = () => {
 
   const { autocompleteProps } = useAutocomplete<IClinic>({
     resource: "clinics",
-    onSearch: (value) => [
+    onSearch: (value: any) => [
       {
         field: "name",
         operator: "containss",

@@ -1,6 +1,5 @@
 import React from "react";
-import { Skeleton, FormControl } from "@pankod/refine-mui";
-import type { FormControlProps } from "@pankod/refine-mui";
+import { Skeleton, FormControl, FormControlProps } from "@mui/material";
 
 export type LoadingFormControlProps = FormControlProps & {
   loading?: boolean;

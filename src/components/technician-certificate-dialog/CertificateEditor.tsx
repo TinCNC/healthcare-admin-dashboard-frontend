@@ -1,5 +1,7 @@
 import React from "react";
 
+import { useAutocomplete } from "@refinedev/mui";
+
 import {
   // TextField,
   Dialog,
@@ -7,9 +9,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  useAutocomplete,
   Autocomplete,
-} from "@pankod/refine-mui";
+} from "@mui/material";
 
 import { LoadingTextField } from "components/form-fields/loading-text-field";
 
@@ -23,11 +24,9 @@ import { LoadingButton } from "@mui/lab";
 import { IOrganization, ITechnician } from "interfaces";
 import { AddCircleOutlineOutlined, CancelOutlined } from "@mui/icons-material";
 
-import {
-  Controller,
-  UseModalFormReturnType,
-} from "@pankod/refine-react-hook-form";
-import { useTranslate } from "@pankod/refine-core";
+import { UseModalFormReturnType } from "@refinedev/react-hook-form";
+import { Controller } from "react-hook-form";
+import { useTranslate } from "@refinedev/core";
 
 export type EditorDataProps = UseModalFormReturnType & {
   submitButtonText?: string;
@@ -52,7 +51,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
     useAutocomplete<IOrganization>({
       resource: "organizations",
       pagination: { current: 1, pageSize: 10000 },
-      onSearch: (value) => [
+      onSearch: (value: any) => [
         {
           field: "name",
           operator: "containss",
@@ -65,7 +64,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
     useAutocomplete<ITechnician>({
       resource: "technicians",
       pagination: { current: 1, pageSize: 10000 },
-      onSearch: (value) => [
+      onSearch: (value: any) => [
         {
           field: "username",
           operator: "containss",

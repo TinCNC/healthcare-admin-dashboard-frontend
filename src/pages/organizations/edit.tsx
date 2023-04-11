@@ -1,8 +1,10 @@
 import { SaveOutlined } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
-import { useTranslate, HttpError } from "@pankod/refine-core";
-import { Edit, Box, Autocomplete } from "@pankod/refine-mui";
-import { Controller, useForm } from "@pankod/refine-react-hook-form";
+import { useTranslate, HttpError } from "@refinedev/core";
+import { Edit } from "@refinedev/mui";
+import { Box, Autocomplete } from "@mui/material";
+import { useForm } from "@refinedev/react-hook-form";
+import { Controller } from "react-hook-form";
 
 import { useState, useEffect } from "react";
 

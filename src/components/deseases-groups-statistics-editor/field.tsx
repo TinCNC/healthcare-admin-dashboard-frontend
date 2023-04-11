@@ -1,5 +1,5 @@
-import { Stack, Box, TextField } from "@pankod/refine-mui";
-import { useTranslate } from "@pankod/refine-core";
+import { Stack, Box, TextField } from "@mui/material";
+import { useTranslate } from "@refinedev/core";
 import React, { ChangeEvent } from "react";
 
 interface DataProps {

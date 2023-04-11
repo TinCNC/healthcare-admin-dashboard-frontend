@@ -1,18 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useTranslate, useMany, CrudFilters } from "@pankod/refine-core";
-import {
-  useDataGrid,
-  DataGrid,
-  GridColumns,
-  Stack,
-  EditButton,
-  DeleteButton,
-  Paper,
-  Divider,
-  FormControl,
-  IconButton,
-  InputBase,
-} from "@pankod/refine-mui";
+import { useTranslate, useMany, CrudFilters } from "@refinedev/core";
+import { useDataGrid, EditButton, DeleteButton } from "@refinedev/mui";
+import { Stack, Paper, Divider, FormControl, IconButton, InputBase } from "@mui/material";
+import { DataGrid, GridColumns } from "@mui/x-data-grid";
 
 import { List } from "components/crud/list";
 

@@ -1,14 +1,9 @@
-import { HttpError } from "@pankod/refine-core";
-import {
-  Box,
-  Autocomplete,
-  useAutocomplete,
-  Edit,
-  Input,
-  Stack,
-} from "@pankod/refine-mui";
+import { HttpError } from "@refinedev/core";
+import { useAutocomplete, Edit } from "@refinedev/mui";
+import { Box, Autocomplete, Input, Stack } from "@mui/material";
 import { LoadingTextField } from "components/form-fields/loading-text-field";
-import { useForm, Controller } from "@pankod/refine-react-hook-form";
+import { useForm } from "@refinedev/react-hook-form";
+import { Controller } from "react-hook-form";
 
 import { IPatient, IClinic } from "interfaces";
 
@@ -50,9 +45,9 @@ export const PatientEdit: React.FC = () => {
         if (uploaded !== undefined) {
           const imageUrl = await getPublicImageUrl(
             "profile-image",
-            uploaded?.Key.substring(uploaded?.Key.indexOf("/") + 1)
+            uploaded?.path.substring(uploaded?.path.indexOf("/") + 1)
           );
-          if (imageUrl !== undefined) setValue("image", imageUrl?.publicURL);
+          if (imageUrl !== undefined) setValue("image", imageUrl?.publicUrl);
         }
       }
 
@@ -87,7 +82,7 @@ export const PatientEdit: React.FC = () => {
     useAutocomplete<IClinic>({
       resource: "clinics",
       pagination: { current: 1, pageSize: 10000 },
-      onSearch: (value) => [
+      onSearch: (value: any) => [
         {
           field: "name",
           operator: "containss",

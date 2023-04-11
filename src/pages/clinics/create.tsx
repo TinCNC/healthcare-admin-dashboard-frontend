@@ -1,12 +1,14 @@
-import { HttpError } from "@pankod/refine-core";
+import { HttpError } from "@refinedev/core";
+
 import {
-  Box,
-  TextField,
-  // Autocomplete,
-  // useAutocomplete,
-  Create,
-} from "@pankod/refine-mui";
-import { useForm, Controller } from "@pankod/refine-react-hook-form";
+// Autocomplete,
+// useAutocomplete,
+Create
+} from "@refinedev/mui";
+
+import { Box, TextField } from "@mui/material";
+import { useForm } from "@refinedev/react-hook-form";
+import { Controller } from "react-hook-form";
 
 import { IClinic } from "interfaces";
 

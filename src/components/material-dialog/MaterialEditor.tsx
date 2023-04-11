@@ -1,6 +1,4 @@
 import React from "react";
-// import React, { useState } from "react";
-
 import {
   TextField,
   Dialog,
@@ -8,14 +6,14 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-} from "@pankod/refine-mui";
+} from "@mui/material";
 
 import { LoadingButton } from "@mui/lab";
 
 import { AddCircleOutlineOutlined, CancelOutlined } from "@mui/icons-material";
 
-import { UseModalFormReturnType } from "@pankod/refine-react-hook-form";
-import { useTranslate } from "@pankod/refine-core";
+import { UseModalFormReturnType } from "@refinedev/react-hook-form";
+import { useTranslate } from "@refinedev/core";
 
 export type DataProps = UseModalFormReturnType & {
   submitButtonText?: string;

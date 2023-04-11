@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import { useAutocomplete } from "@refinedev/mui";
+
 import {
   TextField,
   Dialog,
@@ -7,9 +9,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  useAutocomplete,
   Autocomplete,
-} from "@pankod/refine-mui";
+} from "@mui/material";
 
 import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -21,11 +22,9 @@ import { LoadingButton } from "@mui/lab";
 import { ILaboratory, IMaterial } from "interfaces";
 import { AddCircleOutlineOutlined, CancelOutlined } from "@mui/icons-material";
 
-import {
-  Controller,
-  UseModalFormReturnType,
-} from "@pankod/refine-react-hook-form";
-import { useTranslate } from "@pankod/refine-core";
+import { UseModalFormReturnType } from "@refinedev/react-hook-form";
+import { Controller } from "react-hook-form";
+import { useTranslate } from "@refinedev/core";
 
 export type DataProps = UseModalFormReturnType & {
   submitButtonText?: string;
@@ -51,7 +50,7 @@ export const OrderEditorDialog: React.FC<DataProps> = ({
   const { autocompleteProps: autocompleteLaboratoryProps } =
     useAutocomplete<ILaboratory>({
       resource: "laboratories",
-      onSearch: (value) => [
+      onSearch: (value: any) => [
         {
           field: "name",
           operator: "containss",
@@ -64,7 +63,7 @@ export const OrderEditorDialog: React.FC<DataProps> = ({
     useAutocomplete<IMaterial>({
       resource: "materials",
       filters: [{ field: "laboratory", operator: "eq", value: laboratory }],
-      onSearch: (value) => [
+      onSearch: (value: any) => [
         {
           field: "material_name",
           operator: "containss",

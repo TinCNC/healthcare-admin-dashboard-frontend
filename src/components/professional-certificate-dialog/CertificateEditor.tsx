@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
-// import axios, { isCancel, AxiosError } from "axios";
+import { useAutocomplete } from "@refinedev/mui";
 
 import {
   Dialog,
@@ -8,12 +8,11 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  useAutocomplete,
   Autocomplete,
   Box,
   Stack,
   Input,
-} from "@pankod/refine-mui";
+} from "@mui/material";
 
 import { LoadingTextField } from "components/form-fields/loading-text-field";
 
@@ -31,11 +30,9 @@ import {
   FileUpload,
 } from "@mui/icons-material";
 
-import {
-  Controller,
-  UseModalFormReturnType,
-} from "@pankod/refine-react-hook-form";
-import { useTranslate } from "@pankod/refine-core";
+import { UseModalFormReturnType } from "@refinedev/react-hook-form";
+import { Controller } from "react-hook-form";
+import { useTranslate } from "@refinedev/core";
 
 export type EditorDataProps = UseModalFormReturnType & {
   submitButtonText?: string;
@@ -155,7 +152,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
     resource: "organizations",
     defaultValue: queryResult?.data?.data?.creator,
     pagination: { current: 1, pageSize: 10000 },
-    onSearch: (value) => [
+    onSearch: (value: any) => [
       {
         field: "name",
         operator: "containss",
@@ -173,7 +170,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
     resource: "technicians",
     defaultValue: queryResult?.data?.data?.validator,
     pagination: { current: 1, pageSize: 10000 },
-    onSearch: (value) => [
+    onSearch: (value: any) => [
       {
         field: "username",
         operator: "containss",
@@ -189,7 +186,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
     resource: "medical_specialities",
     defaultValue: queryResult?.data?.data?.speciality,
     pagination: { current: 1, pageSize: 10000 },
-    onSearch: (value) => [
+    onSearch: (value: any) => [
       {
         field: "name",
         operator: "containss",

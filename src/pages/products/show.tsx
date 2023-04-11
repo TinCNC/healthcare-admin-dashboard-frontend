@@ -1,16 +1,14 @@
 import React from "react";
+
 import {
-  useOne,
-  useShow,
-  useTranslate,
-  // useMany,
-  // useList,
-  // HttpError,
-} from "@pankod/refine-core";
+useOne, useShow, // useMany,
+// useList,
+// HttpError,
+useTranslate
+} from "@refinedev/core";
 
-// import parse from "html-react-parser";
-
-import { Stack, Typography, TagField, Box } from "@pankod/refine-mui";
+import { TagField } from "@refinedev/mui";
+import { Stack, Typography, Box } from "@mui/material";
 
 import { Show } from "components/crud/show";
 

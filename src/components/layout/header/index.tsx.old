@@ -6,7 +6,7 @@ import {
   useLogout,
   useTranslate,
   useNavigation,
-} from "@pankod/refine-core";
+} from "@refinedev/core";
 import {
   AppBar,
   IconButton,
@@ -22,7 +22,7 @@ import {
   Typography,
   Divider,
   Badge,
-} from "@pankod/refine-mui";
+} from "@mui/material";
 
 import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
 
@@ -44,7 +44,9 @@ export const Header: React.FC = () => {
   const { push } = useNavigation();
 
   const { mode, setMode } = useContext(ColorModeContext);
-  const { mutate: mutateLogout } = useLogout();
+  const { mutate: mutateLogout } = useLogout({
+    v3LegacyAuthProviderCompatible: true
+  });
 
   const t = useTranslate();
 
@@ -52,7 +54,9 @@ export const Header: React.FC = () => {
   const locale = useGetLocale();
   const currentLocale = locale();
 
-  const { data: user } = useGetIdentity();
+  const { data: user } = useGetIdentity({
+    v3LegacyAuthProviderCompatible: true
+  });
   const showUserInfo = user && (user.name || user.avatar);
 
   return (

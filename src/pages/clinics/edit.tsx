@@ -1,6 +1,7 @@
-import { HttpError } from "@pankod/refine-core";
-import { Box, Edit } from "@pankod/refine-mui";
-import { useForm } from "@pankod/refine-react-hook-form";
+import { HttpError } from "@refinedev/core";
+import { Edit } from "@refinedev/mui";
+import { Box } from "@mui/material";
+import { useForm } from "@refinedev/react-hook-form";
 
 import { LoadingTextField } from "components/form-fields/loading-text-field";
 

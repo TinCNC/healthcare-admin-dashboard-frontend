@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { CartItem } from "./cart-item";
 import { Stack, Box, Divider, Typography, Checkbox } from "@mui/material";
-import { GetListResponse, useTranslate } from "@pankod/refine-core";
+import { GetListResponse, useTranslate } from "@refinedev/core";
 import { IOrder } from "interfaces";
 import { List } from "components/crud/list";
 

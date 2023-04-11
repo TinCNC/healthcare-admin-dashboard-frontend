@@ -2,15 +2,11 @@
 
 import { SaveOutlined } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
-import { useTranslate, HttpError } from "@pankod/refine-core";
-import {
-  Create,
-  Box,
-  TextField,
-  Autocomplete,
-  useAutocomplete,
-} from "@pankod/refine-mui";
-import { Controller, useForm } from "@pankod/refine-react-hook-form";
+import { useTranslate, HttpError } from "@refinedev/core";
+import { Create, useAutocomplete } from "@refinedev/mui";
+import { Box, TextField, Autocomplete } from "@mui/material";
+import { useForm } from "@refinedev/react-hook-form";
+import { Controller } from "react-hook-form";
 
 import { ILaboratory, ITechnician } from "interfaces";
 
@@ -45,7 +41,7 @@ export const LaboratoryCreate: React.FC = () => {
 
   const { autocompleteProps } = useAutocomplete<ITechnician>({
     resource: "technicians",
-    onSearch: (value) => [
+    onSearch: (value: any) => [
       {
         field: "name",
         operator: "containss",

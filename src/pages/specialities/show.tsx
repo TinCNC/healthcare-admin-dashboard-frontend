@@ -1,5 +1,5 @@
-import { useShow, useTranslate } from "@pankod/refine-core";
-import { Stack, Typography, Container } from "@pankod/refine-mui";
+import { useShow, useTranslate } from "@refinedev/core";
+import { Stack, Typography, Container } from "@mui/material";
 
 import { Show } from "components/crud/show";
 

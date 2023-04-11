@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  useTranslate,
-  useMany,
-  CrudFilters,
-  HttpError,
-  useList,
-  GetListResponse,
-} from "@pankod/refine-core";
+import { useTranslate, useMany, CrudFilters, HttpError, useList, GetListResponse } from "@refinedev/core";
 import {
   Paper,
   Divider,
@@ -30,10 +23,7 @@ export const OrderList: React.FC = () => {
     useState<GetListResponse<IOrder>>();
   const { refetch: refetchOrders } = useList<IOrder>({
     resource: "orders",
-    config: {
-      filters: [{ field: "status", operator: "eq", value: "Not Send" }],
-      // pagination: { current: 1, pageSize: 10 },
-    },
+
     // config: {
     //   filters: [
     //     { field: "username", operator: "contains", value: userNameSearch },
@@ -51,16 +41,16 @@ export const OrderList: React.FC = () => {
         }
       },
     },
+
+    // pagination: { current: 1, pageSize: 10 },
+    filters: [{ field: "status", operator: "eq", value: "Not Send" }]
   });
 
   const [pendingOrderListResponse, setPendingOrderListResponse] =
     useState<GetListResponse<IOrder>>();
   const { refetch: refetchPendingOrders } = useList<IOrder>({
     resource: "orders",
-    config: {
-      filters: [{ field: "status", operator: "eq", value: "Pending" }],
-      // pagination: { current: 1, pageSize: 10 },
-    },
+
     queryOptions: {
       enabled: false,
       onSuccess: (data) => {
@@ -70,16 +60,16 @@ export const OrderList: React.FC = () => {
         }
       },
     },
+
+    // pagination: { current: 1, pageSize: 10 },
+    filters: [{ field: "status", operator: "eq", value: "Pending" }]
   });
 
   const [pricedOrderListResponse, setPricedOrderListResponse] =
     useState<GetListResponse<IOrder>>();
   const { refetch: refetchPricedOrders } = useList<IOrder>({
     resource: "orders",
-    config: {
-      filters: [{ field: "status", operator: "eq", value: "Payment Pending" }],
-      // pagination: { current: 1, pageSize: 10 },
-    },
+
     queryOptions: {
       enabled: false,
       onSuccess: (data) => {
@@ -89,6 +79,9 @@ export const OrderList: React.FC = () => {
         }
       },
     },
+
+    // pagination: { current: 1, pageSize: 10 },
+    filters: [{ field: "status", operator: "eq", value: "Payment Pending" }]
   });
 
   useEffect(() => {

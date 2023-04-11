@@ -1,24 +1,14 @@
 import React from "react";
 import {
-  useResourceWithRoute,
   useTranslate,
-  useRouterContext,
   userFriendlyResourceName,
-  ResourceRouterParams,
   useRefineContext,
-} from "@pankod/refine-core";
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  Typography,
-  Box,
-  // CreateButton,
-  // Breadcrumb,
-} from "@mui/material";
-
-import { CreateButton, Breadcrumb } from "@pankod/refine-mui";
-import type { ListProps } from "@pankod/refine-mui";
+  useRouterType,
+  useResource,
+} from "@refinedev/core";
+import { CreateButton, Breadcrumb } from "@refinedev/mui";
+import { Card, CardHeader, CardContent, Typography, Box } from "@mui/material";
+import type { ListProps } from "@refinedev/mui";
 
 /**
  * `<List>` provides us a layout for displaying the page.
@@ -32,9 +22,6 @@ export const List: React.FC<ListProps> = ({
   children,
   createButtonProps,
   resource: resourceFromProps,
-  cardProps,
-  cardHeaderProps,
-  cardContentProps,
   breadcrumb: breadcrumbFromProps,
   wrapperProps,
   headerProps,
@@ -42,23 +29,20 @@ export const List: React.FC<ListProps> = ({
   headerButtonProps,
   headerButtons,
 }) => {
-  const { useParams } = useRouterContext();
-
-  const { resource: routeResourceName } = useParams<ResourceRouterParams>();
-
   const translate = useTranslate();
+  const { options: { breadcrumb: globalBreadcrumb } = {} } = useRefineContext();
 
-  const resourceWithRoute = useResourceWithRoute();
+  const routerType = useRouterType();
 
-  const resource = resourceWithRoute(resourceFromProps ?? routeResourceName);
+  const { resource } = useResource(resourceFromProps);
 
   const isCreateButtonVisible =
-    canCreate ?? (resource.canCreate || createButtonProps);
+    canCreate ??
+    ((resource?.canCreate ?? !!resource?.create) || createButtonProps);
 
-  const { options } = useRefineContext();
   const breadcrumb =
     typeof breadcrumbFromProps === "undefined"
-      ? options?.breadcrumb
+      ? globalBreadcrumb
       : breadcrumbFromProps;
 
   const breadcrumbComponent =
@@ -70,13 +54,17 @@ export const List: React.FC<ListProps> = ({
 
   const defaultHeaderButtons = isCreateButtonVisible ? (
     <CreateButton
-      resourceNameOrRouteName={resource.route}
+      resource={
+        routerType === "legacy"
+          ? resource?.route
+          : resource?.identifier ?? resource?.name
+      }
       {...createButtonProps}
     />
   ) : null;
 
   return (
-    <Card {...(cardProps ?? {})} {...(wrapperProps ?? {})}>
+    <Card {...(wrapperProps ?? {})}>
       {breadcrumbComponent}
       <CardHeader
         sx={{ display: "flex", flexWrap: "wrap" }}
@@ -84,12 +72,15 @@ export const List: React.FC<ListProps> = ({
           title ?? (
             <Typography variant="h5">
               <Box component="span" marginRight="8px">
-                {resource.icon}
+                {resource?.meta?.icon ?? resource?.icon}
               </Box>
               {translate(
-                `${resource.name}.titles.list`,
+                `${resource?.name}.titles.list`,
                 userFriendlyResourceName(
-                  resource.label ?? resource.name,
+                  resource?.meta?.label ??
+                    resource?.options?.label ??
+                    resource?.label ??
+                    resource?.name,
                   "plural"
                 )
               )}
@@ -107,12 +98,9 @@ export const List: React.FC<ListProps> = ({
               : defaultHeaderButtons}
           </Box>
         }
-        {...(cardHeaderProps ?? {})}
         {...(headerProps ?? {})}
       />
-      <CardContent {...(cardContentProps ?? {})} {...(contentProps ?? {})}>
-        {children}
-      </CardContent>
+      <CardContent {...(contentProps ?? {})}>{children}</CardContent>
     </Card>
   );
 };

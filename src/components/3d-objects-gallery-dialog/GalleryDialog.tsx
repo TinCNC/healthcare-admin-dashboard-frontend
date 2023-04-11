@@ -3,24 +3,17 @@ import React from "react";
 import SwipeableViews from "react-swipeable-views";
 import { autoPlay } from "react-swipeable-views-utils";
 
+import { useTheme } from "@mui/material/styles";
+
 import {
-  // TextField,
-  MobileStepper,
-  Paper,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  // DialogContentText,
-  DialogTitle,
-  // TextFieldProps,
-  // useAutocomplete,
-  // Autocomplete,
-  // Show,
-  Box,
-  Typography,
-  Button,
-  useTheme,
-} from "@pankod/refine-mui";
+// TextField,
+MobileStepper, Paper, Dialog, DialogActions, DialogContent, // DialogContentText,
+DialogTitle, // TextFieldProps,
+// useAutocomplete,
+// Autocomplete,
+// Show,
+Box, Typography, Button
+} from "@mui/material";
 
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 
@@ -37,13 +30,7 @@ import {
   IProfessionalCertificates,
   ITechnician,
 } from "interfaces";
-// import { AddCircleOutlineOutlined, CancelOutlined } from "@mui/icons-material";
-
-// import {
-//   Controller,
-//   UseModalFormReturnType,
-// } from "@pankod/refine-react-hook-form";
-import { useTranslate } from "@pankod/refine-core";
+import { useTranslate } from "@refinedev/core";
 
 export type DataProps = {
   loading?: boolean;

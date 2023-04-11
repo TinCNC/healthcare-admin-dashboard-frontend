@@ -1,15 +1,13 @@
-import { HttpError, useTranslate } from "@pankod/refine-core";
+import { HttpError, useTranslate } from "@refinedev/core";
+
 import {
-  Box,
-  TextField,
   // Autocomplete,
   // useAutocomplete,
   Create,
-  Input,
-  Stack,
-  Avatar,
-} from "@pankod/refine-mui";
-import { useForm } from "@pankod/refine-react-hook-form";
+} from "@refinedev/mui";
+
+import { Box, TextField, Input, Stack, Avatar } from "@mui/material";
+import { useForm } from "@refinedev/react-hook-form";
 
 import { ITechnician } from "interfaces";
 
@@ -57,9 +55,9 @@ export const TechnicianCreate: React.FC = () => {
         if (uploaded !== undefined) {
           const imageUrl = await getPublicImageUrl(
             "profile-image",
-            uploaded?.Key.substring(uploaded?.Key.indexOf("/") + 1)
+            uploaded?.path.substring(uploaded?.path.indexOf("/") + 1)
           );
-          if (imageUrl !== undefined) setValue("image", imageUrl?.publicURL);
+          if (imageUrl !== undefined) setValue("image", imageUrl?.publicUrl);
         }
       }
       saveButtonProps.onClick(e);

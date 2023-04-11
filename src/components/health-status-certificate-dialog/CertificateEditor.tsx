@@ -1,14 +1,15 @@
 import React, { useCallback, useEffect, useState } from "react";
 
+import { useAutocomplete } from "@refinedev/mui";
+
 import {
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  useAutocomplete,
   Autocomplete,
-} from "@pankod/refine-mui";
+} from "@mui/material";
 
 import { LoadingTextField } from "components/form-fields/loading-text-field";
 
@@ -22,11 +23,9 @@ import { LoadingButton } from "@mui/lab";
 import { IDoctor, IClinic, IDisease } from "interfaces";
 import { AddCircleOutlineOutlined, CancelOutlined } from "@mui/icons-material";
 
-import {
-  Controller,
-  UseModalFormReturnType,
-} from "@pankod/refine-react-hook-form";
-import { useTranslate } from "@pankod/refine-core";
+import { UseModalFormReturnType } from "@refinedev/react-hook-form";
+import { Controller } from "react-hook-form";
+import { useTranslate } from "@refinedev/core";
 
 export type EditorDataProps = UseModalFormReturnType & {
   submitButtonText?: string;
@@ -93,7 +92,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
     resource: "diseases",
     defaultValue: queryResult?.data?.data?.disease,
     pagination: { current: 1, pageSize: 10000 },
-    onSearch: (value) => [
+    onSearch: (value: any) => [
       {
         field: "name",
         operator: "containss",
@@ -109,7 +108,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
     resource: "doctors",
     defaultValue: queryResult?.data?.data?.issuer,
     pagination: { current: 1, pageSize: 10000 },
-    onSearch: (value) => [
+    onSearch: (value: any) => [
       {
         field: "username",
         operator: "containss",
@@ -125,7 +124,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
     resource: "clinics",
     defaultValue: queryResult?.data?.data?.validator,
     pagination: { current: 1, pageSize: 10000 },
-    onSearch: (value) => [
+    onSearch: (value: any) => [
       {
         field: "name",
         operator: "containss",
@@ -141,7 +140,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
     resource: "doctors",
     defaultValue: queryResult?.data?.data?.examiner,
     pagination: { current: 1, pageSize: 10000 },
-    onSearch: (value) => [
+    onSearch: (value: any) => [
       {
         field: "username",
         operator: "containss",

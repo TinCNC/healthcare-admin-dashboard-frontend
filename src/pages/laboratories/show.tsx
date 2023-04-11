@@ -1,18 +1,9 @@
 import { Blender } from "@mui/icons-material";
-import { useShow, useTranslate, useOne, useModal } from "@pankod/refine-core";
-import { useModalForm } from "@pankod/refine-react-hook-form";
-import {
-  Stack,
-  Typography,
-  TagField,
-  DataGrid,
-  GridColumns,
-  ShowButton,
-  EditButton,
-  DeleteButton,
-  useDataGrid,
-  Container,
-} from "@pankod/refine-mui";
+import { useShow, useTranslate, useOne, useModal } from "@refinedev/core";
+import { useModalForm } from "@refinedev/react-hook-form";
+import { TagField, ShowButton, EditButton, DeleteButton, useDataGrid } from "@refinedev/mui";
+import { DataGrid, GridColumns } from "@mui/x-data-grid";
+import { Stack, Typography, Container } from "@mui/material";
 
 import { SubresourceList } from "components/crud/list-subresource";
 
@@ -141,7 +132,7 @@ export const LaboratoryShow: React.FC = () => {
                   setShowId(row.id);
                   showDetailModal();
                 }}
-                resourceNameOrRouteName="materials"
+                resource="materials"
                 recordItemId={row.id}
               />
               <EditButton
@@ -150,13 +141,13 @@ export const LaboratoryShow: React.FC = () => {
                 onClick={() => {
                   showEditModal(row.id);
                 }}
-                resourceNameOrRouteName="materials"
+                resource="materials"
                 recordItemId={row.id}
               />
               <DeleteButton
                 size="small"
                 hideText
-                resourceNameOrRouteName="materials"
+                resource="materials"
                 recordItemId={row.id}
               />
             </Stack>
@@ -180,12 +171,16 @@ export const LaboratoryShow: React.FC = () => {
 
   const { dataGridProps } = useDataGrid<IMaterial>({
     resource: "materials",
-    permanentFilter: [
-      { field: "laboratory", value: record?.id, operator: "eq" },
-    ],
+
     queryOptions: {
       enabled: !isLoading,
     },
+
+    filters: {
+      permanent: [
+        { field: "laboratory", value: record?.id, operator: "eq" },
+      ]
+    }
   });
 
   return (
