@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   useGetIdentity,
   useGetLocale,
@@ -32,9 +32,16 @@ import {
   Badge,
 } from "@mui/material";
 
+import { getStoredProcedures } from "api";
+
 import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
 
-import { Wallet } from "components/payment-solana";
+// import { Wallet } from "components/payment-solana";
+
+import {
+  // WalletModalProvider,
+  WalletMultiButton,
+} from "@solana/wallet-adapter-react-ui";
 
 import i18n from "i18n";
 
@@ -62,11 +69,17 @@ export const ThemedHeader: React.FC<RefineThemedLayoutHeaderProps> = ({
 
   const { data: user } = useGetIdentity<IUser>();
 
+  const [cartCount, setCartCount] = useState<number>(0);
+
   const changeLanguage = useSetLocale();
   const locale = useGetLocale();
   const currentLocale = locale();
 
   const hasSidebarToggle = Boolean(onToggleSiderClick);
+
+  getStoredProcedures("totalcarts").then((count) => {
+    setCartCount(count);
+  });
 
   return (
     <AppBar position="sticky">
@@ -95,13 +108,13 @@ export const ThemedHeader: React.FC<RefineThemedLayoutHeaderProps> = ({
             alignItems="center"
             gap="16px"
           >
-            <Wallet />
+            <WalletMultiButton />
             <IconButton
               onClick={() => {
                 push("/orders");
               }}
             >
-              <Badge badgeContent={4} color="success">
+              <Badge badgeContent={cartCount} color="success">
                 <ShoppingCart sx={{ color: "white" }} />
               </Badge>
             </IconButton>

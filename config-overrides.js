@@ -21,6 +21,12 @@ module.exports = function override(webpackConfig) {
 
   // Polyfill other modules.
   webpackConfig.resolve.fallback = {
+    // http: require.resolve("stream-http"),
+    // https: require.resolve("https-browserify"),
+    // url: require.resolve("url"),
+    http: false,
+    https: false,
+    url: false,
     crypto: require.resolve("crypto-browserify"),
     stream: require.resolve("stream-browserify"),
     util: require.resolve("util"),

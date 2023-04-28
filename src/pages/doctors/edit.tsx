@@ -60,7 +60,7 @@ export const DoctorEdit: React.FC = () => {
         if (uploaded !== undefined) {
           const imageUrl = await getPublicImageUrl(
             "profile-image",
-            uploaded?.path.substring(uploaded?.path.indexOf("/") + 1)
+            uploaded?.path
           );
           if (imageUrl !== undefined) setValue("image", imageUrl?.publicUrl);
         }

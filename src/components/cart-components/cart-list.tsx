@@ -3,18 +3,20 @@ import { CartItem } from "./cart-item";
 import { Stack, Box, Divider, Typography, Checkbox } from "@mui/material";
 import { GetListResponse, useTranslate } from "@refinedev/core";
 import { IOrder } from "interfaces";
-import { List } from "components/crud/list";
+import { SubresourceList } from "components/crud/list-subresource";
 import { Token } from "@mui/icons-material";
 
 type CartListProps = {
   title?: string;
   response?: GetListResponse<IOrder>;
+  onSelectionChange?: (idList: number[], checkedCount: number) => any;
   onDelete?: () => any;
   footer?: any;
 };
 
 export const CartList: React.FC<CartListProps> = ({
   title = "Queued Order",
+  onSelectionChange,
   response,
   onDelete,
   footer,
@@ -22,6 +24,10 @@ export const CartList: React.FC<CartListProps> = ({
   const t = useTranslate();
   const [checked, setChecked] = useState<boolean[]>();
   const [selectionIdList, setSelectionIdList] = useState<number[]>();
+
+  // const returnCheckCountToProps = () => {
+  //   onSelectionChange(selectionIdList, checked?.length);
+  // };
 
   const handleSelectionChange = (idx: number, c: boolean) => {
     const temp: boolean[] = [...(checked as boolean[])];
@@ -52,7 +58,7 @@ export const CartList: React.FC<CartListProps> = ({
   console.log(selectionIdList);
 
   return (
-    <List title={title}>
+    <SubresourceList title={title}>
       <Stack display="flex" direction="row">
         {/* <Checkbox checked={checked[0]} onChange={handleChange2} /> */}
         <Checkbox
@@ -119,6 +125,6 @@ export const CartList: React.FC<CartListProps> = ({
         )}
       </Box>
       {footer && <Box marginTop="24px">{footer}</Box>}
-    </List>
+    </SubresourceList>
   );
 };

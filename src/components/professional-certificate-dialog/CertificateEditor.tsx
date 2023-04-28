@@ -333,7 +333,6 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
             Please enter the information of the professional certificate belong
             to this person
           </DialogContentText>
-
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Stack gap={4} direction="row">
               <Stack gap={1} width="40%">
@@ -357,10 +356,16 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
                     //   console.log(event.target);
                     // }}
                   />
-                  <input id="file" {...register("image")} type="hidden" />
+                  <input
+                    id="file"
+                    {...register("image")}
+                    accept="image/*"
+                    type="hidden"
+                  />
                   <LoadingButton
                     // loading={isUploadLoading}
                     loadingPosition="start"
+                    fullWidth
                     startIcon={<FileUpload />}
                     variant="contained"
                     component="span"
@@ -695,13 +700,9 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
                 </Box>
               </Stack>
             </Stack>
-            {/* <form className="form" onSubmit={handleSubmit(onFinish)}> */}
-
-            {/* </form> */}
           </LocalizationProvider>
         </DialogContent>
         <DialogActions>
-          {/* <Button onClick={close}>Cancel</Button> */}
           <LoadingButton
             color="error"
             startIcon={<CancelOutlined />}
@@ -709,7 +710,6 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
           >
             Cancel
           </LoadingButton>
-          {/* <Button onClick={handleClose}>Add Certificate</Button> */}
           <LoadingButton
             type="submit"
             startIcon={<AddCircleOutlineOutlined />}

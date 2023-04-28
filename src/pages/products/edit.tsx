@@ -47,7 +47,7 @@ export const ProductEdit: React.FC = () => {
         if (uploaded !== undefined) {
           const imageUrl = await getPublicImageUrl(
             "product-image",
-            uploaded?.path.substring(uploaded?.path.indexOf("/") + 1)
+            uploaded?.path
           );
           if (imageUrl !== undefined) setValue("image", imageUrl?.publicUrl);
         }

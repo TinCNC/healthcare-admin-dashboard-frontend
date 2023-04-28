@@ -18,8 +18,8 @@ import type { ListProps } from "@refinedev/mui";
  */
 
 export type ListPropsSubResource = ListProps & {
-  modalToggle: () => void;
-  icon: React.ReactNode;
+  modalToggle?: () => void;
+  icon?: React.ReactNode;
 };
 
 export const SubresourceList: React.FC<ListPropsSubResource> = ({
