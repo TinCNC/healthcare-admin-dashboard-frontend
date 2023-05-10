@@ -13,7 +13,7 @@ import {
   useRouterType,
   useLink,
 } from "@refinedev/core";
-import { ThemedTitle } from "components/themedLayout/title";
+import { ThemedTitle } from "@/components/themedLayoutV1/title";
 import { FormPropsType } from "../index";
 import { layoutStyles, titleStyles } from "./styles";
 import {

@@ -55,7 +55,7 @@ export const getStoredProcedures = async (
   stored_procedures: string,
   params?: object
 ) => {
-  let { data, error } = await supabaseClient.rpc(stored_procedures, params);
+  const { data, error } = await supabaseClient.rpc(stored_procedures, params);
 
   if (error) return Promise.reject(error);
 

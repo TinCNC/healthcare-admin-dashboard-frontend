@@ -1,7 +1,7 @@
 import { AuthBindings } from "@refinedev/core";
-import { getStoredProcedures } from "api";
+import { getStoredProcedures } from "@/api";
 
-import { supabaseClient } from "utility";
+import { supabaseClient } from "@/utility";
 
 const authProvider: AuthBindings = {
   login: async ({ email, password, providerName }) => {
@@ -43,11 +43,10 @@ const authProvider: AuthBindings = {
       }
 
       if (data?.user) {
-        // const { data: data_test } = await supabaseClient.auth.getUser();
-        // const uuid = data_test.user?.id;
+        const uuid = data?.user.id;
         // localStorage.setItem("uuid", uuid as string);
-        // const role = await getStoredProcedures("getrole", { user_uuid: uuid });
-        // localStorage.setItem("role", role);
+        const role = await getStoredProcedures("getrole", { user_uuid: uuid });
+        localStorage.setItem("role", role);
         return {
           success: true,
           redirectTo: "/",

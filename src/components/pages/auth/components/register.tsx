@@ -14,7 +14,7 @@ import {
 } from "@refinedev/core";
 import { FormPropsType } from "../index";
 import { layoutStyles, titleStyles } from "./styles";
-import { ThemedTitle } from "components/themedLayout/title";
+import { ThemedTitle } from "@/components/themedLayoutV1/title";
 import {
   Button,
   TextField,

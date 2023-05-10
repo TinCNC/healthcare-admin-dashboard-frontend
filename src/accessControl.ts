@@ -20,6 +20,7 @@ m = g(r.sub, p.sub) && keyMatch(r.obj, p.obj) && regexMatch(r.act, p.act)
 export const adapter = new StringAdapter(`
 
 p, admin, *, (list)|(create)|(edit)|(show)|(delete)
+
 // p, admin, */*, (edit)|(show)|(delete)
 // p, admin, */*,  field
 
@@ -46,28 +47,28 @@ p, admin, *, (list)|(create)|(edit)|(show)|(delete)
 // p, admin, users, (list)|(create)
 // p, admin, users/*, (edit)|(show)|(delete)
 
-p, laboratory, posts, (list)|(create)
-p, laboratory, posts/*, (edit)|(show)
-p, laboratory, posts/hit, field, deny
+// p, laboratory, posts, (list)|(create)
+// p, laboratory, posts/*, (edit)|(show)
+// p, laboratory, posts/hit, field, deny
 
-p, laboratory, categories, list
+// p, laboratory, categories, list
 
-p, tehnician, posts, (list)|(create)
-p, tehnician, posts/*, (edit)|(show)
-p, tehnician, posts/hit, field, deny
+// p, tehnician, posts, (list)|(create)
+// p, tehnician, posts/*, (edit)|(show)
+// p, tehnician, posts/hit, field, deny
 
-p, tehnician, categories, list
+// p, tehnician, categories, list
 
-p, hospital, posts, (list)|(create)
-p, hospital, posts/*, (edit)|(show)
-p, hospital, posts/hit, field, deny
+// p, hospital, posts, (list)|(create)
+// p, hospital, posts/*, (edit)|(show)
+// p, hospital, posts/hit, field, deny
 
-p, hospital, categories, list
+// p, hospital, categories, list
 
-p, doctor, posts, (list)|(create)
-p, doctor, posts/*, (edit)|(show)
-p, doctor, posts/hit, field, deny
+// p, doctor, posts, (list)|(create)
+// p, doctor, posts/*, (edit)|(show)
+// p, doctor, posts/hit, field, deny
 
-p, doctor, categories, list
+// p, doctor, categories, list
 
 `);

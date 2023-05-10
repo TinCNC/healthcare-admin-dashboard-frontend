@@ -7,7 +7,7 @@
 </div>
 <br/>
 
-This [refine](https://github.com/pankod/refine) project was generated with [superplate](https://github.com/pankod/refine).
+This [refine](https://github.com/refinedev/refine) project was generated with [superplate](https://github.com/pankod/superplate).
 
 ## Getting Started
 
@@ -42,15 +42,11 @@ Refine offers lots of out-of-the box functionality for rapid development, withou
 
 To learn more about **refine**, please check out the [Documentation](https://refine.dev/docs)
 
-- **Material UI** [Docs](https://refine.dev/docs/ui-frameworks/mui/tutorial/)
-- **Material UI Custom Theme** [Docs](https://refine.dev/docs/ui-frameworks/mui/customization/mui-custom-theme/)
-- **Material UI Light/Dark Mode** [Docs](https://refine.dev/docs/ui-frameworks/mui/customization/mui-custom-theme/)
-- **React Router** [Docs](https://refine.dev/docs/core/providers/router-provider/)
 - **Supabase Data Provider** [Docs](https://refine.dev/docs/core/providers/data-provider/#overview)
-- **Custom Layout** [Docs](https://refine.dev/docs/ui-frameworks/mui/customization/mui-custom-layout/)
-- **KBar Command Palette** [Docs](https://github.com/pankod/refine/tree/next/examples/commandPalette/kbar)
+- **Material UI** [Docs](https://refine.dev/docs/ui-frameworks/mui/tutorial/)
+- **Inferencer** [Docs](https://refine.dev/docs/packages/documentation/inferencer)
+- **React Router** [Docs](https://refine.dev/docs/core/providers/router-provider/)
 - **i18n** [Docs](https://refine.dev/docs/core/providers/i18n-provider/)
-
 
 ## License
 

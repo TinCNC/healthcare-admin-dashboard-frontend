@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import {
   useGetIdentity,
   useGetLocale,
@@ -43,9 +43,9 @@ import {
   WalletMultiButton,
 } from "@solana/wallet-adapter-react-ui";
 
-import i18n from "i18n";
+import i18n from "@/i18n";
 
-import { ColorModeContext } from "../../contexts/color-mode";
+import { ColorModeContext } from "@/contexts/color-mode";
 
 type IUser = {
   id: number;
@@ -132,6 +132,7 @@ export const ThemedHeader: React.FC<RefineThemedLayoutHeaderProps> = ({
                 }}
               >
                 {[...(i18n.languages ?? [])].sort().map((lang: string) => (
+                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                   // @ts-ignore
                   <MenuItem
                     selected={currentLocale === lang}

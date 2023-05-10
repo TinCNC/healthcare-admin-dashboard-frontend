@@ -14,13 +14,13 @@ import {
 
 // import { useState } from "react";
 
-import { AuthPage } from "components/pages/auth";
+import { AuthPage } from "./components/pages/auth";
 
 import { newEnforcer } from "casbin";
 
 import { model, adapter } from "./accessControl";
 
-import { ThemedLayout } from "components/themedLayout";
+import { ThemedLayoutV2 } from "./components/themedLayoutV2";
 
 import { dataProvider, liveProvider } from "@refinedev/supabase";
 import { CssBaseline, GlobalStyles } from "@mui/material";
@@ -49,55 +49,55 @@ import {
   PatientCreate,
   PatientEdit,
   PatientShow,
-} from "pages/patients";
+} from "@/pages/patients";
 import {
   ProductList,
   ProductShow,
   ProductCreate,
   ProductEdit,
-} from "pages/products";
+} from "@/pages/products";
 import {
   TechnicianList,
   TechnicianCreate,
   TechnicianEdit,
   TechnicianShow,
-} from "pages/technicians";
-import { CategoriesList } from "pages/categories";
+} from "@/pages/technicians";
+import { CategoriesList } from "@/pages/categories";
 import {
   DoctorList,
   DoctorShow,
   DoctorCreate,
   DoctorEdit,
-} from "pages/doctors";
-import { _3DObjectList, _3DObjectShow } from "pages/3d_objects";
+} from "@/pages/doctors";
+import { _3DObjectList, _3DObjectShow } from "@/pages/3d_objects";
 import {
   DiseaseList,
   DiseaseShow,
   DiseaseEdit,
   DiseaseCreate,
-} from "pages/diseases";
+} from "@/pages/diseases";
 
 import {
   DiseaseGroupList,
   DiseaseGroupShow,
   DiseaseGroupEdit,
   // DiseaseGroupCreate,
-} from "pages/diseases_groups";
+} from "@/pages/diseases_groups";
 
-import { ClinicList, ClinicCreate, ClinicEdit } from "pages/clinics";
+import { ClinicList, ClinicCreate, ClinicEdit } from "@/pages/clinics";
 
 import {
   DepartmentList,
   DepartmentCreate,
   DepartmentEdit,
-} from "pages/departments";
+} from "@/pages/departments";
 
 import {
   SpecialityList,
   SpecialityCreate,
   SpecialityEdit,
   SpecialityShow,
-} from "pages/specialities";
+} from "@/pages/specialities";
 
 import {
   OrganizationList,
@@ -110,7 +110,7 @@ import {
   LaboratoryShow,
   LaboratoryEdit,
   LaboratoryCreate,
-} from "pages/laboratories";
+} from "@/pages/laboratories";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -129,13 +129,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import { Category, Google } from "@mui/icons-material";
-import { OrderList } from "pages/order";
+import { OrderList } from "@/pages/order";
 import { supabaseClient } from "utility";
 import { ColorModeContextProvider } from "./contexts/color-mode";
 // import { Header } from "./components/header";
 import authProvider from "./authProvider";
-import { SolanaProvider } from "components/payment-solana";
-import { ForbiddenComponent } from "components/pages/forbidden";
+import { SolanaProvider } from "@/components/payment-solana";
+import { ForbiddenComponent } from "@/components/pages/forbidden";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -188,6 +188,13 @@ function App() {
                   {
                     name: "/",
                     list: "/",
+                    meta: {
+                      hide: true,
+                    },
+                  },
+                  {
+                    name: "order",
+                    list: "/orders",
                     meta: {
                       hide: true,
                     },
@@ -387,11 +394,11 @@ function App() {
                       <Authenticated
                         fallback={<CatchAllNavigate to="/login" />}
                       >
-                        <ThemedLayout>
+                        <ThemedLayoutV2>
                           <CanAccess fallback={<ForbiddenComponent />}>
                             <Outlet />
                           </CanAccess>
-                        </ThemedLayout>
+                        </ThemedLayoutV2>
                       </Authenticated>
                     }
                   >
@@ -460,9 +467,7 @@ function App() {
                       <Route path="show/:id" element={<TechnicianShow />} />
                     </Route>
                     <Route path="/3d_objects">
-                      {/* eslint-disable-next-line react/jsx-pascal-case*/}
                       <Route index element={<_3DObjectList />} />
-                      {/* eslint-disable-next-line react/jsx-pascal-case*/}
                       <Route path="create" element={<_3DObjectShow />} />
                       {/* <Route path="edit/:id" element={<ClinicEdit />} /> */}
                       {/* <Route path="show/:id" element={<ClinicShow />} /> */}
@@ -523,9 +528,9 @@ function App() {
                   <Route
                     element={
                       <Authenticated>
-                        <ThemedLayout>
+                        <ThemedLayoutV2>
                           <Outlet />
-                        </ThemedLayout>
+                        </ThemedLayoutV2>
                       </Authenticated>
                     }
                   >
