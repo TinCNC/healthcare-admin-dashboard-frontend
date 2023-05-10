@@ -60,6 +60,7 @@
     },
     "error": {
       "info": "You may have forgotten to add the {{action}} component to {{resource}} resource.",
+      "403": "You do not have permission to access this page.",
       "404": "Sorry, the page you visited does not exist.",
       "resource404": "Are you sure you have created the {{resource}} resource.",
       "backHome": "Back Home"

@@ -1,4 +1,5 @@
 import { AuthBindings } from "@refinedev/core";
+import { getStoredProcedures } from "api";
 
 import { supabaseClient } from "utility";
 
@@ -19,6 +20,8 @@ const authProvider: AuthBindings = {
         }
 
         if (data?.url) {
+          // const { data: data_test } = await supabaseClient.auth.getUser();
+          // console.log(data_test.user);
           return {
             success: true,
             redirectTo: "/",
@@ -40,6 +43,11 @@ const authProvider: AuthBindings = {
       }
 
       if (data?.user) {
+        // const { data: data_test } = await supabaseClient.auth.getUser();
+        // const uuid = data_test.user?.id;
+        // localStorage.setItem("uuid", uuid as string);
+        // const role = await getStoredProcedures("getrole", { user_uuid: uuid });
+        // localStorage.setItem("role", role);
         return {
           success: true,
           redirectTo: "/",
@@ -174,6 +182,8 @@ const authProvider: AuthBindings = {
       };
     }
 
+    localStorage.removeItem("role");
+
     return {
       success: true,
       redirectTo: "/",
@@ -226,14 +236,18 @@ const authProvider: AuthBindings = {
   },
   getIdentity: async () => {
     const { data } = await supabaseClient.auth.getUser();
-
     if (data?.user) {
+      const role = await getStoredProcedures("getrole", {
+        user_uuid: data.user?.id,
+      });
+      localStorage.setItem("role", role);
       return {
         ...data.user,
         name: data.user.email,
       };
     }
 
+    localStorage.removeItem("role");
     return null;
   },
 };

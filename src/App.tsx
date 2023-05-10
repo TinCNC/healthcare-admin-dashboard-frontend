@@ -2,16 +2,23 @@ import {
   Refine,
   // WelcomePage,
   Authenticated,
+  CanAccess,
 } from "@refinedev/core";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 
 import {
-  AuthPage,
   ErrorComponent,
   notificationProvider,
   RefineSnackbarProvider,
-  // ThemedLayout,
 } from "@refinedev/mui";
+
+// import { useState } from "react";
+
+import { AuthPage } from "components/pages/auth";
+
+import { newEnforcer } from "casbin";
+
+import { model, adapter } from "./accessControl";
 
 import { ThemedLayout } from "components/themedLayout";
 
@@ -128,15 +135,24 @@ import { ColorModeContextProvider } from "./contexts/color-mode";
 // import { Header } from "./components/header";
 import authProvider from "./authProvider";
 import { SolanaProvider } from "components/payment-solana";
+import { ForbiddenComponent } from "components/pages/forbidden";
 
 function App() {
   const { t, i18n } = useTranslation();
+
+  // const [role, setRole] = useState("guest");
 
   const i18nProvider = {
     translate: (key: string, params: object) => t(key, params),
     changeLocale: (lang: string) => i18n.changeLanguage(lang),
     getLocale: () => i18n.language,
   };
+
+  // const dataProviderObj = dataProvider(supabaseClient);
+
+  // const liveProviderObj = liveProvider(supabaseClient);
+
+  // const role = localStorage.getItem("role") ?? "unauthenticated";
 
   return (
     <SolanaProvider>
@@ -147,6 +163,21 @@ function App() {
             <GlobalStyles styles={{ html: { WebkitFontSmoothing: "auto" } }} />
             <RefineSnackbarProvider>
               <Refine
+                accessControlProvider={{
+                  can: async ({ resource, action }) => {
+                    console.log(resource + " + " + action);
+                    console.log(
+                      localStorage.getItem("role") ?? "unauthenticated"
+                    );
+                    const enforcer = await newEnforcer(model, adapter);
+                    const can = await enforcer.enforce(
+                      localStorage.getItem("role") ?? "unauthenticated",
+                      resource,
+                      action
+                    );
+                    return { can };
+                  },
+                }}
                 dataProvider={dataProvider(supabaseClient)}
                 liveProvider={liveProvider(supabaseClient)}
                 authProvider={authProvider}
@@ -154,6 +185,13 @@ function App() {
                 notificationProvider={notificationProvider}
                 i18nProvider={i18nProvider}
                 resources={[
+                  {
+                    name: "/",
+                    list: "/",
+                    meta: {
+                      hide: true,
+                    },
+                  },
                   {
                     name: "departments",
                     list: "/departments",
@@ -350,14 +388,16 @@ function App() {
                         fallback={<CatchAllNavigate to="/login" />}
                       >
                         <ThemedLayout>
-                          <Outlet />
+                          <CanAccess fallback={<ForbiddenComponent />}>
+                            <Outlet />
+                          </CanAccess>
                         </ThemedLayout>
                       </Authenticated>
                     }
                   >
                     <Route
                       index
-                      element={<NavigateToResource resource="3d_objects" />}
+                      element={<NavigateToResource resource="departments" />}
                     />
                     <Route path="/departments">
                       <Route index element={<DepartmentList />} />

@@ -51,16 +51,19 @@ export const getSignedImageUrl = async (bucket: string, path: string) => {
   if (data) return Promise.resolve(data);
 };
 
-export const getStoredProcedures = async (stored_procedures: string) => {
-  let { data, error } = await supabaseClient.rpc(stored_procedures);
+export const getStoredProcedures = async (
+  stored_procedures: string,
+  params?: object
+) => {
+  let { data, error } = await supabaseClient.rpc(stored_procedures, params);
 
   if (error) return Promise.reject(error);
 
   if (data) return Promise.resolve(data);
 };
 
-export const getFunction = async (function_name: string) => {
-  return getStoredProcedures(function_name);
+export const getFunction = async (function_name: string, params?: object) => {
+  return getStoredProcedures(function_name, params);
 };
 
 export const downloadImage = async (bucket: string, path: string) => {
