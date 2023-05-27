@@ -1,7 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { useTranslate, CrudFilters } from "@refinedev/core";
-import { useDataGrid, ShowButton, EditButton, DeleteButton } from "@refinedev/mui";
-import { Stack, Divider, Paper, InputBase, IconButton } from "@mui/material";
+import {
+  useDataGrid,
+  ShowButton,
+  EditButton,
+  DeleteButton,
+} from "@refinedev/mui";
+import {
+  Stack,
+  Divider,
+  Paper,
+  InputBase,
+  IconButton,
+  InputLabel,
+  FormControl,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
+} from "@mui/material";
+import GenerateGenderList from "@/components/GenerateGenderList";
 import { DataGrid, GridColumns } from "@mui/x-data-grid";
 
 import { List } from "components/crud/list";
@@ -12,7 +29,27 @@ import { Search } from "@mui/icons-material";
 export const TechnicianList: React.FC = () => {
   const t = useTranslate();
 
-  const { dataGridProps, setFilters } = useDataGrid<ITechnician>();
+  const genderList = GenerateGenderList();
+
+  // console.log(GenerateGenderList());
+
+  // const { dataGridProps: dataGridProps2 } = useDataGrid<ITechnician>({
+  //   resource: "technicians_2",
+  //   meta: {
+  //     select: "*, profiles(first_name, last_name, avatar)",
+  //   },
+  // });
+
+  // console.log(dataGridProps2);
+
+  // const { dataGridProps, setFilters } = useDataGrid<ITechnician>();
+
+  const { dataGridProps, setFilters } = useDataGrid({
+    // resource: "technicians_2",
+    meta: {
+      select: "*, profiles!inner(*)",
+    },
+  });
 
   const [userNameSearch, setUserNameSearch] = useState<string>("");
 
@@ -20,7 +57,7 @@ export const TechnicianList: React.FC = () => {
 
   const [lastNameSearch, setLastNameSearch] = useState<string>("");
 
-  // const [selectClinics, setSelectClinics] = useState<number[]>([]);
+  const [selectGenders, setSelectGenders] = useState<string[]>([]);
 
   // const clinicsListQueryResult = useList<IClinic>({
   //   resource: "clinics",
@@ -28,32 +65,32 @@ export const TechnicianList: React.FC = () => {
 
   useEffect(() => {
     const filter: CrudFilters = [
+      // {
+      //   field: "username",
+      //   operator: "contains",
+      //   value: userNameSearch,
+      // },
       {
-        field: "username",
-        operator: "contains",
-        value: userNameSearch,
-      },
-      {
-        field: "first_name",
+        field: "profiles.first_name",
         operator: "contains",
         value: firstNameSearch,
       },
       {
-        field: "last_name",
+        field: "profiles.last_name",
         operator: "contains",
         value: lastNameSearch,
       },
     ];
-    // if (selectClinics !== undefined && selectClinics.length !== 0) {
-    //   filter.push({
-    //     field: "clinic",
-    //     operator: "in",
-    //     value: selectClinics,
-    //   });
-    // }
+    if (selectGenders !== undefined && selectGenders.length !== 0) {
+      filter.push({
+        field: "profiles.gender",
+        operator: "in",
+        value: selectGenders,
+      });
+    }
     setFilters(filter);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userNameSearch, firstNameSearch, lastNameSearch]);
+  }, [userNameSearch, firstNameSearch, lastNameSearch, selectGenders]);
 
   // const categoryIds = dataGridProps.rows.map((item) => item.category.id);
   // const { data: categoriesData, isLoading } = useMany<ICategory>({
@@ -73,21 +110,30 @@ export const TechnicianList: React.FC = () => {
       maxWidth: 50,
       flex: 1,
     },
+    // {
+    //   field: "username",
+    //   headerName: t("technicians.fields.username"),
+    //   minWidth: 100,
+    //   flex: 1,
+    // },
     {
-      field: "username",
-      headerName: t("technicians.fields.username"),
+      field: "profiles.first_name",
+      valueGetter: (tableData) => tableData.row.profiles.first_name,
+      headerName: t("profiles.fields.first_name"),
       minWidth: 100,
       flex: 1,
     },
     {
-      field: "first_name",
-      headerName: t("technicians.fields.firstName"),
+      field: "profiles.last_name",
+      valueGetter: (tableData) => tableData.row.profiles.last_name,
+      headerName: t("profiles.fields.last_name"),
       minWidth: 100,
       flex: 1,
     },
     {
-      field: "last_name",
-      headerName: t("technicians.fields.lastName"),
+      field: "profiles.gender",
+      valueGetter: (tableData) => tableData.row.profiles.gender,
+      headerName: t("profiles.fields.gender"),
       minWidth: 100,
       flex: 1,
     },
@@ -157,7 +203,7 @@ export const TechnicianList: React.FC = () => {
         <IconButton disabled type="button" sx={{ p: "10px" }} aria-label="menu">
           <Search />
         </IconButton>
-        <InputBase
+        {/* <InputBase
           sx={{ ml: 1, flex: 1 }}
           placeholder="Search Username"
           value={userNameSearch}
@@ -175,7 +221,7 @@ export const TechnicianList: React.FC = () => {
           }}
           orientation="vertical"
           flexItem
-        />
+        /> */}
         <InputBase
           sx={{ ml: 1, flex: 1 }}
           placeholder="Search First Name"
@@ -218,36 +264,28 @@ export const TechnicianList: React.FC = () => {
         {/* <IconButton color="primary" sx={{ p: '10px' }} aria-label="directions">
         <DirectionsIcon />
       </IconButton> */}
-        {/* <FormControl sx={{ minWidth: 320 }}>
-          <InputLabel>Select Clinics</InputLabel>
+        <FormControl sx={{ minWidth: 320 }}>
+          <InputLabel>Select Genders</InputLabel>
           <Select
             sx={{ ml: 1, flex: 1 }}
             multiple
             variant="standard"
-            value={selectClinics}
+            value={selectGenders}
             onChange={(
-              event: SelectChangeEvent<number[]>,
-              child: React.ReactNode
+              event: SelectChangeEvent<string[]>
+              // child: React.ReactNode
             ) => {
-              setSelectClinics(event.target.value as number[]);
+              setSelectGenders(event.target.value as string[]);
             }}
-            // onChange={(
-            //   event: SelectChangeEvent<number>,
-            //   child: React.ReactNode
-            // ) => {
-            //   setSelectServices(event.target.value);
-            // }}
-            // label="Select Author"
           >
-            {clinicsListQueryResult.data !== undefined &&
-              clinicsListQueryResult.data.total > 0 &&
-              clinicsListQueryResult.data.data.map((row, index) => (
-                <MenuItem key={row.id} value={row.id}>
+            {genderList !== undefined &&
+              genderList.map((row) => (
+                <MenuItem key={row.id} value={row.value}>
                   {row.name}
                 </MenuItem>
               ))}
           </Select>
-        </FormControl> */}
+        </FormControl>
       </Paper>
       <List>
         <DataGrid

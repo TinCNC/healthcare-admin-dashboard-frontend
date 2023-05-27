@@ -160,6 +160,18 @@ export const TechnicianCreate: React.FC = () => {
         <Stack gap={1} width="100%">
           <Box component="form" autoComplete="off">
             <TextField
+              {...register("email", { required: "Email is required" })}
+              error={!!errors?.username}
+              helperText={errors.username?.message}
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email"
+              name="email"
+              autoFocus
+            />
+            {/* <TextField
               {...register("username", { required: "Username is required" })}
               error={!!errors?.username}
               helperText={errors.username?.message}
@@ -170,7 +182,7 @@ export const TechnicianCreate: React.FC = () => {
               label="Username"
               name="username"
               autoFocus
-            />
+            /> */}
 
             <TextField
               {...register("first_name", {

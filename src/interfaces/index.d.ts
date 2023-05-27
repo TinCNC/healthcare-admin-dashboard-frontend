@@ -38,8 +38,21 @@ export interface IPatient {
   updated_at: string;
 }
 
+export interface IProfile {
+  id: string;
+  avatar: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  role: string;
+  gender: string;
+  created_at: string;
+}
+
 export interface ITechnician {
   id: number;
+  profiles: IProfile;
+  email: string;
   username: string;
   first_name: string;
   last_name: string;

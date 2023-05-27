@@ -429,6 +429,33 @@
     },
     "loading": "Loading Doctors"
   },
+  "profiles": {
+    "profiles": "Profiles",
+    "fields": {
+      "id": "ID",
+      "first_name": "First Name",
+      "last_name": "Last Name",
+      "full_name": "Full Name",
+      "email": "Email",
+      "avatar": "Avatar",
+      "gender": "Gender",
+      "dob": "DOB",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At"
+    },
+    "titles": {
+      "create": "Create Profile",
+      "edit": "Edit Profile",
+      "list": "Profiles",
+      "show": "Show Profile"
+    },
+    "loading": "Loading Profiles"
+  },
+  "gender": {
+    "male": "Male",
+    "female": "Female",
+    "other": "Other"
+  },
   "health_status_certificates": {
     "health_status_certificates": "Health Status Certificates",
     "fields": {

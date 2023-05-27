@@ -36,7 +36,14 @@ import {
 export const TechnicianShow: React.FC = () => {
   const t = useTranslate();
 
-  const { queryResult } = useShow<ITechnician>();
+  // const { queryResult } = useShow<ITechnician>();
+
+  const { queryResult } = useShow<ITechnician>({
+    // resource: "technicians_2",
+    meta: {
+      select: "*, profiles!inner(*)",
+    },
+  });
 
   const { queryResult: certificateQueryResult, setShowId } =
     useShow<ITechnicianCertificates>({
@@ -122,6 +129,9 @@ export const TechnicianShow: React.FC = () => {
   const { data: validatorsData, isLoading: validatorsLoading } =
     useMany<ITechnician>({
       resource: "technicians",
+      meta: {
+        select: "*, profiles!inner(*)",
+      },
       ids: validatorIds,
       queryOptions: {
         enabled: validatorIds.length > 0,
@@ -200,7 +210,9 @@ export const TechnicianShow: React.FC = () => {
           const validator = validatorsData?.data.find(
             (item) => item.id === row.validator
           );
-          return validator?.first_name + " " + validator?.last_name;
+          return (
+            validator?.profiles.first_name + " " + validator?.profiles.last_name
+          );
         },
       },
       {
@@ -291,17 +303,21 @@ export const TechnicianShow: React.FC = () => {
         <Stack gap={1}>
           <Avatar
             alt={record?.username}
-            src={record?.image}
+            src={record?.profiles.avatar}
             sx={{ width: 192, height: 192 }}
           />
         </Stack>
         <Stack gap={1}>
           <Typography variant="body1" fontWeight="bold">
-            {t("patients.fields.full_name")}
+            {t("profiles.fields.full_name")}
           </Typography>
           <Typography variant="body2">
-            {record?.first_name + " " + record?.last_name}
+            {record?.profiles.first_name + " " + record?.profiles.last_name}
           </Typography>
+          <Typography variant="body1" fontWeight="bold">
+            {t("profiles.fields.gender")}
+          </Typography>
+          <Typography variant="body2">{record?.profiles.gender}</Typography>
           {/* <Typography variant="body1" fontWeight="bold">
             {t("patients.fields.clinic")}
           </Typography>
