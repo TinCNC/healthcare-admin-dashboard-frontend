@@ -8,7 +8,7 @@ import {
   DeleteButton,
   ShowButton,
 } from "@refinedev/mui";
-import { GridColumns, DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Stack, Typography, Avatar } from "@mui/material";
 
 import { SubresourceList } from "components/crud/list-subresource";
@@ -147,7 +147,7 @@ export const DoctorShow: React.FC = () => {
     });
 
   const certificatesColumns = React.useMemo<
-    GridColumns<IProfessionalCertificates>
+    GridColDef<IProfessionalCertificates>[]
   >(
     () => [
       {

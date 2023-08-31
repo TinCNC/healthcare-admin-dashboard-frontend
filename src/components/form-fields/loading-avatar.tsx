@@ -3,12 +3,13 @@ import { Skeleton, Avatar, AvatarProps } from "@mui/material";
 
 export type AvatarPropsWithLoading = AvatarProps & {
   loading?: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerProps?: any;
 };
 
 export const LoadingAvatar: React.FC<AvatarPropsWithLoading> = ({
   loading,
-  registerProps,
+  // registerProps,
   ...rest
 }) => {
   //   const [preLoad, setPreLoad] = useState<boolean>(true);

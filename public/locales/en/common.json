@@ -456,11 +456,49 @@
     "female": "Female",
     "other": "Other"
   },
+  "prescriptions": {
+    "prescriptions": "Prescriptions",
+    "fields": {
+      "id": "Id",
+      "medicine": "Medicine",
+      "health_status_certificate": "Health Status Certificate",
+      "quantity": "Quantity",
+      "notes": "Notes",
+      "dosage": "Dosage",
+      "createdAt": "Created At"
+    },
+    "titles": {
+      "create": "Create Precription",
+      "edit": "Edit Precription",
+      "list": "Prescriptions",
+      "show": "Show Precription"
+    }
+  },
+  "medicines": {
+    "medicines": "Medicines",
+    "fields": {
+      "id": "Id",
+      "name": "Name",
+      "brand": "Brand",
+      "description": "Description",
+      "quantity": "Quantity",
+      "clinic": "Clinic",
+      "price": "Price",
+      "createdAt": "Created At"
+    },
+    "titles": {
+      "create": "Create Medicine",
+      "edit": "Edit Medicine",
+      "list": "Medicines",
+      "show": "Show Medicine"
+    }
+  },
   "health_status_certificates": {
-    "health_status_certificates": "Health Status Certificates",
+    "health_status_certificates": "Patient Record",
     "fields": {
       "id": "ID",
       "name": "Name",
+      "symptom": "Symptom",
       "disease": "Disease",
       "description": "Description",
       "issued_date": "Issued Date",
@@ -470,7 +508,8 @@
       "holder": "Holder",
       "examiner": "Examiner",
       "status": "Status",
-      "createdAt": "Created At"
+      "reexamineAt": "Reexamine At",
+      "examinedAt": "Examined At"
     },
     "values": {
       "never_expire": "Never Expire"
@@ -478,7 +517,7 @@
     "titles": {
       "create": "Create Certificate",
       "edit": "Edit Certificate",
-      "list": "Certificates",
+      "list": "Patient Record",
       "show": "Show Certificate"
     },
     "loading": "Loading Certificate"

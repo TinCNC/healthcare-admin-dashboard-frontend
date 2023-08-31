@@ -84,7 +84,7 @@ export const ProductEdit: React.FC = () => {
   const { autocompleteProps, defaultValueQueryResult } =
     useAutocomplete<ICategory>({
       resource: "categories",
-      onSearch: (value: any) => [
+      onSearch: (value: string) => [
         {
           field: "title",
           operator: "containss",

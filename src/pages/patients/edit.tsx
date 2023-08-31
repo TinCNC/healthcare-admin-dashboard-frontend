@@ -31,6 +31,7 @@ export const PatientEdit: React.FC = () => {
 
   const [creatingPatient, setCreatingPatient] = useState<boolean>(false);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSubmit = async (e: BaseSyntheticEvent<object, any, any>) => {
     // console.log(saveButtonProps);
 
@@ -82,7 +83,7 @@ export const PatientEdit: React.FC = () => {
     useAutocomplete<IClinic>({
       resource: "clinics",
       pagination: { current: 1, pageSize: 10000 },
-      onSearch: (value: any) => [
+      onSearch: (value: string) => [
         {
           field: "name",
           operator: "containss",
@@ -111,6 +112,7 @@ export const PatientEdit: React.FC = () => {
       isLoading={formLoading}
       saveButtonProps={{
         disabled: creatingPatient,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         onClick: (e: BaseSyntheticEvent<object, any, any>) => {
           handleSubmit(e);
         },

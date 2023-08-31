@@ -1,12 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useTranslate, useList, GetListResponse } from "@refinedev/core";
-import { Box, Grid, Divider, IconButton, InputBase, Paper, Stack } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Divider,
+  IconButton,
+  InputBase,
+  Paper,
+  Stack,
+  Pagination,
+} from "@mui/material";
 
 import { List } from "components/crud/list-gridview";
 
 import { IDoctor } from "interfaces";
 
-import { TrainerCard } from "../../components/doctor-card";
+import { DoctorCard } from "../../components/doctor-card";
 
 import { Search } from "@mui/icons-material";
 
@@ -24,17 +33,28 @@ export const DoctorList: React.FC = () => {
 
   const [lastNameSearch, setLastNameSearch] = useState<string>("");
 
+  const [current, setCurrent] = useState<number>(1);
+  const [pageCount, setPageCount] = useState<number>(0);
+  // const [pageCount, setPageCount] = useState<number>(
+  //   Math.ceil((doctorListResponse?.total || 0) / pageSize)
+  // );
+  const [pageSize, setPageSize] = useState<number>(5);
+
   // const { dataGridProps } = useDataGrid<ITrainer>();
 
   const { refetch: refetchDoctors } = useList<IDoctor>({
     resource: "doctors",
-
+    pagination: {
+      current,
+      pageSize,
+    },
     queryOptions: {
       enabled: false,
       onSuccess: (data) => {
         setIsLoading(false);
         if (data.total > 0) {
           setDoctorListResponse(data);
+          setPageCount(Math.ceil(data.total / pageSize));
         }
       },
     },
@@ -44,7 +64,7 @@ export const DoctorList: React.FC = () => {
       { field: "username", operator: "contains", value: userNameSearch },
       { field: "first_name", operator: "contains", value: firstNameSearch },
       { field: "last_name", operator: "contains", value: lastNameSearch },
-    ]
+    ],
   });
 
   useEffect(() => {
@@ -64,9 +84,15 @@ export const DoctorList: React.FC = () => {
     userNameSearch,
     firstNameSearch,
     lastNameSearch,
+    current,
     // selectServices,
     // selectCountries,
   ]);
+
+  function handlePageChange(page: number) {
+    setCurrent(page);
+    // throw new Error("Function not implemented.");
+  }
 
   // console.log(trainerListQueryResult);
 
@@ -191,7 +217,7 @@ export const DoctorList: React.FC = () => {
           >
             {doctorListResponse.data.map((row, index) => (
               <Grid item xs={3} sm={3} md={3} lg={3} key={index}>
-                <TrainerCard data={row}></TrainerCard>
+                <DoctorCard data={row}></DoctorCard>
               </Grid>
             ))}
           </Grid>
@@ -209,6 +235,17 @@ export const DoctorList: React.FC = () => {
           </Box>
         )}
       </List>
+      <Pagination
+        count={pageCount}
+        page={current}
+        onChange={(event: React.ChangeEvent<unknown>, page: number) => {
+          handlePageChange(page);
+        }}
+        variant="outlined"
+        shape="rounded"
+        showFirstButton
+        showLastButton
+      />
     </Stack>
   );
 };

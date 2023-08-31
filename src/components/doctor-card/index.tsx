@@ -1,6 +1,12 @@
 import React from "react";
 import { ShowButton, EditButton, DeleteButton, TagField } from "@refinedev/mui";
-import { Card, CardActions, CardContent, CardMedia, Typography } from "@mui/material";
+import {
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Typography,
+} from "@mui/material";
 import { useMany } from "@refinedev/core";
 import { IDepartment, IDoctor } from "interfaces";
 
@@ -8,7 +14,7 @@ export type DataProps = {
   data?: IDoctor;
 };
 
-export const TrainerCard: React.FC<DataProps> = ({ data }) => {
+export const DoctorCard: React.FC<DataProps> = ({ data }) => {
   // const departmentIds = data?.departments || [];
   const { data: departmentsData, isLoading: departmentsLoading } =
     useMany<IDepartment>({

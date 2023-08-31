@@ -152,7 +152,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
     resource: "organizations",
     defaultValue: queryResult?.data?.data?.creator,
     pagination: { current: 1, pageSize: 10000 },
-    onSearch: (value: any) => [
+    onSearch: (value: string) => [
       {
         field: "name",
         operator: "containss",
@@ -170,7 +170,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
     resource: "technicians",
     defaultValue: queryResult?.data?.data?.validator,
     pagination: { current: 1, pageSize: 10000 },
-    onSearch: (value: any) => [
+    onSearch: (value: string) => [
       {
         field: "username",
         operator: "containss",
@@ -303,6 +303,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
   };
 
   const submitButtonClick = async (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     e: React.BaseSyntheticEvent<object, any, any>
   ) => {
     if (getValues("expired_at") === "") setValue("expired_at", null);

@@ -41,7 +41,7 @@ export const LaboratoryCreate: React.FC = () => {
 
   const { autocompleteProps } = useAutocomplete<ITechnician>({
     resource: "technicians",
-    onSearch: (value: any) => [
+    onSearch: (value: string) => [
       {
         field: "name",
         operator: "containss",

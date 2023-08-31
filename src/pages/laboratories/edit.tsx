@@ -9,6 +9,7 @@ import { useForm } from "@refinedev/react-hook-form";
 import { Controller } from "react-hook-form";
 
 import { ILaboratory, ITechnician } from "interfaces";
+import { LoadingTextField } from "@/components/form-fields/loading-text-field";
 
 export const LaboratoryEdit: React.FC = () => {
   const t = useTranslate();
@@ -32,7 +33,7 @@ export const LaboratoryEdit: React.FC = () => {
     register,
     control,
     getValues,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     refineCore: { formLoading, queryResult },
     reset,
   } = useForm<
@@ -45,7 +46,7 @@ export const LaboratoryEdit: React.FC = () => {
     useAutocomplete<ITechnician>({
       resource: "technicians",
       pagination: { current: 1, pageSize: 10000 },
-      onSearch: (value: any) => [
+      onSearch: (value: string) => [
         {
           field: "name",
           operator: "containss",
@@ -70,7 +71,7 @@ export const LaboratoryEdit: React.FC = () => {
   useEffect(() => {
     if (!formLoading && !queryResult?.isLoading) {
       console.log(getValues());
-      reset();
+      // reset();
       setName(getValues("name"));
       // setDirector(getValues("director") || undefined);
       setAddress(getValues("address"));
@@ -108,7 +109,43 @@ export const LaboratoryEdit: React.FC = () => {
         sx={{ display: "flex", flexDirection: "column" }}
         autoComplete="off"
       >
-        <TextField
+        {/* <LoadingTextField
+          loading={queryResult?.isFetching}
+          // disabled={isSubmitting}
+          registerProps={register("name", {
+            required: "Username is required",
+          })}
+          error={!!errors?.name}
+          helperText={errors.name?.message}
+          margin="normal"
+          required
+          fullWidth
+          id="name"
+          label="Name"
+          name="name"
+          autoFocus
+        /> */}
+        <LoadingTextField
+          registerProps={register("name", {
+            required: t("errors.required.field", { field: "Name" }),
+          })}
+          loading={queryResult?.isFetching}
+          disabled={isSubmitting}
+          error={!!errors.name}
+          helperText={errors.name?.message}
+          margin="normal"
+          fullWidth
+          label={t("laboratories.fields.name")}
+          name="name"
+          value={name}
+          onChange={(
+            event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+          ) => {
+            setName(event.target.value);
+          }}
+          autoFocus
+        />
+        {/* <TextField
           {...register("name", {
             required: t("errors.required.field", { field: "Name" }),
           })}
@@ -125,7 +162,7 @@ export const LaboratoryEdit: React.FC = () => {
             setName(event.target.value);
           }}
           autoFocus
-        />
+        /> */}
         <Controller
           control={control}
           name="director"
@@ -165,12 +202,17 @@ export const LaboratoryEdit: React.FC = () => {
             />
           )}
         />
-        <TextField
-          {...register("address", {
+        <LoadingTextField
+          registerProps={register("address", {
             required: t("errors.required.field", { field: "Address" }),
           })}
+          // {...register("address", {
+          //   required: t("errors.required.field", { field: "Address" }),
+          // })}
           error={!!errors.address}
           helperText={errors.address?.message}
+          loading={queryResult?.isFetching}
+          disabled={isSubmitting}
           margin="normal"
           fullWidth
           label={t("laboratories.fields.address")}
@@ -182,12 +224,17 @@ export const LaboratoryEdit: React.FC = () => {
             setAddress(event.target.value);
           }}
         />
-        <TextField
-          {...register("email", {
+        <LoadingTextField
+          registerProps={register("email", {
             required: t("errors.required.field", { field: "Email" }),
           })}
+          // {...register("email", {
+          //   required: t("errors.required.field", { field: "Email" }),
+          // })}
           error={!!errors.email}
           helperText={errors.email?.message}
+          loading={queryResult?.isFetching}
+          disabled={isSubmitting}
           margin="normal"
           fullWidth
           label={t("laboratories.fields.email")}
@@ -199,12 +246,14 @@ export const LaboratoryEdit: React.FC = () => {
             setEmail(event.target.value);
           }}
         />
-        <TextField
-          {...register("phone", {
+        <LoadingTextField
+          registerProps={register("phone", {
             required: t("errors.required.field", { field: "Phone" }),
           })}
           error={!!errors.phone}
           helperText={errors.phone?.message}
+          loading={queryResult?.isFetching}
+          disabled={isSubmitting}
           margin="normal"
           fullWidth
           label={t("laboratories.fields.phone")}
@@ -216,12 +265,14 @@ export const LaboratoryEdit: React.FC = () => {
             setPhone(event.target.value);
           }}
         />
-        <TextField
-          {...register("website", {
+        <LoadingTextField
+          registerProps={register("website", {
             required: t("errors.required.field", { field: "Website" }),
           })}
           error={!!errors.website}
           helperText={errors.website?.message}
+          loading={queryResult?.isFetching}
+          disabled={isSubmitting}
           margin="normal"
           fullWidth
           label={t("laboratories.fields.website")}
@@ -233,14 +284,16 @@ export const LaboratoryEdit: React.FC = () => {
             setWebsite(event.target.value);
           }}
         />
-        <TextField
-          {...register("workload_capacity", {
+        <LoadingTextField
+          registerProps={register("workload_capacity", {
             required: t("errors.required.field", {
               field: "workload_capacity",
             }),
           })}
           error={!!errors.workload_capacity}
           helperText={errors.workload_capacity?.message}
+          loading={queryResult?.isFetching}
+          disabled={isSubmitting}
           type="number"
           margin="normal"
           fullWidth

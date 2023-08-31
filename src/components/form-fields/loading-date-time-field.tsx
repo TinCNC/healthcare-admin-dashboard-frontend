@@ -1,14 +1,17 @@
 import React from "react";
-import { TextField, Skeleton, TextFieldProps } from "@mui/material";
+import { TextField, Skeleton } from "@mui/material";
+import dayjs from "dayjs";
+import { DateTimePicker, DateTimePickerProps } from "@mui/x-date-pickers";
 // import { MuiTextFieldProps } from "@refinedev/mui";
 
-export type TextFieldPropsWithLoading = TextFieldProps & {
-  loading?: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  registerProps?: any;
-};
+export type DateTimeFieldPropsWithLoading =
+  DateTimePickerProps<dayjs.Dayjs | null> & {
+    loading?: boolean;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    registerProps?: any;
+  };
 
-export const LoadingTextField: React.FC<TextFieldPropsWithLoading> = ({
+export const LoadingDateTimeField: React.FC<DateTimeFieldPropsWithLoading> = ({
   loading,
   registerProps,
   ...rest
@@ -30,6 +33,6 @@ export const LoadingTextField: React.FC<TextFieldPropsWithLoading> = ({
       <TextField sx={{ ...sx }} {...restProps} disabled />
     </Skeleton>
   ) : (
-    <TextField {...registerProps} sx={{ ...sx }} {...restProps} />
+    <DateTimePicker {...registerProps} sx={{ ...sx }} {...restProps} />
   );
 };

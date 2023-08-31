@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import {
   useTranslate,
-  useMany,
+  // useMany,
   useList, // useTable,
   CrudFilters,
 } from "@refinedev/core";
@@ -27,7 +27,7 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 
-import { DataGrid, GridColumns } from "@mui/x-data-grid";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 
 import { List } from "components/crud/list";
 
@@ -92,92 +92,188 @@ export const PatientList: React.FC = () => {
   //   },
   // });
 
-  const columns: GridColumns<IPatient> = [
-    {
-      field: "id",
-      headerName: t("patients.fields.id"),
-      type: "number",
-      minWidth: 50,
-      maxWidth: 50,
-      flex: 1,
-    },
-    {
-      field: "username",
-      headerName: t("patients.fields.username"),
-      minWidth: 100,
-      flex: 1,
-    },
-    {
-      field: "first_name",
-      headerName: t("patients.fields.firstName"),
-      minWidth: 100,
-      flex: 1,
-    },
-    {
-      field: "last_name",
-      headerName: t("patients.fields.lastName"),
-      minWidth: 100,
-      flex: 1,
-    },
-    {
-      field: "clinic",
-      headerName: t("patients.fields.clinic"),
-      minWidth: 100,
-      flex: 1,
-      renderCell: ({ row }) => {
-        if (
-          clinicsListQueryResult.isFetching ||
-          clinicsListQueryResult.isLoading
-        ) {
-          return "Loading...";
-        }
+  const columns = React.useMemo<GridColDef<IPatient>[]>(
+    () => [
+      {
+        field: "id",
+        headerName: t("patients.fields.id"),
+        type: "number",
+        minWidth: 50,
+        maxWidth: 50,
+        flex: 1,
+      },
+      {
+        field: "username",
+        headerName: t("patients.fields.username"),
+        minWidth: 100,
+        flex: 1,
+      },
+      {
+        field: "first_name",
+        headerName: t("patients.fields.firstName"),
+        minWidth: 100,
+        flex: 1,
+      },
+      {
+        field: "last_name",
+        headerName: t("patients.fields.lastName"),
+        minWidth: 100,
+        flex: 1,
+      },
+      {
+        field: "clinic",
+        headerName: t("patients.fields.clinic"),
+        minWidth: 100,
+        flex: 1,
+        renderCell: ({ row }) => {
+          if (
+            clinicsListQueryResult.isFetching ||
+            clinicsListQueryResult.isLoading
+          ) {
+            return "Loading...";
+          }
 
-        const clinic =
-          clinicsListQueryResult.data !== undefined
-            ? clinicsListQueryResult?.data?.data.find(
-                (item) => item.id === row.clinic
-              )?.name
-            : "";
-        return clinic;
+          const clinic =
+            clinicsListQueryResult.data !== undefined
+              ? clinicsListQueryResult?.data?.data.find(
+                  (item) => item.id === row.clinic
+                )?.name
+              : "";
+          return clinic;
+        },
       },
-    },
-    {
-      field: "created_at",
-      headerName: t("patients.fields.createdAt"),
-      minWidth: 150,
-      flex: 1,
-      renderCell: ({ row }) => {
-        return new Date(row.created_at).toLocaleString();
+      {
+        field: "created_at",
+        headerName: t("patients.fields.createdAt"),
+        minWidth: 150,
+        flex: 1,
+        renderCell: ({ row }) => {
+          return new Date(row.created_at).toLocaleString();
+        },
       },
-    },
-    // {
-    //   field: "updated_at",
-    //   headerName: t("patients.fields.updatedAt"),
-    //   minWidth: 400,
-    //   flex: 1,
-    //   renderCell: ({ row }) => {
-    //     return new Date(row.created_at).toLocaleString();
-    //   },
-    // },
-    {
-      field: "actions",
-      type: "actions",
-      headerName: t("table.actions"),
-      renderCell: function render({ row }) {
-        return (
-          <Stack direction="row" spacing={1}>
-            <ShowButton hideText recordItemId={row.id} />
-            <EditButton size="small" hideText recordItemId={row.id} />
-            <DeleteButton size="small" hideText recordItemId={row.id} />
-          </Stack>
-        );
+      // {
+      //   field: "updated_at",
+      //   headerName: t("patients.fields.updatedAt"),
+      //   minWidth: 400,
+      //   flex: 1,
+      //   renderCell: ({ row }) => {
+      //     return new Date(row.created_at).toLocaleString();
+      //   },
+      // },
+      {
+        field: "actions",
+        type: "actions",
+        headerName: t("table.actions"),
+        renderCell: function render({ row }) {
+          return (
+            <Stack direction="row" spacing={1}>
+              <ShowButton hideText recordItemId={row.id} />
+              <EditButton size="small" hideText recordItemId={row.id} />
+              <DeleteButton size="small" hideText recordItemId={row.id} />
+            </Stack>
+          );
+        },
+        align: "center",
+        headerAlign: "center",
+        minWidth: 120,
+        // flex: 1,
       },
-      align: "center",
-      headerAlign: "center",
-      minWidth: 120,
-      // flex: 1,
-    },
-  ];
+    ],
+
+    [
+      clinicsListQueryResult.data,
+      clinicsListQueryResult.isFetching,
+      clinicsListQueryResult.isLoading,
+      t,
+    ]
+  );
+
+  // const columns: GridColDef<IPatient> = [
+  //   {
+  //     field: "id",
+  //     headerName: t("patients.fields.id"),
+  //     type: "number",
+  //     minWidth: 50,
+  //     maxWidth: 50,
+  //     flex: 1,
+  //   },
+  //   {
+  //     field: "username",
+  //     headerName: t("patients.fields.username"),
+  //     minWidth: 100,
+  //     flex: 1,
+  //   },
+  //   {
+  //     field: "first_name",
+  //     headerName: t("patients.fields.firstName"),
+  //     minWidth: 100,
+  //     flex: 1,
+  //   },
+  //   {
+  //     field: "last_name",
+  //     headerName: t("patients.fields.lastName"),
+  //     minWidth: 100,
+  //     flex: 1,
+  //   },
+  //   {
+  //     field: "clinic",
+  //     headerName: t("patients.fields.clinic"),
+  //     minWidth: 100,
+  //     flex: 1,
+  //     renderCell: ({ row }) => {
+  //       if (
+  //         clinicsListQueryResult.isFetching ||
+  //         clinicsListQueryResult.isLoading
+  //       ) {
+  //         return "Loading...";
+  //       }
+
+  //       const clinic =
+  //         clinicsListQueryResult.data !== undefined
+  //           ? clinicsListQueryResult?.data?.data.find(
+  //               (item) => item.id === row.clinic
+  //             )?.name
+  //           : "";
+  //       return clinic;
+  //     },
+  //   },
+  //   {
+  //     field: "created_at",
+  //     headerName: t("patients.fields.createdAt"),
+  //     minWidth: 150,
+  //     flex: 1,
+  //     renderCell: ({ row }) => {
+  //       return new Date(row.created_at).toLocaleString();
+  //     },
+  //   },
+  //   // {
+  //   //   field: "updated_at",
+  //   //   headerName: t("patients.fields.updatedAt"),
+  //   //   minWidth: 400,
+  //   //   flex: 1,
+  //   //   renderCell: ({ row }) => {
+  //   //     return new Date(row.created_at).toLocaleString();
+  //   //   },
+  //   // },
+  //   {
+  //     field: "actions",
+  //     type: "actions",
+  //     headerName: t("table.actions"),
+  //     renderCell: function render({ row }) {
+  //       return (
+  //         <Stack direction="row" spacing={1}>
+  //           <ShowButton hideText recordItemId={row.id} />
+  //           <EditButton size="small" hideText recordItemId={row.id} />
+  //           <DeleteButton size="small" hideText recordItemId={row.id} />
+  //         </Stack>
+  //       );
+  //     },
+  //     align: "center",
+  //     headerAlign: "center",
+  //     minWidth: 120,
+  //     // flex: 1,
+  //   },
+  // ];
 
   // console.log(dataGridProps);
   // console.log(tableQueryResult);
@@ -266,8 +362,8 @@ export const PatientList: React.FC = () => {
             variant="standard"
             value={selectClinics}
             onChange={(
-              event: SelectChangeEvent<number[]>,
-              child: React.ReactNode
+              event: SelectChangeEvent<number[]>
+              // child: React.ReactNode
             ) => {
               setSelectClinics(event.target.value as number[]);
             }}
@@ -281,7 +377,7 @@ export const PatientList: React.FC = () => {
           >
             {clinicsListQueryResult.data !== undefined &&
               clinicsListQueryResult.data.total > 0 &&
-              clinicsListQueryResult.data.data.map((row, index) => (
+              clinicsListQueryResult.data.data.map((row) => (
                 <MenuItem key={row.id} value={row.id}>
                   {row.name}
                 </MenuItem>

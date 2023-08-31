@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useTranslate, CrudFilters } from "@refinedev/core";
-import { useDataGrid, EditButton, DeleteButton, ShowButton } from "@refinedev/mui";
+import {
+  useDataGrid,
+  EditButton,
+  DeleteButton,
+  ShowButton,
+} from "@refinedev/mui";
 import { Stack, Divider, IconButton, InputBase, Paper } from "@mui/material";
-import { DataGrid, GridColumns } from "@mui/x-data-grid";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 
 import { List } from "components/crud/list";
 
@@ -69,7 +74,7 @@ export const LaboratoryList: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nameSearch, addressSearch, phoneSearch, emailSearch]);
 
-  const columns = React.useMemo<GridColumns<ILaboratory>>(
+  const columns = React.useMemo<GridColDef<ILaboratory>[]>(
     () => [
       {
         field: "id",

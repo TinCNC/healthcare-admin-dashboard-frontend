@@ -136,6 +136,33 @@ export interface ILaboratory {
   created_at: string;
 }
 
+export interface IPrescription {
+  id: number;
+  medicine: number;
+  health_status_certificate: number;
+  quantity: number;
+  notes: number;
+  dosage: IDosage;
+  created_at: string;
+}
+
+interface IDosage {
+  time: number;
+  volume: number;
+}
+
+export interface IMedicine {
+  id: number;
+  name: string;
+  brand: string;
+  description: string;
+  quantity: number;
+  clinic: number;
+  price: number;
+  image: string;
+  created_at: string;
+}
+
 export interface IOrder {
   id: number;
   product_id: number;
@@ -226,5 +253,6 @@ export interface IHealthStatusCertificates {
   holder: number;
   examiner: number;
   status: string;
-  created_at: string;
+  reexamine_at: string;
+  examined_at: string;
 }
