@@ -1,182 +1,364 @@
-// import React from "react";
-// import { useTranslate, useMany } from "@pankod/refine-core";
-// import {
-//   useDataGrid,
-//   DataGrid,
-//   GridColumns,
-//   List,
-//   Stack,
-//   EditButton,
-//   DeleteButton,
-// } from "@pankod/refine-mui";
-
-// import { IDoctor } from "interfaces";
-
-// export const DoctorList: React.FC = () => {
-//   const t = useTranslate();
-
-//   const { dataGridProps } = useDataGrid<IDoctor>();
-
-//   // const categoryIds = dataGridProps.rows.map((item) => item.category.id);
-//   // const { data: categoriesData, isLoading } = useMany<ICategory>({
-//   //   resource: "categories",
-//   //   ids: categoryIds,
-//   //   queryOptions: {
-//   //     enabled: categoryIds.length > 0,
-//   //   },
-//   // });
-
-//   const columns: GridColumns<IDoctor> = [
-//     {
-//       field: "id",
-//       headerName: t("doctors.fields.id"),
-//       type: "number",
-//       width: 50,
-//     },
-//     {
-//       field: "username",
-//       headerName: t("doctors.fields.username"),
-//       minWidth: 200,
-//       flex: 1,
-//     },
-//     {
-//       field: "first_name",
-//       headerName: t("doctors.fields.firstName"),
-//       minWidth: 200,
-//       flex: 1,
-//     },
-//     {
-//       field: "last_name",
-//       headerName: t("doctors.fields.lastName"),
-//       minWidth: 200,
-//       flex: 1,
-//     },
-//     {
-//       field: "faculty",
-//       headerName: t("doctors.fields.faculty"),
-//       minWidth: 200,
-//       flex: 1,
-//     },
-//     {
-//       field: "created_at",
-//       headerName: t("doctors.fields.createdAt"),
-//       minWidth: 400,
-//       flex: 1,
-//     },
-//     {
-//       field: "updated_at",
-//       headerName: t("doctors.fields.updatedAt"),
-//       minWidth: 400,
-//       flex: 1,
-//     },
-//     {
-//       field: "actions",
-//       type: "actions",
-//       headerName: t("table.actions"),
-//       renderCell: function render({ row }) {
-//         return (
-//           <Stack direction="row" spacing={1}>
-//             <EditButton size="small" hideText recordItemId={row.id} />
-//             <DeleteButton size="small" hideText recordItemId={row.id} />
-//           </Stack>
-//         );
-//       },
-//       align: "center",
-//       headerAlign: "center",
-//       minWidth: 80,
-//     },
-//   ];
-
-//   return (
-//     <List>
-//       <DataGrid {...dataGridProps} columns={columns} autoHeight />
-//     </List>
-//   );
-// };
-
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useTranslate, useList, GetListResponse } from "@refinedev/core";
 import {
-  // useTranslate,
-  // useMany,
-  useList,
-} from "@pankod/refine-core";
-import {
-  // useDataGrid,
-  // DataGrid,
-  // GridColumns,
-  List,
   Box,
-  // Stack,
-  // EditButton,
-  // DeleteButton,
   Grid,
-  CircularProgress,
-  Typography,
-} from "@pankod/refine-mui";
+  Divider,
+  IconButton,
+  InputBase,
+  Paper,
+  Stack,
+  Pagination,
+  FormControl,
+  Autocomplete,
+  TextField,
+  Chip,
+} from "@mui/material";
 
-import { IDoctor } from "interfaces";
+import { List } from "components/crud/list-gridview";
 
-import { TrainerCard } from "../../components/doctor-card";
+import { IClinic, IDoctorView } from "interfaces";
+
+import { DoctorCard } from "../../components/doctor-card";
+
+import { Search } from "@mui/icons-material";
 
 export const DoctorList: React.FC = () => {
-  // const t = useTranslate();
+  const t = useTranslate();
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const [doctorListResponse, setDoctorListResponse] =
+    useState<GetListResponse<IDoctorView>>();
+
+  // const [userNameSearch, setUserNameSearch] = useState<string>("");
+
+  const [nameSearch, setNameSearch] = useState<string>("");
+
+  // const [firstNameSearch, setFirstNameSearch] = useState<string>("");
+
+  // const [lastNameSearch, setLastNameSearch] = useState<string>("");
+
+  const [current, setCurrent] = useState<number>(1);
+  const [pageCount, setPageCount] = useState<number>(0);
+  // const [pageCount, setPageCount] = useState<number>(
+  //   Math.ceil((doctorListResponse?.total || 0) / pageSize)
+  // );
+  const [pageSize, setPageSize] = useState<number>(5);
+
+  const [selectClinics, setSelectClinics] = useState<IClinic[]>([]);
+
+  const clinicsListQueryResult = useList<IClinic>({
+    resource: "clinics",
+  });
 
   // const { dataGridProps } = useDataGrid<ITrainer>();
 
-  const trainerListQueryResult = useList<IDoctor>({
-    resource: "doctors",
-    config: {
-      pagination: { current: 1, pageSize: 10 },
+  const { refetch: refetchDoctors } = useList<IDoctorView>({
+    resource: "doctors_view",
+    pagination: {
+      current,
+      pageSize,
     },
+    queryOptions: {
+      enabled: false,
+      onSuccess: (data) => {
+        setIsLoading(false);
+        if (data.total > 0) {
+          setDoctorListResponse(data);
+          setPageCount(Math.ceil(data.total / pageSize));
+        }
+      },
+    },
+
+    // pagination: { current: 1, pageSize: 10 },
+    filters: [
+      { field: "full_name", operator: "contains", value: nameSearch },
+      // { field: "username", operator: "contains", value: userNameSearch },
+      // { field: "first_name", operator: "contains", value: firstNameSearch },
+      // { field: "last_name", operator: "contains", value: lastNameSearch },
+    ],
   });
 
-  console.log(trainerListQueryResult);
+  useEffect(() => {
+    setIsLoading(true);
+    setDoctorListResponse(undefined);
+    refetchDoctors();
+  }, [
+    refetchDoctors,
+    nameSearch,
+    // userNameSearch,
+    // firstNameSearch,
+    // lastNameSearch,
+    current,
+  ]);
 
-  console.log(trainerListQueryResult.data);
+  function handlePageChange(page: number) {
+    setCurrent(page);
+    // throw new Error("Function not implemented.");
+  }
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      {trainerListQueryResult.isLoading ? (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            flexDirection: "column",
-            height: "calc(100vh - 112px)",
+    <Stack gap={1}>
+      <Paper
+        component="form"
+        sx={{
+          p: "2px 4px",
+          marginBottom: "10px",
+          display: "flex",
+          alignItems: "center",
+          // width: 960,
+        }}
+      >
+        <IconButton disabled type="button" sx={{ p: "10px" }} aria-label="menu">
+          <Search />
+        </IconButton>
+        <InputBase
+          sx={{ ml: 1, flex: 1 }}
+          placeholder="Search Name"
+          value={nameSearch}
+          onChange={(
+            event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+          ) => {
+            setNameSearch(event.target.value);
           }}
-        >
-          <CircularProgress />
-          <Typography>Loading Doctors</Typography>
-        </Box>
-      ) : trainerListQueryResult.data !== undefined &&
-        trainerListQueryResult.data.total > 0 ? (
-        <Grid
-          container
-          spacing={{ xs: 2, md: 3 }}
-          columns={{ xs: 3, sm: 6, md: 9, lg: 12 }}
-        >
-          {trainerListQueryResult.data.data.map((row, index) => (
-            <Grid item xs={3} sm={3} md={3} lg={3} key={index}>
-              <TrainerCard data={row}></TrainerCard>
-            </Grid>
-          ))}
-        </Grid>
-      ) : (
-        <Box
+          inputProps={{ "aria-label": "search name" }}
+        />
+        <Divider
           sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "calc(100vh - 112px)",
+            color: "text.secondary",
+            borderColor: "text.secondary",
           }}
-        >
-          No Doctors Found
-        </Box>
-        // <Box sx={{ display: "flex", lineHeight: "calc(100vh - 112px)" }}>
-        //   No Doctors Found
-        // </Box>
-      )}
-    </Box>
+          orientation="vertical"
+          flexItem
+        />
+        <FormControl sx={{ minWidth: 320 }}>
+          <Autocomplete
+            multiple
+            // id=""
+            options={
+              clinicsListQueryResult.data !== undefined
+                ? clinicsListQueryResult?.data?.data?.map((item) => item)
+                : ([] as IClinic[])
+            }
+            getOptionLabel={(option) => (option as IClinic).name ?? option}
+            value={selectClinics}
+            onChange={(_event, value) => {
+              setSelectClinics(value as IClinic[]);
+            }}
+            // defaultValue={[top100Films[13].title]}
+            freeSolo
+            renderTags={(value: readonly IClinic[], getTagProps) =>
+              value.map((option: IClinic, index: number) => (
+                <Chip
+                  variant="outlined"
+                  label={option.name}
+                  {...getTagProps({ index })}
+                />
+              ))
+            }
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="Departments"
+                placeholder="Departments"
+              />
+            )}
+          />
+        </FormControl>
+        <Divider
+          sx={{
+            color: "text.secondary",
+            borderColor: "text.secondary",
+          }}
+          orientation="vertical"
+          flexItem
+        />
+        <FormControl sx={{ minWidth: 320 }}>
+          <Autocomplete
+            multiple
+            // id=""
+            options={
+              clinicsListQueryResult.data !== undefined
+                ? clinicsListQueryResult?.data?.data?.map((item) => item)
+                : ([] as IClinic[])
+            }
+            getOptionLabel={(option) => (option as IClinic).name ?? option}
+            value={selectClinics}
+            onChange={(_event, value) => {
+              setSelectClinics(value as IClinic[]);
+            }}
+            // defaultValue={[top100Films[13].title]}
+            freeSolo
+            renderTags={(value: readonly IClinic[], getTagProps) =>
+              value.map((option: IClinic, index: number) => (
+                <Chip
+                  variant="outlined"
+                  label={option.name}
+                  {...getTagProps({ index })}
+                />
+              ))
+            }
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="Clinics"
+                placeholder="Clinics"
+              />
+            )}
+          />
+        </FormControl>
+        <FormControl sx={{ minWidth: 320 }}>
+          <Autocomplete
+            multiple
+            // id=""
+            options={
+              clinicsListQueryResult.data !== undefined
+                ? clinicsListQueryResult?.data?.data?.map((item) => item)
+                : ([] as IClinic[])
+            }
+            getOptionLabel={(option) => (option as IClinic).name ?? option}
+            value={selectClinics}
+            onChange={(_event, value) => {
+              setSelectClinics(value as IClinic[]);
+            }}
+            // defaultValue={[top100Films[13].title]}
+            freeSolo
+            renderTags={(value: readonly IClinic[], getTagProps) =>
+              value.map((option: IClinic, index: number) => (
+                <Chip
+                  variant="outlined"
+                  label={option.name}
+                  {...getTagProps({ index })}
+                />
+              ))
+            }
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="Order by"
+                placeholder="Order by"
+              />
+            )}
+          />
+        </FormControl>
+        {/* <InputBase
+          sx={{ ml: 1, flex: 1 }}
+          placeholder="Search First Name"
+          value={firstNameSearch}
+          onChange={(
+            event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+          ) => {
+            setFirstNameSearch(event.target.value);
+          }}
+          inputProps={{ "aria-label": "search first name" }}
+        />
+        <Divider
+          sx={{
+            color: "text.secondary",
+            borderColor: "text.secondary",
+          }}
+          orientation="vertical"
+          flexItem
+        />
+        <InputBase
+          sx={{ ml: 1, flex: 1 }}
+          placeholder="Search Last Name"
+          value={lastNameSearch}
+          onChange={(
+            event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+          ) => {
+            setLastNameSearch(event.target.value);
+          }}
+          inputProps={{ "aria-label": "search last name" }}
+        />
+        <Divider
+          sx={{
+            color: "text.secondary",
+            borderColor: "text.secondary",
+          }}
+          orientation="vertical"
+          flexItem
+        /> */}
+        {/* <IconButton color="primary" sx={{ p: '10px' }} aria-label="directions">
+        <DirectionsIcon />
+      </IconButton> */}
+        {/* <FormControl sx={{ minWidth: 320 }}>
+          <InputLabel>Select Clinics</InputLabel>
+          <Select
+            sx={{ ml: 1, flex: 1 }}
+            multiple
+            variant="standard"
+            value={selectClinics}
+            onChange={(
+              event: SelectChangeEvent<number[]>,
+              child: React.ReactNode
+            ) => {
+              setSelectClinics(event.target.value as number[]);
+            }}
+            // onChange={(
+            //   event: SelectChangeEvent<number>,
+            //   child: React.ReactNode
+            // ) => {
+            //   setSelectServices(event.target.value);
+            // }}
+            // label="Select Author"
+          >
+            {clinicsListQueryResult.data !== undefined &&
+              clinicsListQueryResult.data.total > 0 &&
+              clinicsListQueryResult.data.data.map((row, index) => (
+                <MenuItem key={row.id} value={row.id}>
+                  {row.name}
+                </MenuItem>
+              ))}
+          </Select>
+        </FormControl> */}
+      </Paper>
+      <List
+        wrapperProps={{ sx: { minHeight: "calc(100vh - 230px)" } }}
+        loading={isLoading}
+        loadingMsg={t("doctors.loading")}
+      >
+        {doctorListResponse !== undefined && doctorListResponse.total > 0 ? (
+          <Grid
+            container
+            spacing={{ xs: 2, md: 3 }}
+            columns={{ xs: 3, sm: 6, md: 9, lg: 12 }}
+          >
+            {doctorListResponse.data.map((row, index) => (
+              <Grid item xs={3} sm={3} md={3} lg={3} key={index}>
+                <DoctorCard data={row}></DoctorCard>
+              </Grid>
+            ))}
+          </Grid>
+        ) : (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              verticalAlign: "middle",
+              height: "calc(100vh - (340px))",
+            }}
+          >
+            No Doctors Found
+          </Box>
+        )}
+      </List>
+      <Pagination
+        count={pageCount}
+        page={current}
+        onChange={(event: React.ChangeEvent<unknown>, page: number) => {
+          handlePageChange(page);
+        }}
+        variant="outlined"
+        shape="rounded"
+        showFirstButton
+        showLastButton
+      />
+    </Stack>
   );
 };

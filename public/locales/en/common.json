@@ -60,6 +60,7 @@
     },
     "error": {
       "info": "You may have forgotten to add the {{action}} component to {{resource}} resource.",
+      "403": "You do not have permission to access this page.",
       "404": "Sorry, the page you visited does not exist.",
       "resource404": "Are you sure you have created the {{resource}} resource.",
       "backHome": "Back Home"
@@ -75,6 +76,7 @@
     "create": "Create",
     "save": "Save",
     "logout": "Logout",
+    "my_account": "My Account",
     "delete": "Delete",
     "edit": "Edit",
     "cancel": "Cancel",
@@ -139,9 +141,13 @@
     "patients": "Patients",
     "fields": {
       "id": "ID",
-      "username": "Username",
-      "firstName": "First Name",
-      "lastName": "Last Name",
+      "identity_number": "Identity Number",
+      "first_name": "First Name",
+      "last_name": "Last Name",
+      "full_name": "Full Name",
+      "dob": "DOB",
+      "gender": "Gender",
+      "image": "Image",
       "clinic": "Clinic",
       "createdAt": "Created At",
       "updatedAt": "Updated At"
@@ -151,6 +157,57 @@
       "edit": "Edit Patient",
       "list": "Patients",
       "show": "Show Patient"
+    }
+  },
+  "technicians": {
+    "technicians": "Technicians",
+    "fields": {
+      "id": "ID",
+      "username": "Username",
+      "first_name": "First Name",
+      "last_name": "Last Name",
+      "full_name": "Full Name",
+      "createdAt": "Created At"
+    },
+    "titles": {
+      "create": "Create Technician",
+      "edit": "Edit Technician",
+      "list": "Technicians",
+      "show": "Show Technician"
+    }
+  },
+  "products": {
+    "products": "Products",
+    "fields": {
+      "id": "ID",
+      "name": "Name",
+      "category": "Category",
+      "application": "Application",
+      "description": "Description",
+      "manufacturing_cost": "Manufacturing Cost",
+      "sale_price": "Sale Price",
+      "createdAt": "Created At"
+    },
+    "titles": {
+      "create": "Create Products",
+      "edit": "Edit Products",
+      "list": "Products",
+      "show": "Show Products"
+    }
+  },
+  "categories": {
+    "categories": "Categories",
+    "fields": {
+      "id": "ID",
+      "title": "Name",
+      "description": "Description",
+      "createdAt": "Created At"
+    },
+    "titles": {
+      "create": "Create Categories",
+      "edit": "Edit Categories",
+      "list": "Categories",
+      "show": "Show Categories"
     }
   },
   "clinics": {
@@ -178,6 +235,7 @@
       "scientific_name": "Scientific Name",
       "classification": "Classification",
       "body_part": "Body Part",
+      "body_parts": "Body Parts",
       "severity": "Severity",
       "createdAt": "Created At"
     },
@@ -186,6 +244,41 @@
       "edit": "Edit Disease",
       "list": "Diseases",
       "show": "Disease Information"
+    }
+  },
+  "diseases_groups": {
+    "diseases_groups": "Diseases Groups",
+    "fields": {
+      "id": "ID",
+      "group_name": "Group Name",
+      "icd10_code": "ICD10 Code",
+      "vn_code": "VN Code",
+      "statistics": "Statistics",
+      "createdAt": "Created At",
+      "statistics_info": {
+        "total": "Total",
+        "combined": "Combined",
+        "female": "Female",
+        "age_group": {
+          "infant": "Infant",
+          "1-<5": "1-<5",
+          "5-<10": "5-<10",
+          "10-<15": "10-<15",
+          "15-<20": "15-<20",
+          "20-<30": "20-<30",
+          "30-<40": "30-<40",
+          "40-<50": "40-<50",
+          "50-<60": "50-<60",
+          "60-<70": "60-<70",
+          "70+": "70+"
+        }
+      }
+    },
+    "titles": {
+      "create": "Create Diseases Group",
+      "edit": "Edit Diseases Group",
+      "list": "Diseases Groups",
+      "show": "Diseases Group Information"
     }
   },
   "departments": {
@@ -197,10 +290,125 @@
       "createdAt": "Created At"
     },
     "titles": {
-      "create": "Create Patient",
-      "edit": "Edit Patient",
+      "create": "Create Departments",
+      "edit": "Edit Departments",
       "list": "Departments",
-      "show": "Show Patient"
+      "show": "Show Departments"
+    }
+  },
+  "medical_specialities": {
+    "medical_specialities": "Medical Specialities",
+    "fields": {
+      "id": "Id",
+      "name": "Name",
+      "description": "Description",
+      "createdAt": "Created At"
+    },
+    "titles": {
+      "create": "Create Speciality",
+      "edit": "Edit Speciality",
+      "list": "Medical Specialities",
+      "show": "Show Speciality"
+    }
+  },
+  "orders": {
+    "orders": "Orders",
+    "fields": {
+      "id": "Id",
+      "name": "Name",
+      "object_id": "Object ID",
+      "product_id": "Product ID",
+      "product": "Product",
+      "object": "Object",
+      "material": "Material",
+      "laboratory": "Laboratory",
+      "delivery_time": "Expected Delivery Time",
+      "price": "Price",
+      "quantity": "Quantity",
+      "status": "Status",
+      "createdAt": "Created At"
+    },
+    "titles": {
+      "create": "Create Order",
+      "edit": "Edit Order",
+      "list": "Orders",
+      "show": "Show Order"
+    }
+  },
+  "3d_objects": {
+    "3d_objects": "3D Objects",
+    "fields": {
+      "id": "Id",
+      "name": "Object Name",
+      "main_file": "Main File",
+      "metadata": "Metadata",
+      "designer": "Designer",
+      "size": "Size (x*y*z)(mm)",
+      "size_x_mm": "X Size (mm)",
+      "size_y_mm": "Y Size (mm)",
+      "size_z_mm": "Z Size (mm)",
+      "created_at": "Created At",
+      "updated_at": "Updated At"
+    },
+    "titles": {
+      "create": "Create 3D Object",
+      "edit": "Edit 3D Object",
+      "list": "3D Objects",
+      "show": "Show 3D Object",
+      "show_gallery": "Show Gallery"
+    }
+  },
+  "materials": {
+    "materials": "Materials",
+    "fields": {
+      "id": "Id",
+      "material_name": "Material Name",
+      "price": "Price",
+      "description": "Description",
+      "createdAt": "Created At"
+    },
+    "titles": {
+      "create": "Create Material",
+      "edit": "Edit Material",
+      "list": "Materials",
+      "show": "Show Material"
+    }
+  },
+  "laboratories": {
+    "laboratories": "Laboratories",
+    "fields": {
+      "id": "Id",
+      "name": "Name",
+      "address": "Address",
+      "email": "Email",
+      "director": "Director",
+      "speciality": "Speciality",
+      "workload_capacity": "Workload Capacity",
+      "phone": "Phone",
+      "website": "Website",
+      "createdAt": "Created At"
+    },
+    "titles": {
+      "create": "Create Laboratory",
+      "edit": "Edit Laboratory",
+      "list": "Laboratories",
+      "show": "Show Laboratory"
+    }
+  },
+  "organizations": {
+    "organizations": "Organizations",
+    "fields": {
+      "id": "Id",
+      "name": "Name",
+      "type": "Type",
+      "address": "Address",
+      "createdAt": "Created At"
+    },
+    "titles": {
+      "create": "Create Organization",
+      "edit": "Edit Organization",
+      "list": "Organizations",
+      "show": "Show Organization"
     }
   },
   "doctors": {
@@ -208,11 +416,12 @@
     "fields": {
       "id": "ID",
       "username": "Username",
-      "firstName": "First Name",
-      "lastName": "Last Name",
+      "first_name": "First Name",
+      "last_name": "Last Name",
       "full_name": "Full Name",
       "image": "Image",
       "departments": "Departments",
+      "clinics": "Clinics",
       "createdAt": "Created At",
       "updatedAt": "Updated At"
     },
@@ -221,7 +430,124 @@
       "edit": "Edit Doctor",
       "list": "Doctors",
       "show": "Show Doctor"
+    },
+    "loading": "Loading Doctors"
+  },
+  "doctor_salaries": {
+    "doctor_salaries": "Doctor Salaries History",
+    "fields": {
+      "id": "ID",
+      "doctor_id": "Doctor ID",
+      "clinic": "Clinic",
+      "salary": "Salary",
+      "start_date": "Start Date",
+      "end_date": "End Date",
+      "created_at": "Created At"
+    },
+    "values": {
+      "current_salary": "Current Salary"
+    },
+    "titles": {
+      "create": "Create Doctor Salary History",
+      "edit": "Edit Salary History",
+      "list": "Doctor Salaries History",
+      "show": "Show Doctor Salary"
+    },
+    "loading": "Loading Doctor Salary"
+  },
+  "profiles": {
+    "profiles": "Profiles",
+    "fields": {
+      "id": "ID",
+      "first_name": "First Name",
+      "last_name": "Last Name",
+      "full_name": "Full Name",
+      "email": "Email",
+      "avatar": "Avatar",
+      "gender": "Gender",
+      "dob": "DOB",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At"
+    },
+    "titles": {
+      "create": "Create Profile",
+      "edit": "Edit Profile",
+      "list": "Profiles",
+      "show": "Show Profile"
+    },
+    "loading": "Loading Profiles"
+  },
+  "gender": {
+    "male": "Male",
+    "female": "Female",
+    "other": "Other"
+  },
+  "prescriptions": {
+    "prescriptions": "Prescriptions",
+    "fields": {
+      "id": "Id",
+      "medicine": "Medicine",
+      "total_price": "Total Price",
+      "examination_record": "Examination Record",
+      "quantity": "Quantity",
+      "notes": "Notes",
+      "dosage": "Dosage",
+      "createdAt": "Created At"
+    },
+    "titles": {
+      "create": "Create Precription",
+      "edit": "Edit Precription",
+      "list": "Prescriptions",
+      "show": "Show Precription"
     }
+  },
+  "medicines": {
+    "medicines": "Medicines",
+    "fields": {
+      "id": "Id",
+      "name": "Name",
+      "brand": "Brand",
+      "description": "Description",
+      "quantity": "Quantity",
+      "clinic": "Clinic",
+      "price": "Price",
+      "createdAt": "Created At"
+    },
+    "titles": {
+      "create": "Create Medicine",
+      "edit": "Edit Medicine",
+      "list": "Medicines",
+      "show": "Show Medicine"
+    }
+  },
+  "examination_records": {
+    "examination_records": "Patient Record",
+    "fields": {
+      "id": "ID",
+      "name": "Name",
+      "symptom": "Symptom",
+      "disease": "Disease",
+      "description": "Description",
+      "issued_date": "Issued Date",
+      "expired_date": "Expired Date",
+      "issuer": "Issuer",
+      "validator": "Validator",
+      "holder": "Holder",
+      "examiner": "Examiner",
+      "status": "Status",
+      "reexamineAt": "Reexamine At",
+      "examinedAt": "Examined At"
+    },
+    "values": {
+      "never_expire": "Never Expire"
+    },
+    "titles": {
+      "create": "Create Certificate",
+      "edit": "Edit Certificate",
+      "list": "Patient Record",
+      "show": "Show Certificate"
+    },
+    "loading": "Loading Certificate"
   },
   "professional_certificates": {
     "professional_certificates": "Professional Certificates",
@@ -233,17 +559,51 @@
       "expired_at": "Expired At",
       "creator": "Creator",
       "validator": "Validator",
+      "speciality": "Speciality",
       "holder": "Holder",
       "program": "Program",
+      "type": "Type",
       "level": "Level",
       "createdAt": "Created At"
     },
+    "values": {
+      "never_expire": "Never Expire"
+    },
     "titles": {
       "create": "Create Certificate",
-      "edit": "Edit Doctor",
+      "edit": "Edit Certificate",
       "list": "Certificates",
       "show": "Show Certificate"
-    }
+    },
+    "loading": "Loading Certificate"
+  },
+  "technician_certificates": {
+    "technician_certificates": "Technician Certificates",
+    "fields": {
+      "id": "ID",
+      "name": "Name",
+      "description": "Description",
+      "issued_date": "Issued Date",
+      "expired_date": "Expired Date",
+      "issuer": "Issuer",
+      "validator": "Validator",
+      "speciality": "Speciality",
+      "holder": "Holder",
+      "program": "Program",
+      "type": "Type",
+      "level": "Level",
+      "createdAt": "Created At"
+    },
+    "values": {
+      "never_expire": "Never Expire"
+    },
+    "titles": {
+      "create": "Create Certificate",
+      "edit": "Edit Certificate",
+      "list": "Certificates",
+      "show": "Show Certificate"
+    },
+    "loading": "Loading Certificate"
   },
   "table": {
     "actions": "Actions"

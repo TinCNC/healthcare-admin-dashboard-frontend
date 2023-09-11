@@ -1,20 +1,32 @@
 import React from "react";
+import { ShowButton, EditButton, DeleteButton, TagField } from "@refinedev/mui";
 import {
   Card,
   CardActions,
   CardContent,
   CardMedia,
-  Button,
-  ShowButton,
   Typography,
-} from "@pankod/refine-mui";
-import { IDoctor } from "interfaces";
+} from "@mui/material";
+// import { useMany } from "@refinedev/core";
+import { IDoctorView } from "interfaces";
 
 export type DataProps = {
-  data?: IDoctor;
+  data?: IDoctorView;
 };
 
-export const TrainerCard: React.FC<DataProps> = ({ data }) => {
+export const DoctorCard: React.FC<DataProps> = ({ data }) => {
+  // const departmentIds = data?.departments || [];
+  // const { data: departmentsData, isLoading: departmentsLoading } =
+  //   useMany<IDepartment>({
+  //     resource: "departments",
+  //     ids: data?.departments || [],
+  //     queryOptions: {
+  //       enabled: data?.departments !== undefined || data !== undefined,
+  //     },
+  //   });
+
+  // console.log(departmentsData);
+
   return (
     <Card
     // sx={{ maxWidth: 320 }}
@@ -22,8 +34,10 @@ export const TrainerCard: React.FC<DataProps> = ({ data }) => {
       <CardMedia
         component="img"
         height="240"
-        // image="https://www.dropbox.com/s/a36t7juz7rl0sqm/binhthanhmai-1665188876521.jpg?raw=1"
-        image={data?.image}
+        image={
+          data?.avatar ||
+          "https://opuqcfkadzuitwfpengj.supabase.co/storage/v1/object/public/placeholder-images/People_Placeholder.png"
+        }
         alt="avatar"
       />
       <CardContent>
@@ -31,13 +45,30 @@ export const TrainerCard: React.FC<DataProps> = ({ data }) => {
           {data?.first_name + " " + data?.last_name}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {data?.departments}
+          {data?.departments !== undefined &&
+            data?.departments !== null &&
+            data?.departments.length > 0 &&
+            data?.departments_name.map((item) => {
+              return <TagField sx={{ marginRight: "12px" }} value={item} />;
+            })}
+          {/* {!departmentsLoading || departmentsData !== undefined ? (
+            departmentsData?.data.map((item) => {
+              return (
+                <TagField
+                  sx={{ marginRight: "12px" }}
+                  value={item.name}
+                ></TagField>
+              );
+            })
+          ) : (
+            <TagField value="Loading..."></TagField>
+          )} */}
         </Typography>
       </CardContent>
       <CardActions>
-        {/* <Button size="small">View Details</Button> */}
         <ShowButton size="small" recordItemId={data?.id} />
-        {/* <Button size="small">Learn More</Button> */}
+        <EditButton size="small" recordItemId={data?.id} />
+        <DeleteButton size="small" recordItemId={data?.id} />
       </CardActions>
     </Card>
   );

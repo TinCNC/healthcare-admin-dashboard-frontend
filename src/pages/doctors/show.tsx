@@ -1,98 +1,254 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useShow, useTranslate, useModal, useResource } from "@refinedev/core";
+import { useModalForm } from "@refinedev/react-hook-form";
 import {
-  // useOne,
-  useShow,
-  useTranslate,
-  useMany,
-  useList,
-} from "@pankod/refine-core";
-
-// import parse from "html-react-parser";
-
-import {
-  Show,
-  Stack,
-  Typography,
   TagField,
-  Avatar,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  MuiList,
-  ImageList,
-  ImageListItem,
-  Grid,
-  Box,
-  GridColumns,
-  DataGrid,
   useDataGrid,
-  List,
-} from "@pankod/refine-mui";
+  EditButton,
+  DeleteButton,
+  ShowButton,
+} from "@refinedev/mui";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { Stack, Typography, Avatar } from "@mui/material";
 
-// import { FitnessCenter } from "@mui/icons-material";
+import { SubresourceList } from "components/crud/list-subresource";
+
+import { Show } from "components/crud/show";
+
+import { CardMembership } from "@mui/icons-material";
 
 import {
-  // ITrainer,
-  // ICertification,
-  // IService,
-  // IGallery,
-  // IProduct,
-  IDoctor,
-  IDepartment,
-  IProfessionalCertificates,
-  ITechnician,
+  // IDoctor,
+  // IDepartment,
+  IProfessionalCertificatesView,
+  IDoctorView,
+  IDoctorSalaryView,
 } from "interfaces";
-
-// import { ProductCard } from "../../components/product-card";
-
-// import { PostCard } from "../../components/post-card";
-
-// import { VideoDialog } from "../../components/video-dialog";
+import {
+  CertificateDetailDialog,
+  CertificateEditorDialog,
+} from "../../components/professional-certificate-dialog";
 
 export const DoctorShow: React.FC = () => {
   const t = useTranslate();
 
-  const { queryResult } = useShow<IDoctor>();
+  const { queryResult } = useShow<IDoctorView>({
+    resource: "doctors_view",
+    id: useResource().id,
+  });
+
+  const {
+    queryResult: { data: certificateData, isFetching: certificateFetching },
+    setShowId,
+  } = useShow<IProfessionalCertificatesView>({
+    resource: "professional_certificates_view",
+    id: "0",
+  });
+
+  // console.log(certificateData);
+
+  const {
+    show: showDetailModal,
+    close: closeDetailModal,
+    visible: detailModalVisible,
+  } = useModal();
+
+  const createModalFormReturnValues = useModalForm({
+    refineCoreProps: {
+      action: "create",
+      resource: "professional_certificates",
+      redirect: false,
+    },
+  });
+
+  const editModalFormReturnValues = useModalForm({
+    refineCoreProps: {
+      action: "edit",
+      resource: "professional_certificates",
+      redirect: false,
+    },
+  });
+
+  const {
+    setValue,
+    modal: {
+      show: showCreateModal,
+      // close: closeCreateModal,
+      // visible: createModalVisible,
+    },
+  } = createModalFormReturnValues;
+
+  const {
+    // setValue,
+    modal: {
+      show: showEditModal,
+      // close: closeCreateModal,
+      // visible: createModalVisible,
+    },
+  } = editModalFormReturnValues;
 
   const { data, isLoading } = queryResult;
   const record = data?.data;
 
-  const { dataGridProps } = useDataGrid<IProfessionalCertificates>({
-    resource: "professional_certificates",
-    permanentFilter: [{ field: "holder", value: record?.id, operator: "eq" }],
+  useEffect(() => {
+    if (!isLoading) {
+      console.log("loaded");
+      setValue("holder", record?.id);
+      // setGetAutocompleteValue(false);
+    }
+  }, [isLoading, record?.id, setValue]);
+
+  const { dataGridProps } = useDataGrid<IProfessionalCertificatesView>({
+    resource: "professional_certificates_view",
+
+    queryOptions: {
+      enabled: !isLoading,
+    },
+
+    filters: {
+      permanent: [{ field: "holder", value: record?.id, operator: "eq" }],
+    },
   });
 
-  const creatorIds = dataGridProps.rows.map((item) => item.creator);
-  const { data: creatorsData, isLoading: creatorsLoading } =
-    useMany<ITechnician>({
-      resource: "technicians",
-      ids: creatorIds,
+  const { dataGridProps: workHistoryDataGridProps } =
+    useDataGrid<IDoctorSalaryView>({
+      resource: "doctors_salary_view",
+
       queryOptions: {
-        enabled: creatorIds.length > 0,
+        enabled: !isLoading,
+      },
+
+      filters: {
+        permanent: [{ field: "doctor_id", value: record?.id, operator: "eq" }],
       },
     });
 
-  const validatorIds = dataGridProps.rows.map((item) => item.validator);
-  const { data: validatorsData, isLoading: validatorsLoading } =
-    useMany<ITechnician>({
-      resource: "technicians",
-      ids: validatorIds,
-      queryOptions: {
-        enabled: validatorIds.length > 0,
-      },
-    });
+  // const creatorIds = dataGridProps.rows.map((item) => item.creator);
+  // const { data: creatorsData, isLoading: creatorsLoading } =
+  //   useMany<IOrganization>({
+  //     resource: "organizations",
+  //     ids: creatorIds,
+  //     queryOptions: {
+  //       enabled: creatorIds.length > 0,
+  //     },
+  //   });
 
-  const { data: departmentsData, isLoading: departmentsLoading } =
-    useMany<IDepartment>({
-      resource: "departments",
-      ids: record?.departments || [],
-      queryOptions: {
-        enabled: record !== undefined ? record?.departments.length > 0 : false,
+  // const validatorIds = dataGridProps.rows.map((item) => item.validator);
+  // const { data: validatorsData, isLoading: validatorsLoading } =
+  //   useMany<ITechnician>({
+  //     resource: "technicians",
+  //     ids: validatorIds,
+  //     queryOptions: {
+  //       enabled: validatorIds.length > 0,
+  //     },
+  //   });
+
+  // const specialityIds = dataGridProps.rows.map((item) => item.speciality);
+  // const { data: specialitiesData, isLoading: specialitiesLoading } =
+  //   useMany<IMedicalSpeciality>({
+  //     resource: "medical_specialities",
+  //     ids: specialityIds,
+  //     queryOptions: {
+  //       enabled: specialityIds.length > 0,
+  //     },
+  //   });
+
+  // const { data: departmentsData, isLoading: departmentsLoading } =
+  //   useMany<IDepartment>({
+  //     resource: "departments",
+  //     ids: record?.departments || [],
+  //     queryOptions: {
+  //       enabled: record !== undefined ? record?.departments.length > 0 : false,
+  //     },
+  //   });
+
+  const salariesColumns = React.useMemo<GridColDef<IDoctorSalaryView>[]>(
+    () => [
+      {
+        field: "id",
+        headerName: t("doctor_salaries.fields.id"),
+        type: "number",
+        width: 50,
       },
-    });
+      {
+        field: "clinic_name",
+        headerName: t("doctor_salaries.fields.clinic"),
+        minWidth: 200,
+        maxWidth: 200,
+        flex: 1,
+      },
+      {
+        field: "salary",
+        headerName: t("doctor_salaries.fields.salary"),
+        minWidth: 200,
+        maxWidth: 200,
+        flex: 1,
+      },
+      {
+        field: "start_date",
+        headerName: t("doctor_salaries.fields.start_date"),
+        minWidth: 100,
+        maxWidth: 100,
+        flex: 1,
+        renderCell: ({ row }) => {
+          return new Date(row.start_date).toLocaleDateString();
+        },
+      },
+      {
+        field: "end_date",
+        headerName: t("doctor_salaries.fields.end_date"),
+        minWidth: 100,
+        maxWidth: 100,
+        flex: 1,
+        renderCell: ({ row }) => {
+          return new Date(row.end_date).toLocaleDateString();
+        },
+      },
+      {
+        field: "actions",
+        type: "actions",
+        headerName: t("table.actions"),
+        renderCell: function render({ row }) {
+          return (
+            <Stack direction="row" spacing={1}>
+              <ShowButton
+                size="small"
+                hideText
+                onClick={() => {
+                  setShowId(row.id);
+                  showDetailModal();
+                }}
+                resource="professional_certificates"
+                recordItemId={row.id}
+              />
+              <EditButton
+                size="small"
+                hideText
+                onClick={() => {
+                  showEditModal(row.id);
+                }}
+                resource="professional_certificates"
+                recordItemId={row.id}
+              />
+              <DeleteButton
+                size="small"
+                hideText
+                resource="professional_certificates"
+                recordItemId={row.id}
+              />
+            </Stack>
+          );
+        },
+        align: "center",
+        headerAlign: "center",
+        minWidth: 80,
+      },
+    ],
+    [t, setShowId, showDetailModal, showEditModal]
+  );
 
   const certificatesColumns = React.useMemo<
-    GridColumns<IProfessionalCertificates>
+    GridColDef<IProfessionalCertificatesView>[]
   >(
     () => [
       {
@@ -111,21 +267,26 @@ export const DoctorShow: React.FC = () => {
       {
         field: "issued_date",
         headerName: t("professional_certificates.fields.issued_date"),
-        minWidth: 200,
-        maxWidth: 200,
+        minWidth: 100,
+        maxWidth: 100,
         flex: 1,
         renderCell: ({ row }) => {
-          return new Date(row.created_at).toLocaleString();
+          return new Date(row.issued_date).toLocaleDateString();
         },
       },
       {
         field: "expired_at",
         headerName: t("professional_certificates.fields.expired_at"),
-        minWidth: 200,
-        maxWidth: 200,
+        minWidth: 100,
+        maxWidth: 100,
         flex: 1,
+        // renderCell: ({ row }) => {
+        //   return new Date(row.expired_at).toLocaleDateString();
+        // },
         renderCell: ({ row }) => {
-          return new Date(row.created_at).toLocaleString();
+          if (row.expired_at === undefined || row.expired_at === null)
+            return t("professional_certificates.values.never_expire");
+          return new Date(row.expired_at).toLocaleDateString();
         },
       },
       // {
@@ -136,41 +297,59 @@ export const DoctorShow: React.FC = () => {
       //   flex: 1,
       // },
       {
-        field: "creator",
+        field: "creator_name",
         headerName: t("professional_certificates.fields.creator"),
         // type: "number",
-        minWidth: 200,
-        maxWidth: 200,
+        minWidth: 220,
+        maxWidth: 220,
         flex: 1,
-        renderCell: ({ row }) => {
-          if (creatorsLoading) {
-            return "Loading...";
-          }
+        // renderCell: ({ row }) => {
+        //   if (creatorsLoading) {
+        //     return "Loading...";
+        //   }
 
-          const creator = creatorsData?.data.find(
-            (item) => item.id === row.creator
-          );
-          return creator?.first_name + " " + creator?.last_name;
-        },
+        //   const creator = creatorsData?.data.find(
+        //     (item) => item.id === row.creator
+        //   );
+        //   return creator?.name;
+        // },
       },
       {
-        field: "validator",
+        field: "validator_name",
         headerName: t("professional_certificates.fields.validator"),
         // type: "number",
         minWidth: 200,
         maxWidth: 200,
         flex: 1,
-        renderCell: ({ row }) => {
-          if (validatorsLoading) {
-            return "Loading...";
-          }
+        // renderCell: ({ row }) => {
+        //   if (validatorsLoading) {
+        //     return "Loading...";
+        //   }
 
-          const validator = validatorsData?.data.find(
-            (item) => item.id === row.validator
-          );
-          return validator?.first_name + " " + validator?.last_name;
-        },
+        //   const validator = validatorsData?.data.find(
+        //     (item) => item.id === row.validator
+        //   );
+        //   return validator?.first_name + " " + validator?.last_name;
+        // },
       },
+      // {
+      //   field: "speciality",
+      //   headerName: t("professional_certificates.fields.speciality"),
+      //   // type: "number",
+      //   minWidth: 200,
+      //   maxWidth: 200,
+      //   flex: 1,
+      //   renderCell: ({ row }) => {
+      //     if (specialitiesLoading) {
+      //       return "Loading...";
+      //     }
+
+      //     const speciality = specialitiesData?.data.find(
+      //       (item) => item.id === row.speciality
+      //     );
+      //     return speciality?.name;
+      //   },
+      // },
       // {
       //   field: "validator",
       //   headerName: t("professional_certificates.fields.validator"),
@@ -188,293 +367,225 @@ export const DoctorShow: React.FC = () => {
       {
         field: "program",
         headerName: t("professional_certificates.fields.program"),
-        minWidth: 200,
-        maxWidth: 200,
+        minWidth: 220,
+        maxWidth: 220,
         flex: 1,
       },
+      // {
+      //   field: "level",
+      //   headerName: t("professional_certificates.fields.level"),
+      //   minWidth: 60,
+      //   maxWidth: 60,
+      //   flex: 1,
+      // },
       {
-        field: "level",
-        headerName: t("professional_certificates.fields.level"),
-        minWidth: 60,
-        maxWidth: 60,
-        flex: 1,
-      },
-      {
-        field: "created_at",
-        headerName: t("professional_certificates.fields.createdAt"),
+        field: "type",
+        headerName: t("professional_certificates.fields.type"),
         minWidth: 200,
         // maxWidth: 200,
         flex: 1,
-        renderCell: ({ row }) => {
-          return new Date(row.created_at).toLocaleString();
-        },
       },
       // {
-      //   field: "actions",
-      //   type: "actions",
-      //   headerName: t("table.actions"),
-      //   renderCell: function render({ row }) {
-      //     return (
-      //       <Stack direction="row" spacing={1}>
-      //         <EditButton size="small" hideText recordItemId={row.id} />
-      //         <DeleteButton size="small" hideText recordItemId={row.id} />
-      //       </Stack>
-      //     );
+      //   field: "created_at",
+      //   headerName: t("professional_certificates.fields.createdAt"),
+      //   minWidth: 200,
+      //   // maxWidth: 200,
+      //   flex: 1,
+      //   renderCell: ({ row }) => {
+      //     return new Date(row.created_at).toLocaleString();
       //   },
-      //   align: "center",
-      //   headerAlign: "center",
-      //   minWidth: 80,
       // },
+      {
+        field: "actions",
+        type: "actions",
+        headerName: t("table.actions"),
+        renderCell: function render({ row }) {
+          return (
+            <Stack direction="row" spacing={1}>
+              <ShowButton
+                size="small"
+                hideText
+                onClick={() => {
+                  setShowId(row.id);
+                  showDetailModal();
+                }}
+                resource="professional_certificates"
+                recordItemId={row.id}
+              />
+              <EditButton
+                size="small"
+                hideText
+                onClick={() => {
+                  showEditModal(row.id);
+                }}
+                resource="professional_certificates"
+                recordItemId={row.id}
+              />
+              <DeleteButton
+                size="small"
+                hideText
+                resource="professional_certificates"
+                recordItemId={row.id}
+              />
+            </Stack>
+          );
+        },
+        align: "center",
+        headerAlign: "center",
+        minWidth: 80,
+      },
     ],
-    [t, creatorsData, creatorsLoading, validatorsData, validatorsLoading]
+    [t, setShowId, showDetailModal, showEditModal]
   );
-
-  //   const { data: categoryData } = useOne<ICategory>({
-  //     resource: "categories",
-  //     id: record?.category.id || "",
-  //     queryOptions: {
-  //       enabled: !!record?.category.id,
-  //     },
-  //   });
-
-  // const { data: servicesData, isLoading: servicesLoading } = useMany<IService>({
-  //   resource: "services",
-  //   ids: record?.services || [],
-  //   queryOptions: {
-  //     enabled: record !== undefined ? record?.services.length > 0 : false,
-  //   },
-  // });
-
-  // const { data: certificationsData, isLoading: certificationsLoading } =
-  //   useMany<ICertification>({
-  //     resource: "certificates",
-  //     ids: record?.certifications || [],
-  //     queryOptions: {
-  //       enabled:
-  //         record !== undefined ? record?.certifications.length > 0 : false,
-  //     },
-  //   });
-
-  // console.log(servicesData);
-
-  // const { data: galleryData, isLoading: galleryLoading } = useList<IGallery>({
-  //   resource: "image_gallery",
-  //   config: {
-  //     filters: [
-  //       {
-  //         field: "user_id",
-  //         operator: "eq",
-  //         value: record?.id || null,
-  //       },
-  //     ],
-  //   },
-  // });
-
-  // const { data: productData, isLoading: productLoading } = useList<IProduct>({
-  //   resource: "products",
-  //   config: {
-  //     filters: [
-  //       {
-  //         field: "user_id",
-  //         operator: "eq",
-  //         value: record?.id || null,
-  //       },
-  //     ],
-  //   },
-  // });
-
-  // const { data: postsData, isLoading: postsLoading } = useList<IPost>({
-  //   resource: "posts",
-  //   config: {
-  //     filters: [
-  //       {
-  //         field: "user_id",
-  //         operator: "eq",
-  //         value: record?.id || null,
-  //       },
-  //     ],
-  //   },
-  // });
-
-  // console.log(galleryData);
-
-  // const { data: galleryData, isLoading: galleryLoading } = useMany<IGallery>({
-  //   resource: "image_gallery",
-  //   ids: record?.services || [],
-  //   queryOptions: {
-  //     enabled: record !== undefined ? record?.services.length > 0 : false,
-  //   },
-  // });
 
   return (
     <Show isLoading={isLoading}>
+      <CertificateEditorDialog
+        submitButtonText={t("professional_certificates.titles.create")}
+        {...createModalFormReturnValues}
+      />
+      <CertificateEditorDialog
+        submitButtonText={t("professional_certificates.titles.edit")}
+        {...editModalFormReturnValues}
+      />
+      <CertificateDetailDialog
+        loading={certificateFetching}
+        data={certificateData?.data}
+        close={closeDetailModal}
+        visible={detailModalVisible}
+      />
       <Stack
         direction={{ sm: "column", md: "row" }}
         spacing={{ xs: 1, sm: 2, md: 4 }}
       >
         <Stack gap={1}>
           <Avatar
-            alt={record?.username}
-            src={record?.image}
+            alt={record?.full_name}
+            src={record?.avatar}
             sx={{ width: 192, height: 192 }}
           />
-          {/* <VideoDialog
-            buttonText="Why train with me?"
-            dialogTitle="Trainer's Introduction Video"
-            videoLink={record?.video}
-          /> */}
         </Stack>
         <Stack gap={1}>
-          <Typography variant="body1" fontWeight="bold">
-            {t("doctors.fields.full_name")}
-          </Typography>
-          <Typography variant="body2">
-            {record?.first_name + " " + record?.last_name}
-          </Typography>
+          <Stack
+            direction={{ sm: "column", md: "row" }}
+            spacing={{ xs: 1, sm: 2, md: 40 }}
+          >
+            <Stack gap={1}>
+              <Typography variant="body1" fontWeight="bold">
+                {t("patients.fields.first_name")}
+              </Typography>
+              <Typography variant="body2">{record?.first_name}</Typography>
+            </Stack>
+            <Stack gap={1}>
+              <Typography variant="body1" fontWeight="bold">
+                {t("patients.fields.last_name")}
+              </Typography>
+              <Typography variant="body2">{record?.last_name}</Typography>
+            </Stack>
+          </Stack>
+          <Stack
+            direction={{ sm: "column", md: "row" }}
+            spacing={{ xs: 1, sm: 2, md: 41 }}
+          >
+            <Stack gap={1}>
+              <Typography variant="body1" fontWeight="bold">
+                {t("doctors.fields.full_name")}
+              </Typography>
+              <Typography variant="body2">
+                {record?.first_name + " " + record?.last_name}
+              </Typography>
+            </Stack>
+            <Stack gap={1}>
+              <Typography variant="body1" fontWeight="bold">
+                {t("profiles.fields.gender")}
+              </Typography>
+              <Typography variant="body2">{record?.gender}</Typography>
+            </Stack>
+          </Stack>
+          <Stack
+            direction={{ sm: "column", md: "row" }}
+            spacing={{ xs: 1, sm: 2, md: 43 }}
+          >
+            <Stack gap={1}>
+              <Typography variant="body1" fontWeight="bold">
+                {t("profiles.fields.dob")}
+              </Typography>
+              <Typography variant="body2">
+                {record !== undefined &&
+                  new Date(record?.dob).toLocaleDateString()}
+              </Typography>
+            </Stack>
+            <Stack gap={1}>
+              <Typography variant="body1" fontWeight="bold">
+                Country
+                {/* {t("profiles.fields.country")} */}
+              </Typography>
+              <Typography variant="body2">Vietnam</Typography>
+            </Stack>
+          </Stack>
+
           <Typography variant="body1" fontWeight="bold">
             {t("doctors.fields.departments")}
           </Typography>
           <Typography variant="body2">
             <Typography variant="body2">
-              {departmentsData !== undefined &&
-                departmentsData.data.map((item) => {
-                  return <TagField value={item.name} />;
+              {record?.departments !== undefined &&
+                record?.departments !== null &&
+                record?.departments.length > 0 &&
+                record?.departments_name.map((item) => {
+                  return <TagField sx={{ marginRight: "12px" }} value={item} />;
                 })}
             </Typography>
           </Typography>
           {/* <Typography variant="body1" fontWeight="bold">
+            {t("doctors.fields.clinics")}
+          </Typography>
+          <Typography variant="body2">
+            <Typography variant="body2">
+              {record?.clinics !== undefined &&
+                record?.clinics !== null &&
+                record?.clinics.length > 0 &&
+                record?.clinics_name.map((item) => {
+                  return <TagField sx={{ marginRight: "12px" }} value={item} />;
+                })}
+            </Typography>
+          </Typography> */}
+          {/* <Typography variant="body1" fontWeight="bold">
             {t("doctors.fields.biography")}
           </Typography> */}
         </Stack>
+        <Stack gap={1}>
+          <SubresourceList
+            resource="doctor_salaries"
+            // title="Salary History"
+            modalToggle={showCreateModal}
+            icon={<CardMembership sx={{ verticalAlign: "middle" }} />}
+            canCreate={true}
+            // breadcrumb={false}
+          >
+            <DataGrid
+              {...workHistoryDataGridProps}
+              columns={salariesColumns}
+              autoHeight
+            />
+          </SubresourceList>
+        </Stack>
       </Stack>
       <Stack gap={1} marginTop={4}>
-        <List resource="professional_certificates" breadcrumb={false}>
+        <SubresourceList
+          resource="professional_certificates"
+          modalToggle={showCreateModal}
+          icon={<CardMembership sx={{ verticalAlign: "middle" }} />}
+          canCreate={true}
+          // breadcrumb={false}
+        >
           <DataGrid
             {...dataGridProps}
             columns={certificatesColumns}
             autoHeight
           />
-        </List>
+        </SubresourceList>
       </Stack>
-      {/* <Stack
-        direction={{ sm: "column", md: "row" }}
-        spacing={{ xs: 1, sm: 2, md: 4 }}
-      >
-        <Stack sx={{ gap: 1, minWidth: 320 }}>
-          <Typography variant="h4" fontWeight="bold">
-            {t("trainers.services")}
-          </Typography>
-          <Typography variant="body1">
-            <MuiList>
-              {!servicesLoading &&
-                servicesData !== undefined &&
-                servicesData.data.map((row, index) => (
-                  <ListItem>
-                    <ListItemIcon>
-                      <FitnessCenter />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={row.name}
-                      // secondary={secondary ? 'Secondary text' : null}
-                    />
-                  </ListItem>
-                ))}
-            </MuiList>
-          </Typography>
-        </Stack>
-        <Stack sx={{ gap: 1, minWidth: 480 }}>
-          <Typography variant="h4" fontWeight="bold">
-            {t("trainers.certification")}
-          </Typography>
-          <Stack>
-            <Grid
-              container
-              spacing={{ xs: 2, md: 3 }}
-              columns={{ xs: 3, sm: 6, md: 9, lg: 12 }}
-            >
-              {!certificationsLoading &&
-                certificationsData !== undefined &&
-                certificationsData.data.map((row, index) => (
-                  <Grid item xs={3} sm={3} md={3} lg={3} key={index}>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        width: "fit-content",
-                        color: "text.secondary",
-                      }}
-                      gap={1}
-                    >
-                      <Avatar
-                        src={
-                          row?.image ||
-                          "https://mhxuwblyckkausnppiws.supabase.co/storage/v1/object/sign/certificates/generic/Certification.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJjZXJ0aWZpY2F0ZXMvZ2VuZXJpYy9DZXJ0aWZpY2F0aW9uLnBuZyIsImlhdCI6MTY2NjQ0NzcyNywiZXhwIjoxOTgxODA3NzI3fQ.PIbh5UD83atwxItAW2J_NO97dFHafLcUuE6elzSeQg4"
-                        }
-                      />
-                      <Typography variant="body2">{row?.name}</Typography>
-                    </Box>
-                  </Grid>
-                ))}
-            </Grid>
-          </Stack>
-        </Stack>
-      </Stack> */}
-      {/* <Stack gap={1} justifyContent="center" alignItems="center">
-        <Typography variant="h4" fontWeight="bold">
-          {t("trainers.image_gallery")}
-        </Typography>
-        <ImageList sx={{ width: 960, height: 600 }} cols={3} rowHeight={320}>
-          {!galleryLoading &&
-            galleryData !== undefined &&
-            galleryData.data.map((item) => (
-              <ImageListItem key={item.image} sx={{ width: 320 }}>
-                <img
-                  // src={`${item.image}?w=320&h=320&fit=crop&auto=format`}
-                  // srcSet={`${item.image}?w=320&h=320&fit=crop&auto=format&dpr=2 2x`}
-                  src={`${item.image}`}
-                  srcSet={`${item.image}`}
-                  // width={240}
-                  // height={240}
-                  alt={item.title}
-                  style={{ height: "inherit" }}
-                  loading="lazy"
-                />
-              </ImageListItem>
-            ))}
-        </ImageList>
-      </Stack> */}
-      {/* <Stack gap={1} justifyContent="center" alignItems="center">
-        <Typography variant="h4" fontWeight="bold">
-          {t("trainers.subscriptions")}
-        </Typography>
-        <MuiList>
-          {!productLoading &&
-            productData !== undefined &&
-            productData.data.map((item) => (
-              <ListItem>
-                <ProductCard data={item}></ProductCard>
-              </ListItem>
-            ))}
-        </MuiList>
-      </Stack> */}
-      {/* <Stack gap={1}>
-        <Typography variant="h4" fontWeight="bold">
-          {t("trainers.posts")}
-        </Typography>
-        <Grid
-          container
-          spacing={{ xs: 2, md: 3 }}
-          columns={{ xs: 3, sm: 6, md: 9, lg: 12 }}
-        >
-          {!postsLoading &&
-            postsData !== undefined &&
-            postsData.data.map((row, index) => (
-              <Grid item xs={3} sm={3} md={3} lg={3} key={index}>
-                <PostCard data={row}></PostCard>
-              </Grid>
-            ))}
-        </Grid>
-      </Stack> */}
     </Show>
   );
 };

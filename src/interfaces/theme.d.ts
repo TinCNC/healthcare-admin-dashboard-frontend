@@ -1,15 +1,14 @@
-import "@pankod/refine-mui";
+import "@refinedev/mui";
 
 export interface CustomTheme {
-  // Add custom variables here like below:
-  // status: {
-  //   danger: string;
-  // };
+  customVariable: {
+    custom: string;
+  };
 }
 
-declare module "@pankod/refine-mui" {
-  interface Theme extends import("@pankod/refine-mui").Theme, CustomTheme {}
+declare module "@mui/material/styles" {
+  interface Theme extends import("@mui/material/styles").Theme, CustomTheme {}
   interface ThemeOptions
-    extends import("@pankod/refine-mui").ThemeOptions,
+    extends import("@mui/material/styles").ThemeOptions,
       CustomTheme {}
 }
