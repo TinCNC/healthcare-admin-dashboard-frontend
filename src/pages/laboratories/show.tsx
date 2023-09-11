@@ -1,8 +1,14 @@
 import { Blender } from "@mui/icons-material";
 import { useShow, useTranslate, useOne, useModal } from "@refinedev/core";
 import { useModalForm } from "@refinedev/react-hook-form";
-import { TagField, ShowButton, EditButton, DeleteButton, useDataGrid } from "@refinedev/mui";
-import { DataGrid, GridColumns } from "@mui/x-data-grid";
+import {
+  TagField,
+  ShowButton,
+  EditButton,
+  DeleteButton,
+  useDataGrid,
+} from "@refinedev/mui";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Stack, Typography, Container } from "@mui/material";
 
 import { SubresourceList } from "components/crud/list-subresource";
@@ -86,7 +92,7 @@ export const LaboratoryShow: React.FC = () => {
       },
     });
 
-  const materialsColumns = React.useMemo<GridColumns<IMaterial>>(
+  const materialsColumns = React.useMemo<GridColDef<IMaterial>[]>(
     () => [
       {
         field: "id",
@@ -177,10 +183,8 @@ export const LaboratoryShow: React.FC = () => {
     },
 
     filters: {
-      permanent: [
-        { field: "laboratory", value: record?.id, operator: "eq" },
-      ]
-    }
+      permanent: [{ field: "laboratory", value: record?.id, operator: "eq" }],
+    },
   });
 
   return (

@@ -35,6 +35,7 @@ export const ProductEdit: React.FC = () => {
 
   const [creatingProduct, setCreatingProduct] = useState<boolean>(false);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSubmit = async (e: BaseSyntheticEvent<object, any, any>) => {
     try {
       if (imageFile !== undefined) {

@@ -7,25 +7,25 @@ import {
   CardMedia,
   Typography,
 } from "@mui/material";
-import { useMany } from "@refinedev/core";
-import { IDepartment, IDoctor } from "interfaces";
+// import { useMany } from "@refinedev/core";
+import { IDoctorView } from "interfaces";
 
 export type DataProps = {
-  data?: IDoctor;
+  data?: IDoctorView;
 };
 
 export const DoctorCard: React.FC<DataProps> = ({ data }) => {
   // const departmentIds = data?.departments || [];
-  const { data: departmentsData, isLoading: departmentsLoading } =
-    useMany<IDepartment>({
-      resource: "departments",
-      ids: data?.departments || [],
-      queryOptions: {
-        enabled: data?.departments !== undefined || data !== undefined,
-      },
-    });
+  // const { data: departmentsData, isLoading: departmentsLoading } =
+  //   useMany<IDepartment>({
+  //     resource: "departments",
+  //     ids: data?.departments || [],
+  //     queryOptions: {
+  //       enabled: data?.departments !== undefined || data !== undefined,
+  //     },
+  //   });
 
-  console.log(departmentsData);
+  // console.log(departmentsData);
 
   return (
     <Card
@@ -34,7 +34,10 @@ export const DoctorCard: React.FC<DataProps> = ({ data }) => {
       <CardMedia
         component="img"
         height="240"
-        image={data?.image || "images/People_Placeholder.png"}
+        image={
+          data?.avatar ||
+          "https://opuqcfkadzuitwfpengj.supabase.co/storage/v1/object/public/placeholder-images/People_Placeholder.png"
+        }
         alt="avatar"
       />
       <CardContent>
@@ -42,7 +45,13 @@ export const DoctorCard: React.FC<DataProps> = ({ data }) => {
           {data?.first_name + " " + data?.last_name}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {!departmentsLoading || departmentsData !== undefined ? (
+          {data?.departments !== undefined &&
+            data?.departments !== null &&
+            data?.departments.length > 0 &&
+            data?.departments_name.map((item) => {
+              return <TagField sx={{ marginRight: "12px" }} value={item} />;
+            })}
+          {/* {!departmentsLoading || departmentsData !== undefined ? (
             departmentsData?.data.map((item) => {
               return (
                 <TagField
@@ -53,7 +62,7 @@ export const DoctorCard: React.FC<DataProps> = ({ data }) => {
             })
           ) : (
             <TagField value="Loading..."></TagField>
-          )}
+          )} */}
         </Typography>
       </CardContent>
       <CardActions>

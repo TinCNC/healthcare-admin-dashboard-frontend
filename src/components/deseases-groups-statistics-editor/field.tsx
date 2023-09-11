@@ -3,15 +3,15 @@ import { useTranslate } from "@refinedev/core";
 import React, { ChangeEvent } from "react";
 
 interface DataProps {
-  combined: number;
-  female: number;
-  onChange: (
+  combined?: number;
+  female?: number;
+  onChange?: (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
   isLoading?: boolean;
 }
 
-export const DiseasesGroupEditor: React.FC<DataProps> = ({
+export const DiseasesGroupEditorField: React.FC<DataProps> = ({
   combined,
   female,
   onChange,

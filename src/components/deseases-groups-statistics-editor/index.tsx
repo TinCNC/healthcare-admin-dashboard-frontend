@@ -1,6 +1,7 @@
 import { Stack, Typography, Box, TextField } from "@mui/material";
 import React, { ChangeEvent } from "react";
 import { useTranslate } from "@refinedev/core";
+import { DiseasesGroupEditorField } from "./field";
 
 interface IDataItem {
   age: string;
@@ -35,8 +36,10 @@ function jsonToGraphArray(json?: Object) {
 
 export const DiseasesGroupEditor: React.FC<DataProps> = ({ data }) => {
   const t = useTranslate();
+  jsonToGraphArray(data);
   return (
     <Stack gap={1} direction="column">
+      <DiseasesGroupEditorField />
       {/* <Stack
         direction={{ xs: "column", sm: "row" }}
         spacing={{ xs: 1, sm: 2, md: 4 }}

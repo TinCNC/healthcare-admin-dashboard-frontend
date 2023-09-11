@@ -9,11 +9,15 @@ import {
   Paper,
   Stack,
   Pagination,
+  FormControl,
+  Autocomplete,
+  TextField,
+  Chip,
 } from "@mui/material";
 
 import { List } from "components/crud/list-gridview";
 
-import { IDoctor } from "interfaces";
+import { IClinic, IDoctorView } from "interfaces";
 
 import { DoctorCard } from "../../components/doctor-card";
 
@@ -25,13 +29,15 @@ export const DoctorList: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [doctorListResponse, setDoctorListResponse] =
-    useState<GetListResponse<IDoctor>>();
+    useState<GetListResponse<IDoctorView>>();
 
-  const [userNameSearch, setUserNameSearch] = useState<string>("");
+  // const [userNameSearch, setUserNameSearch] = useState<string>("");
 
-  const [firstNameSearch, setFirstNameSearch] = useState<string>("");
+  const [nameSearch, setNameSearch] = useState<string>("");
 
-  const [lastNameSearch, setLastNameSearch] = useState<string>("");
+  // const [firstNameSearch, setFirstNameSearch] = useState<string>("");
+
+  // const [lastNameSearch, setLastNameSearch] = useState<string>("");
 
   const [current, setCurrent] = useState<number>(1);
   const [pageCount, setPageCount] = useState<number>(0);
@@ -40,10 +46,16 @@ export const DoctorList: React.FC = () => {
   // );
   const [pageSize, setPageSize] = useState<number>(5);
 
+  const [selectClinics, setSelectClinics] = useState<IClinic[]>([]);
+
+  const clinicsListQueryResult = useList<IClinic>({
+    resource: "clinics",
+  });
+
   // const { dataGridProps } = useDataGrid<ITrainer>();
 
-  const { refetch: refetchDoctors } = useList<IDoctor>({
-    resource: "doctors",
+  const { refetch: refetchDoctors } = useList<IDoctorView>({
+    resource: "doctors_view",
     pagination: {
       current,
       pageSize,
@@ -61,42 +73,30 @@ export const DoctorList: React.FC = () => {
 
     // pagination: { current: 1, pageSize: 10 },
     filters: [
-      { field: "username", operator: "contains", value: userNameSearch },
-      { field: "first_name", operator: "contains", value: firstNameSearch },
-      { field: "last_name", operator: "contains", value: lastNameSearch },
+      { field: "full_name", operator: "contains", value: nameSearch },
+      // { field: "username", operator: "contains", value: userNameSearch },
+      // { field: "first_name", operator: "contains", value: firstNameSearch },
+      // { field: "last_name", operator: "contains", value: lastNameSearch },
     ],
   });
 
   useEffect(() => {
-    // console.log(selectServices);
     setIsLoading(true);
     setDoctorListResponse(undefined);
     refetchDoctors();
-    // setTrainerListResponse(undefined);
-    // if (selectCountries !== undefined && selectCountries.length !== 0)
-    //   refetchTrainersWithCountries();
-    // // if (selectServices !== undefined && selectServices.length !== 0)
-    // //   refetchTrainersWithService();
-    // else refetchTrainers();
   }, [
     refetchDoctors,
-    // refetchTrainersWithCountries,
-    userNameSearch,
-    firstNameSearch,
-    lastNameSearch,
+    nameSearch,
+    // userNameSearch,
+    // firstNameSearch,
+    // lastNameSearch,
     current,
-    // selectServices,
-    // selectCountries,
   ]);
 
   function handlePageChange(page: number) {
     setCurrent(page);
     // throw new Error("Function not implemented.");
   }
-
-  // console.log(trainerListQueryResult);
-
-  // console.log(trainerListQueryResult.data);
 
   return (
     <Stack gap={1}>
@@ -115,14 +115,14 @@ export const DoctorList: React.FC = () => {
         </IconButton>
         <InputBase
           sx={{ ml: 1, flex: 1 }}
-          placeholder="Search Username"
-          value={userNameSearch}
+          placeholder="Search Name"
+          value={nameSearch}
           onChange={(
             event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
           ) => {
-            setUserNameSearch(event.target.value);
+            setNameSearch(event.target.value);
           }}
-          inputProps={{ "aria-label": "search username" }}
+          inputProps={{ "aria-label": "search name" }}
         />
         <Divider
           sx={{
@@ -132,7 +132,120 @@ export const DoctorList: React.FC = () => {
           orientation="vertical"
           flexItem
         />
-        <InputBase
+        <FormControl sx={{ minWidth: 320 }}>
+          <Autocomplete
+            multiple
+            // id=""
+            options={
+              clinicsListQueryResult.data !== undefined
+                ? clinicsListQueryResult?.data?.data?.map((item) => item)
+                : ([] as IClinic[])
+            }
+            getOptionLabel={(option) => (option as IClinic).name ?? option}
+            value={selectClinics}
+            onChange={(_event, value) => {
+              setSelectClinics(value as IClinic[]);
+            }}
+            // defaultValue={[top100Films[13].title]}
+            freeSolo
+            renderTags={(value: readonly IClinic[], getTagProps) =>
+              value.map((option: IClinic, index: number) => (
+                <Chip
+                  variant="outlined"
+                  label={option.name}
+                  {...getTagProps({ index })}
+                />
+              ))
+            }
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="Departments"
+                placeholder="Departments"
+              />
+            )}
+          />
+        </FormControl>
+        <Divider
+          sx={{
+            color: "text.secondary",
+            borderColor: "text.secondary",
+          }}
+          orientation="vertical"
+          flexItem
+        />
+        <FormControl sx={{ minWidth: 320 }}>
+          <Autocomplete
+            multiple
+            // id=""
+            options={
+              clinicsListQueryResult.data !== undefined
+                ? clinicsListQueryResult?.data?.data?.map((item) => item)
+                : ([] as IClinic[])
+            }
+            getOptionLabel={(option) => (option as IClinic).name ?? option}
+            value={selectClinics}
+            onChange={(_event, value) => {
+              setSelectClinics(value as IClinic[]);
+            }}
+            // defaultValue={[top100Films[13].title]}
+            freeSolo
+            renderTags={(value: readonly IClinic[], getTagProps) =>
+              value.map((option: IClinic, index: number) => (
+                <Chip
+                  variant="outlined"
+                  label={option.name}
+                  {...getTagProps({ index })}
+                />
+              ))
+            }
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="Clinics"
+                placeholder="Clinics"
+              />
+            )}
+          />
+        </FormControl>
+        <FormControl sx={{ minWidth: 320 }}>
+          <Autocomplete
+            multiple
+            // id=""
+            options={
+              clinicsListQueryResult.data !== undefined
+                ? clinicsListQueryResult?.data?.data?.map((item) => item)
+                : ([] as IClinic[])
+            }
+            getOptionLabel={(option) => (option as IClinic).name ?? option}
+            value={selectClinics}
+            onChange={(_event, value) => {
+              setSelectClinics(value as IClinic[]);
+            }}
+            // defaultValue={[top100Films[13].title]}
+            freeSolo
+            renderTags={(value: readonly IClinic[], getTagProps) =>
+              value.map((option: IClinic, index: number) => (
+                <Chip
+                  variant="outlined"
+                  label={option.name}
+                  {...getTagProps({ index })}
+                />
+              ))
+            }
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="Order by"
+                placeholder="Order by"
+              />
+            )}
+          />
+        </FormControl>
+        {/* <InputBase
           sx={{ ml: 1, flex: 1 }}
           placeholder="Search First Name"
           value={firstNameSearch}
@@ -169,7 +282,7 @@ export const DoctorList: React.FC = () => {
           }}
           orientation="vertical"
           flexItem
-        />
+        /> */}
         {/* <IconButton color="primary" sx={{ p: '10px' }} aria-label="directions">
         <DirectionsIcon />
       </IconButton> */}

@@ -1,2 +1,2 @@
-export * from "./CertificateDetail";
+export * from "./PrescriptionDetail";
 export * from "./PrescriptionEditor";

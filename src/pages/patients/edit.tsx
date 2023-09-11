@@ -1,6 +1,15 @@
 import { HttpError } from "@refinedev/core";
 import { useAutocomplete, Edit } from "@refinedev/mui";
-import { Box, Autocomplete, Input, Stack } from "@mui/material";
+import {
+  Box,
+  Autocomplete,
+  Input,
+  Stack,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from "@mui/material";
 import { LoadingTextField } from "components/form-fields/loading-text-field";
 import { useForm } from "@refinedev/react-hook-form";
 import { Controller } from "react-hook-form";
@@ -13,6 +22,10 @@ import { BaseSyntheticEvent, useState, useEffect } from "react";
 
 import { uploadImage, getPublicImageUrl } from "api";
 import { LoadingAvatar } from "components/form-fields/loading-avatar";
+
+import { useTranslate } from "@refinedev/core";
+import { DatePicker } from "@mui/x-date-pickers";
+import dayjs, { Dayjs } from "dayjs";
 
 export const PatientEdit: React.FC = () => {
   const {
@@ -27,9 +40,13 @@ export const PatientEdit: React.FC = () => {
 
   const [imagePreview, setImagePreview] = useState<string>("");
 
+  const [dob, setDob] = useState<Dayjs | null>();
+
   const [imageFile, setImageFile] = useState<File>();
 
   const [creatingPatient, setCreatingPatient] = useState<boolean>(false);
+
+  const t = useTranslate();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSubmit = async (e: BaseSyntheticEvent<object, any, any>) => {
@@ -41,7 +58,7 @@ export const PatientEdit: React.FC = () => {
         const uploaded = await uploadImage(
           imageFile,
           "profile-image",
-          `patients/${getValues("username")}/`
+          `patients/${getValues("identity_number")}/`
         );
         if (uploaded !== undefined) {
           const imageUrl = await getPublicImageUrl(
@@ -94,6 +111,18 @@ export const PatientEdit: React.FC = () => {
     });
 
   useEffect(() => {
+    if (queryResult?.isFetched && !formLoading) {
+      console.log("loaded");
+      if (queryResult?.data?.data?.dob !== null)
+        setDob(dayjs(queryResult?.data?.data?.dob));
+      else {
+        setDob(null);
+      }
+      // setGetAutocompleteValue(false);
+    }
+  }, [formLoading, queryResult?.isFetched, queryResult?.data?.data]); // Only re-run the effect if count changes
+
+  useEffect(() => {
     if (defaultValueQueryResult?.isFetched && !formLoading) {
       console.log("loaded");
       setClinic(defaultValueQueryResult?.data?.data.at(0) || null);
@@ -125,7 +154,7 @@ export const PatientEdit: React.FC = () => {
         <Stack gap={1}>
           <LoadingAvatar
             loading={queryResult?.isFetching}
-            alt={getValues("username")}
+            alt={getValues("identity_number")}
             src={imagePreview || getValues("image")}
             sx={{ width: 320, height: 320 }}
           />
@@ -172,17 +201,17 @@ export const PatientEdit: React.FC = () => {
             <LoadingTextField
               loading={queryResult?.isFetching}
               disabled={isSubmitting}
-              registerProps={register("username", {
-                required: "Username is required",
+              registerProps={register("identity_number", {
+                required: "identity_card is required",
               })}
-              error={!!errors?.username}
-              helperText={errors.username?.message}
+              error={!!errors?.identity_number}
+              helperText={errors.identity_number?.message}
               margin="normal"
               required
               fullWidth
-              id="username"
-              label="Username"
-              name="username"
+              id="identity_number"
+              label={t("patients.fields.identity_number")}
+              name="identity_number"
               autoFocus
             />
 
@@ -216,32 +245,57 @@ export const PatientEdit: React.FC = () => {
               label="Last Name"
               name="last_name"
             />
-            {/* <Controller
-          control={control}
-          name="status"
-          rules={{ required: "Status is required" }}
-          render={({ field }) => (
-            <Autocomplete
-              {...field}
-              options={["published", "draft", "rejected"]}
-              onChange={(_, value) => {
-                field.onChange(value);
+            <DatePicker
+              {...register("dob")}
+              // id="expired_at"
+              // error={!!errors?.expired_at}
+              // helperText={errors.expired_at?.message as string}
+              disablePast
+              label={t("patients.fields.dob")}
+              openTo="day"
+              views={["year", "month", "day"]}
+              value={dob}
+              // disabled={isSubmitting}
+              onChange={(newValue) => {
+                setValue("dob", newValue?.toDate().toDateString() as string);
+                setDob(newValue);
               }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Status"
-                  margin="normal"
-                  variant="outlined"
-                  error={!!errors.status}
-                  helperText={errors.status?.message}
-                  required
-                />
-              )}
+              // onChange={(newValue) => {
+              //   console.log(newValue);
+              //   // console.log(queryResult?.data?.data?.id);
+              //   if (newValue === null) setValue("dob", null);
+              //   else {
+              //     setValue("dob", newValue?.toDate().toLocaleDateString());
+              //   }
+              //   setDob(newValue);
+              //   // console.log(getValues());
+              // }}
+              slotProps={{
+                textField: {
+                  // loading: queryResult?.isFetching,
+                  // variant: "standard",
+                  error: !!errors?.dob,
+                  helperText: errors.dob?.message as string,
+                  fullWidth: true,
+                  margin: "dense",
+                },
+              }}
             />
-          )}
-        /> */}
-            <Controller
+            <FormControl fullWidth margin="normal">
+              <InputLabel id="gender">Gender</InputLabel>
+              <Select
+                labelId="gender"
+                id="gender"
+                // value={age}
+                label="Gender"
+                // onChange={handleChange}
+              >
+                <MenuItem value={"male"}>Male</MenuItem>
+                <MenuItem value={"female"}>Female</MenuItem>
+                <MenuItem value={"other"}>Other</MenuItem>
+              </Select>
+            </FormControl>
+            {/* <Controller
               control={control}
               name="clinic"
               rules={{ required: "Clinic is required" }}
@@ -278,7 +332,7 @@ export const PatientEdit: React.FC = () => {
                   )}
                 />
               )}
-            />
+            /> */}
           </Box>
         </Stack>
       </Stack>

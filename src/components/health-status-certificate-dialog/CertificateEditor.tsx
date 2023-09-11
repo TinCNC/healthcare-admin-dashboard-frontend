@@ -280,7 +280,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
               autoFocus
               margin="dense"
               id="name"
-              label={t("health_status_certificates.fields.name")}
+              label={t("examination_records.fields.name")}
               name="name"
               required
               // defaultValue={"lsdjflksd"}
@@ -311,7 +311,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
                     <LoadingTextField
                       loading={queryResult?.isFetching}
                       {...params}
-                      label={t("health_status_certificates.fields.disease")}
+                      label={t("examination_records.fields.disease")}
                       margin="normal"
                       variant="standard"
                       error={!!errors.disease}
@@ -340,7 +340,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
               // helperText={errors.issued_date?.message as string}
               disableFuture
               loading={queryResult?.isFetching}
-              label={t("health_status_certificates.fields.examinedAt")}
+              label={t("examination_records.fields.examinedAt")}
               openTo="day"
               // views={["year", "month", "day"]}
               disabled={isSubmitting}
@@ -373,7 +373,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
               // error={!!errors?.issued_date}
               // helperText={errors.issued_date?.message as string}
               loading={queryResult?.isFetching}
-              label={t("health_status_certificates.fields.reexamineAt")}
+              label={t("examination_records.fields.reexamineAt")}
               openTo="day"
               // views={["year", "month", "day"]}
               disabled={isSubmitting}
@@ -400,7 +400,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
             {/* <DatePicker
                 {...register("expired_date")}
                 disablePast
-                label={t("health_status_certificates.fields.expired_date")}
+                label={t("examination_records.fields.expired_date")}
                 openTo="day"
                 views={["year", "month", "day"]}
                 value={expiredDate}
@@ -457,7 +457,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
                     <LoadingTextField
                       loading={queryResult?.isFetching}
                       {...params}
-                      label={t("health_status_certificates.fields.issuer")}
+                      label={t("examination_records.fields.issuer")}
                       margin="normal"
                       variant="standard"
                       error={!!errors.creator}
@@ -492,7 +492,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
                     <LoadingTextField
                       loading={queryResult?.isFetching}
                       {...params}
-                      label={t("health_status_certificates.fields.validator")}
+                      label={t("examination_records.fields.validator")}
                       margin="normal"
                       variant="standard"
                       error={!!errors.validator}
@@ -533,7 +533,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
                     <LoadingTextField
                       {...params}
                       loading={queryResult?.isFetching}
-                      label={t("health_status_certificates.fields.examiner")}
+                      label={t("examination_records.fields.examiner")}
                       margin="normal"
                       variant="standard"
                       error={!!errors.examiner}
@@ -564,7 +564,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
               helperText={errors.status?.message as string}
               required
               id="status"
-              label={t("health_status_certificates.fields.status")}
+              label={t("examination_records.fields.status")}
               name="status"
               fullWidth
               variant="standard"

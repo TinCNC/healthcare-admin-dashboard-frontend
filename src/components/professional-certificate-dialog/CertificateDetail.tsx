@@ -13,19 +13,20 @@ import {
 } from "@mui/material";
 
 import {
-  IMedicalSpeciality,
-  IOrganization,
-  IProfessionalCertificates,
-  ITechnician,
+  // IMedicalSpeciality,
+  // IOrganization,
+  // IProfessionalCertificates,
+  IProfessionalCertificatesView,
+  // ITechnician,
 } from "interfaces";
 import { useTranslate } from "@refinedev/core";
 
 export type DataProps = {
   loading?: boolean;
-  data?: IProfessionalCertificates;
-  creatorsData?: IOrganization[];
-  validatorsData?: ITechnician[];
-  specialitiesData?: IMedicalSpeciality[];
+  data?: IProfessionalCertificatesView;
+  // creatorsData?: IOrganization[];
+  // validatorsData?: ITechnician[];
+  // specialitiesData?: IMedicalSpeciality[];
   visible: boolean;
   close: () => void;
 };
@@ -33,15 +34,15 @@ export type DataProps = {
 export const CertificateDetailDialog: React.FC<DataProps> = ({
   loading,
   data,
-  creatorsData,
-  validatorsData,
-  specialitiesData,
+  // creatorsData,
+  // validatorsData,
+  // specialitiesData,
   visible,
   close,
 }) => {
   const t = useTranslate();
 
-  const validator = validatorsData?.find((item) => item.id === data?.validator);
+  // const validator = validatorsData?.find((item) => item.id === data?.validator);
 
   return (
     <div>
@@ -104,29 +105,23 @@ export const CertificateDetailDialog: React.FC<DataProps> = ({
                 <Typography variant="body1" fontWeight="bold">
                   {t("professional_certificates.fields.creator")}
                 </Typography>
-                <Typography variant="body2">
-                  {
-                    creatorsData?.find((item) => item.id === data?.creator)
-                      ?.name
-                  }
-                </Typography>
+                <Typography variant="body2">{data?.creator_name}</Typography>
 
                 <Typography variant="body1" fontWeight="bold">
                   {t("professional_certificates.fields.validator")}
                 </Typography>
-                <Typography variant="body2">
-                  {validator?.first_name + " " + validator?.last_name}
-                </Typography>
+                <Typography variant="body2">{data?.validator_name}</Typography>
 
                 <Typography variant="body1" fontWeight="bold">
                   {t("professional_certificates.fields.speciality")}
                 </Typography>
                 <Typography variant="body2">
-                  {
+                  {data?.speciality_name}
+                  {/* {
                     specialitiesData?.find(
                       (item) => item.id === data?.speciality
                     )?.name
-                  }
+                  } */}
                 </Typography>
 
                 <Typography variant="body1" fontWeight="bold">

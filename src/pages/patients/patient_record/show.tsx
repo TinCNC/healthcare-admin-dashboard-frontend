@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   useShow,
   useTranslate,
-  useMany,
+  // useMany,
   useModal,
-  useOne,
+  // useOne,
   useResource,
 } from "@refinedev/core";
 import { useModalForm } from "@refinedev/react-hook-form";
@@ -15,43 +15,42 @@ import {
   ShowButton,
 } from "@refinedev/mui";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { Stack, Typography, Avatar } from "@mui/material";
+import { Stack, Typography, Avatar, Container } from "@mui/material";
 
 import { Show } from "components/crud/show";
 
 import { CardMembership } from "@mui/icons-material";
 
-import {
-  IPrescription,
-  IPatient,
-  IDisease,
-  IMedicine,
-  IHealthStatusCertificates,
-} from "interfaces";
+import { IExaminationRecordView, IPrescriptionView } from "interfaces";
 
-import { PrecriptionEditorDialog } from "@/components/precription-dialog";
+import {
+  PrecriptionEditorDialog,
+  PrescriptionDetailDialog,
+} from "@/components/precription-dialog";
 import { SubresourceList } from "components/crud/list-subresource";
 
 export const PatientRecord: React.FC = () => {
   const t = useTranslate();
 
-  const { id: resourceId } = useResource();
-
-  const { queryResult } = useShow<IHealthStatusCertificates>({
-    id: resourceId,
-    resource: "health_status_certificates",
+  const { queryResult } = useShow<IExaminationRecordView>({
+    id: useResource().id,
+    resource: "examination_records_view",
   });
 
-  console.log(queryResult);
+  const [selectedPrescriptionData, setSelectedPrescriptionData] = useState<
+    IPrescriptionView | undefined
+  >();
 
-  const { queryResult: prescriptionQueryResult, setShowId } =
-    useShow<IPrescription>({
-      resource: "prescriptions",
-      id: "0",
-    });
+  // console.log(queryResult);
 
-  const { data: prescriptionData, isLoading: prescriptionLoading } =
-    prescriptionQueryResult;
+  // const { queryResult: prescriptionQueryResult, setShowId } =
+  //   useShow<IPrescriptionView>({
+  //     resource: "prescriptions_view",
+  //     id: "0",
+  //   });
+
+  // const { data: prescriptionData, isLoading: prescriptionLoading } =
+  //   prescriptionQueryResult;
 
   const {
     show: showDetailModal,
@@ -103,8 +102,8 @@ export const PatientRecord: React.FC = () => {
     }
   }, [isLoading, record?.id, setValue]);
 
-  const { dataGridProps } = useDataGrid<IPrescription>({
-    resource: "prescriptions",
+  const { dataGridProps } = useDataGrid<IPrescriptionView>({
+    resource: "prescriptions_view",
 
     queryOptions: {
       enabled: !isLoading,
@@ -113,7 +112,7 @@ export const PatientRecord: React.FC = () => {
     filters: {
       permanent: [
         {
-          field: "health_status_certificate",
+          field: "examination_record",
           value: record?.id,
           operator: "eq",
         },
@@ -121,28 +120,7 @@ export const PatientRecord: React.FC = () => {
     },
   });
 
-  const medicineIds = dataGridProps.rows.map((item) => item.medicine);
-  const { data: medicinesData, isLoading: medicinesLoading } =
-    useMany<IMedicine>({
-      resource: "medicines",
-      ids: medicineIds,
-      queryOptions: {
-        enabled: medicineIds.length > 0,
-      },
-    });
-
-  // const examinersId = dataGridProps.rows.map((item) => item.examiner);
-  // const { data: examinersData, isLoading: examinersLoading } = useMany<IDoctor>(
-  //   {
-  //     resource: "doctors",
-  //     ids: examinersId,
-  //     queryOptions: {
-  //       enabled: examinersId.length > 0,
-  //     },
-  //   }
-  // );
-
-  const prescriptionsColumns = React.useMemo<GridColDef<IPrescription>[]>(
+  const prescriptionsColumns = React.useMemo<GridColDef<IPrescriptionView>[]>(
     () => [
       {
         field: "id",
@@ -151,21 +129,18 @@ export const PatientRecord: React.FC = () => {
         width: 50,
       },
       {
-        field: "medicine",
+        field: "medicine_name",
         headerName: t("prescriptions.fields.medicine"),
-        minWidth: 300,
-        maxWidth: 300,
+        minWidth: 280,
+        maxWidth: 280,
         flex: 1,
-        renderCell: ({ row }) => {
-          if (medicinesLoading) {
-            return "Loading...";
-          }
-
-          const medicine = medicinesData?.data.find(
-            (item) => item.id === row.medicine
-          );
-          return medicine?.name;
-        },
+      },
+      {
+        field: "notes",
+        headerName: t("prescriptions.fields.notes"),
+        minWidth: 150,
+        maxWidth: 150,
+        flex: 1,
       },
       {
         field: "quantity",
@@ -175,15 +150,21 @@ export const PatientRecord: React.FC = () => {
         flex: 1,
       },
       {
-        field: "examined_at",
-        headerName: t("prescriptions.fields.createdAt"),
-        minWidth: 200,
-        // maxWidth: 200,
+        field: "total_price",
+        headerName: t("prescriptions.fields.total_price"),
+        minWidth: 100,
+        maxWidth: 100,
         flex: 1,
-        renderCell: ({ row }) => {
-          return new Date(row.created_at).toLocaleString();
-        },
       },
+      // {
+      //   field: "created_at",
+      //   headerName: t("prescriptions.fields.createdAt"),
+      //   minWidth: 200,
+      //   flex: 1,
+      //   renderCell: ({ row }) => {
+      //     return new Date(row.created_at).toLocaleString();
+      //   },
+      // },
       {
         field: "actions",
         type: "actions",
@@ -195,7 +176,8 @@ export const PatientRecord: React.FC = () => {
                 size="small"
                 hideText
                 onClick={() => {
-                  setShowId(row.id);
+                  // setShowId(row.id);
+                  setSelectedPrescriptionData(row);
                   showDetailModal();
                 }}
                 resource="prescriptions"
@@ -226,29 +208,13 @@ export const PatientRecord: React.FC = () => {
     ],
     [
       t,
-      medicinesLoading,
-      medicinesData?.data,
-      setShowId,
+      // medicinesLoading,
+      // medicinesData?.data,
+      // setShowId,
       showDetailModal,
       showEditModal,
     ]
   );
-
-  const { data: diseaseData, isLoading: diseaseLoading } = useOne<IDisease>({
-    resource: "diseases",
-    id: record?.disease || "",
-    queryOptions: {
-      enabled: !!record?.disease,
-    },
-  });
-
-  const { data: patientData, isLoading: patientLoading } = useOne<IPatient>({
-    resource: "patients",
-    id: record?.holder || "",
-    queryOptions: {
-      enabled: !!record?.holder,
-    },
-  });
 
   return (
     <Show isLoading={isLoading}>
@@ -260,14 +226,12 @@ export const PatientRecord: React.FC = () => {
         submitButtonText={t("medicine.titles.edit")}
         {...editModalFormReturnValues}
       />
-      {/* <PrescriptionDetailDialog
-        loading={prescriptionLoading}
-        data={prescriptionData?.data}
-        diseasesData={diseasesData?.data}
-        examinersData={examinersData?.data}
+      <PrescriptionDetailDialog
+        // loading={prescriptionLoading}
+        data={selectedPrescriptionData}
         close={closeDetailModal}
         visible={detailModalVisible}
-      /> */}
+      />
       <Stack
         direction={{ sm: "column", md: "row" }}
         spacing={{ xs: 1, sm: 2, md: 4 }}
@@ -283,27 +247,19 @@ export const PatientRecord: React.FC = () => {
           <Typography variant="body1" fontWeight="bold">
             {t("patients.fields.full_name")}
           </Typography>
-          <Typography variant="body2">
-            {!patientLoading
-              ? patientData?.data?.first_name +
-                " " +
-                patientData?.data?.last_name
-              : "Loading"}
-          </Typography>
+          <Typography variant="body2">{record?.patient_name}</Typography>
           <Typography variant="body1" fontWeight="bold">
-            {t("health_status_certificates.fields.symptom")}
+            {t("examination_records.fields.symptom")}
           </Typography>
           <Typography variant="body2">{record?.name}</Typography>
           <Typography variant="body1" fontWeight="bold">
-            {t("health_status_certificates.fields.disease")}
+            {t("examination_records.fields.disease")}
           </Typography>
-          <Typography variant="body2">
-            {!diseaseLoading ? diseaseData?.data?.name : "Loading"}
-          </Typography>
+          <Typography variant="body2">{record?.disease_name}</Typography>
         </Stack>
         <Stack gap={1}>
           <Typography variant="body1" fontWeight="bold">
-            {t("health_status_certificates.fields.examinedAt")}
+            {t("examination_records.fields.examinedAt")}
           </Typography>
           <Typography variant="body2">
             {!isLoading
@@ -313,7 +269,7 @@ export const PatientRecord: React.FC = () => {
               : "Loading..."}
           </Typography>
           <Typography variant="body1" fontWeight="bold">
-            {t("health_status_certificates.fields.reexamineAt")}
+            {t("examination_records.fields.reexamineAt")}
           </Typography>
           <Typography variant="body2">
             {!isLoading
@@ -324,20 +280,22 @@ export const PatientRecord: React.FC = () => {
           </Typography>
         </Stack>
       </Stack>
-      <Stack gap={1} marginTop={4}>
-        <SubresourceList
-          resource="medicines"
-          modalToggle={showCreateModal}
-          icon={<CardMembership sx={{ verticalAlign: "middle" }} />}
-          canCreate={true}
-        >
-          <DataGrid
-            {...dataGridProps}
-            columns={prescriptionsColumns}
-            autoHeight
-          />
-        </SubresourceList>
-      </Stack>
+      <Container maxWidth="md">
+        <Stack gap={1} marginTop={4} padding="12px">
+          <SubresourceList
+            resource="medicines"
+            modalToggle={showCreateModal}
+            icon={<CardMembership sx={{ verticalAlign: "middle" }} />}
+            canCreate={true}
+          >
+            <DataGrid
+              {...dataGridProps}
+              columns={prescriptionsColumns}
+              autoHeight
+            />
+          </SubresourceList>
+        </Stack>
+      </Container>
     </Show>
   );
 };

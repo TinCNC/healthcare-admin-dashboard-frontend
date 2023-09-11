@@ -23,7 +23,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import { LoadingButton } from "@mui/lab";
 
-import { IMedicalSpeciality, IOrganization, ITechnician } from "interfaces";
+import { IMedicalSpeciality, IOrganization, ITechnicianView } from "interfaces";
 import {
   AddCircleOutlineOutlined,
   CancelOutlined,
@@ -103,7 +103,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
   };
 
   const [creator, setCreator] = useState<IOrganization | null>(null);
-  const [validator, setValidator] = useState<ITechnician | null>(null);
+  const [validator, setValidator] = useState<ITechnicianView | null>(null);
   const [speciality, setSpeciality] = useState<IMedicalSpeciality | null>(null);
   const [type, setType] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState<boolean>(false);
@@ -166,13 +166,13 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
   const {
     autocompleteProps: autocompleteValidatorProps,
     defaultValueQueryResult: defaultValueValidatorQueryResult,
-  } = useAutocomplete<ITechnician>({
-    resource: "technicians",
+  } = useAutocomplete<ITechnicianView>({
+    resource: "technicians_view",
     defaultValue: queryResult?.data?.data?.validator,
     pagination: { current: 1, pageSize: 10000 },
     onSearch: (value: string) => [
       {
-        field: "username",
+        field: "full_name",
         operator: "containss",
         value,
       },
@@ -186,7 +186,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
     resource: "medical_specialities",
     defaultValue: queryResult?.data?.data?.speciality,
     pagination: { current: 1, pageSize: 10000 },
-    onSearch: (value: any) => [
+    onSearch: (value: string) => [
       {
         field: "name",
         operator: "containss",
@@ -246,7 +246,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
       if (returnedIssedDateValue !== null)
         setIssuedDate(dayjs(returnedIssedDateValue));
       else {
-        setExpiredAt(null);
+        setIssuedDate(null);
       }
       if (returnedExpiredAtValue !== null)
         setExpiredAt(dayjs(returnedExpiredAtValue));
@@ -411,7 +411,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
               fullWidth
               variant="standard"
             /> */}
-
+                  {/* 
                   <DatePicker
                     {...register("issued_date", {
                       required: "Issued Date is required",
@@ -442,6 +442,42 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
                         margin="dense"
                       />
                     )}
+                  /> */}
+
+                  <DatePicker
+                    {...register("issued_date", {
+                      required: "Issued Date is required",
+                    })}
+                    // error={!!errors?.issued_date}
+                    // helperText={errors.issued_date?.message as string}
+                    disableFuture
+                    loading={queryResult?.isFetching}
+                    label={t("professional_certificates.fields.issued_date")}
+                    openTo="day"
+                    views={["year", "month", "day"]}
+                    // views={["year", "month", "day"]}
+                    disabled={isSubmitting}
+                    // value={value}
+                    // onChange={(newValue) => setValue(newValue)}
+                    value={issuedDate}
+                    // onChange={}
+                    onChange={(newValue) => {
+                      setValue(
+                        "issued_date",
+                        newValue?.toDate().toDateString()
+                      );
+                      setIssuedDate(newValue);
+                    }}
+                    slotProps={{
+                      textField: {
+                        // loading: queryResult?.isFetching,
+                        variant: "standard",
+                        error: !!errors?.issued_date,
+                        helperText: errors.issued_date?.message as string,
+                        fullWidth: true,
+                        margin: "dense",
+                      },
+                    }}
                   />
 
                   <DatePicker
@@ -468,19 +504,29 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
                       setExpiredAt(newValue);
                       console.log(getValues());
                     }}
-                    renderInput={(params) => (
-                      <LoadingTextField
-                        loading={queryResult?.isFetching}
-                        // required
-                        // error={!!errors?.expired_at}
-                        // helperText={errors.expired_at?.message as string}
-                        fullWidth
-                        variant="standard"
-                        margin="dense"
-                        // name="expired_at"
-                        {...params}
-                      />
-                    )}
+                    slotProps={{
+                      textField: {
+                        // loading: queryResult?.isFetching,
+                        variant: "standard",
+                        error: !!errors?.expired_at,
+                        helperText: errors.expired_at?.message as string,
+                        fullWidth: true,
+                        margin: "dense",
+                      },
+                    }}
+                    // renderInput={(params) => (
+                    //   <LoadingTextField
+                    //     loading={queryResult?.isFetching}
+                    //     // required
+                    //     // error={!!errors?.expired_at}
+                    //     // helperText={errors.expired_at?.message as string}
+                    //     fullWidth
+                    //     variant="standard"
+                    //     margin="dense"
+                    //     // name="expired_at"
+                    //     {...params}
+                    //   />
+                    // )}
                   />
 
                   <Controller
@@ -547,13 +593,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
                           field.onChange(value?.id);
                         }}
                         getOptionLabel={(item) => {
-                          return item.username
-                            ? item.username +
-                                ": " +
-                                item.first_name +
-                                " " +
-                                item.last_name
-                            : "";
+                          return item.full_name ? item.full_name : "";
                         }}
                         isOptionEqualToValue={(option, value) =>
                           value === undefined || option.id === value.id

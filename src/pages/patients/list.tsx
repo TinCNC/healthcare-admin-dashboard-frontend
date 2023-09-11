@@ -3,7 +3,8 @@ import React, { useState, useEffect } from "react";
 import {
   useTranslate,
   // useMany,
-  useList, // useTable,
+  // useList,
+  // useTable,
   CrudFilters,
 } from "@refinedev/core";
 
@@ -16,22 +17,22 @@ import {
 
 import {
   Stack,
-  FormControl,
-  Select,
+  // FormControl,
+  // Select,
   Divider,
   Paper,
   InputBase,
   IconButton,
-  InputLabel,
-  MenuItem,
-  SelectChangeEvent,
+  // InputLabel,
+  // MenuItem,
+  // SelectChangeEvent,
 } from "@mui/material";
 
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 
 import { List } from "components/crud/list";
 
-import { IClinic, IPatient } from "interfaces";
+import { IPatient } from "interfaces";
 import { Search } from "@mui/icons-material";
 
 export const PatientList: React.FC = () => {
@@ -41,26 +42,26 @@ export const PatientList: React.FC = () => {
 
   // const { tableQueryResult, setFilters: setFilters2 } = useTable<IPatient>();
 
-  const [userNameSearch, setUserNameSearch] = useState<string>("");
+  // const [userNameSearch, setUserNameSearch] = useState<string>("");
 
   const [firstNameSearch, setFirstNameSearch] = useState<string>("");
 
   const [lastNameSearch, setLastNameSearch] = useState<string>("");
 
-  const [selectClinics, setSelectClinics] = useState<number[]>([]);
+  // const [selectClinics, setSelectClinics] = useState<number[]>([]);
 
-  const clinicsListQueryResult = useList<IClinic>({
-    resource: "clinics",
-  });
+  // const clinicsListQueryResult = useList<IClinic>({
+  //   resource: "clinics",
+  // });
 
   useEffect(() => {
-    console.log(selectClinics);
+    // console.log(selectClinics);
     const filter: CrudFilters = [
-      {
-        field: "username",
-        operator: "contains",
-        value: userNameSearch,
-      },
+      // {
+      //   field: "username",
+      //   operator: "contains",
+      //   value: userNameSearch,
+      // },
       {
         field: "first_name",
         operator: "contains",
@@ -72,16 +73,16 @@ export const PatientList: React.FC = () => {
         value: lastNameSearch,
       },
     ];
-    if (selectClinics !== undefined && selectClinics.length !== 0) {
-      filter.push({
-        field: "clinic",
-        operator: "in",
-        value: selectClinics,
-      });
-    }
+    // if (selectClinics !== undefined && selectClinics.length !== 0) {
+    //   filter.push({
+    //     field: "clinic",
+    //     operator: "in",
+    //     value: selectClinics,
+    //   });
+    // }
     setFilters(filter);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userNameSearch, firstNameSearch, lastNameSearch, selectClinics]);
+  }, [firstNameSearch, lastNameSearch]);
 
   // const categoryIds = dataGridProps.rows.map((item) => item.category.id);
   // const { data: categoriesData, isLoading } = useMany<ICategory>({
@@ -103,45 +104,45 @@ export const PatientList: React.FC = () => {
         flex: 1,
       },
       {
-        field: "username",
-        headerName: t("patients.fields.username"),
-        minWidth: 100,
-        flex: 1,
-      },
-      {
         field: "first_name",
-        headerName: t("patients.fields.firstName"),
+        headerName: t("patients.fields.first_name"),
         minWidth: 100,
         flex: 1,
       },
       {
         field: "last_name",
-        headerName: t("patients.fields.lastName"),
+        headerName: t("patients.fields.last_name"),
         minWidth: 100,
         flex: 1,
       },
       {
-        field: "clinic",
-        headerName: t("patients.fields.clinic"),
+        field: "dob",
+        headerName: t("patients.fields.dob"),
         minWidth: 100,
         flex: 1,
-        renderCell: ({ row }) => {
-          if (
-            clinicsListQueryResult.isFetching ||
-            clinicsListQueryResult.isLoading
-          ) {
-            return "Loading...";
-          }
-
-          const clinic =
-            clinicsListQueryResult.data !== undefined
-              ? clinicsListQueryResult?.data?.data.find(
-                  (item) => item.id === row.clinic
-                )?.name
-              : "";
-          return clinic;
-        },
       },
+      // {
+      //   field: "clinic",
+      //   headerName: t("patients.fields.clinic"),
+      //   minWidth: 100,
+      //   flex: 1,
+      //   renderCell: ({ row }) => {
+      //     if (
+      //       clinicsListQueryResult.isFetching ||
+      //       clinicsListQueryResult.isLoading
+      //     ) {
+      //       return "Loading...";
+      //     }
+
+      //     const clinic =
+      //       clinicsListQueryResult.data !== undefined
+      //         ? clinicsListQueryResult?.data?.data.find(
+      //             (item) => item.id === row.clinic
+      //           )?.name
+      //         : "";
+      //     return clinic;
+      //   },
+      // },
       {
         field: "created_at",
         headerName: t("patients.fields.createdAt"),
@@ -181,9 +182,9 @@ export const PatientList: React.FC = () => {
     ],
 
     [
-      clinicsListQueryResult.data,
-      clinicsListQueryResult.isFetching,
-      clinicsListQueryResult.isLoading,
+      // clinicsListQueryResult.data,
+      // clinicsListQueryResult.isFetching,
+      // clinicsListQueryResult.isLoading,
       t,
     ]
   );
@@ -205,13 +206,13 @@ export const PatientList: React.FC = () => {
   //   },
   //   {
   //     field: "first_name",
-  //     headerName: t("patients.fields.firstName"),
+  //     headerName: t("patients.fields.first_name"),
   //     minWidth: 100,
   //     flex: 1,
   //   },
   //   {
   //     field: "last_name",
-  //     headerName: t("patients.fields.lastName"),
+  //     headerName: t("patients.fields.last_name"),
   //     minWidth: 100,
   //     flex: 1,
   //   },
@@ -293,7 +294,7 @@ export const PatientList: React.FC = () => {
         <IconButton disabled type="button" sx={{ p: "10px" }} aria-label="menu">
           <Search />
         </IconButton>
-        <InputBase
+        {/* <InputBase
           sx={{ ml: 1, flex: 1 }}
           placeholder="Search Username"
           value={userNameSearch}
@@ -311,7 +312,7 @@ export const PatientList: React.FC = () => {
           }}
           orientation="vertical"
           flexItem
-        />
+        /> */}
         <InputBase
           sx={{ ml: 1, flex: 1 }}
           placeholder="Search First Name"
@@ -342,19 +343,19 @@ export const PatientList: React.FC = () => {
           }}
           inputProps={{ "aria-label": "search last name" }}
         />
-        <Divider
+        {/* <Divider
           sx={{
             color: "text.secondary",
             borderColor: "text.secondary",
           }}
           orientation="vertical"
           flexItem
-        />
+        /> */}
 
         {/* <IconButton color="primary" sx={{ p: '10px' }} aria-label="directions">
         <DirectionsIcon />
       </IconButton> */}
-        <FormControl sx={{ minWidth: 320 }}>
+        {/* <FormControl sx={{ minWidth: 320 }}>
           <InputLabel>Select Clinics</InputLabel>
           <Select
             sx={{ ml: 1, flex: 1 }}
@@ -383,7 +384,7 @@ export const PatientList: React.FC = () => {
                 </MenuItem>
               ))}
           </Select>
-        </FormControl>
+        </FormControl> */}
       </Paper>
       <List>
         <DataGrid

@@ -242,7 +242,7 @@ export const PrecriptionEditorDialog: React.FC<EditorDataProps> = ({
                     <LoadingTextField
                       loading={queryResult?.isFetching}
                       {...params}
-                      label={t("health_status_certificates.fields.medicine")}
+                      label={t("examination_records.fields.medicine")}
                       margin="normal"
                       variant="standard"
                       error={!!errors.medicine}

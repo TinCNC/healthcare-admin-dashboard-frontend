@@ -141,10 +141,13 @@
     "patients": "Patients",
     "fields": {
       "id": "ID",
-      "username": "Username",
-      "firstName": "First Name",
-      "lastName": "Last Name",
+      "identity_number": "Identity Number",
+      "first_name": "First Name",
+      "last_name": "Last Name",
       "full_name": "Full Name",
+      "dob": "DOB",
+      "gender": "Gender",
+      "image": "Image",
       "clinic": "Clinic",
       "createdAt": "Created At",
       "updatedAt": "Updated At"
@@ -161,8 +164,8 @@
     "fields": {
       "id": "ID",
       "username": "Username",
-      "firstName": "First Name",
-      "lastName": "Last Name",
+      "first_name": "First Name",
+      "last_name": "Last Name",
       "full_name": "Full Name",
       "createdAt": "Created At"
     },
@@ -418,6 +421,7 @@
       "full_name": "Full Name",
       "image": "Image",
       "departments": "Departments",
+      "clinics": "Clinics",
       "createdAt": "Created At",
       "updatedAt": "Updated At"
     },
@@ -428,6 +432,28 @@
       "show": "Show Doctor"
     },
     "loading": "Loading Doctors"
+  },
+  "doctor_salaries": {
+    "doctor_salaries": "Doctor Salaries History",
+    "fields": {
+      "id": "ID",
+      "doctor_id": "Doctor ID",
+      "clinic": "Clinic",
+      "salary": "Salary",
+      "start_date": "Start Date",
+      "end_date": "End Date",
+      "created_at": "Created At"
+    },
+    "values": {
+      "current_salary": "Current Salary"
+    },
+    "titles": {
+      "create": "Create Doctor Salary History",
+      "edit": "Edit Salary History",
+      "list": "Doctor Salaries History",
+      "show": "Show Doctor Salary"
+    },
+    "loading": "Loading Doctor Salary"
   },
   "profiles": {
     "profiles": "Profiles",
@@ -461,7 +487,8 @@
     "fields": {
       "id": "Id",
       "medicine": "Medicine",
-      "health_status_certificate": "Health Status Certificate",
+      "total_price": "Total Price",
+      "examination_record": "Examination Record",
       "quantity": "Quantity",
       "notes": "Notes",
       "dosage": "Dosage",
@@ -493,8 +520,8 @@
       "show": "Show Medicine"
     }
   },
-  "health_status_certificates": {
-    "health_status_certificates": "Patient Record",
+  "examination_records": {
+    "examination_records": "Patient Record",
     "fields": {
       "id": "ID",
       "name": "Name",

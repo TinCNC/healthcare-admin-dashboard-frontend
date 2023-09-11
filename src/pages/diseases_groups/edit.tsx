@@ -3,18 +3,20 @@ import { LoadingButton } from "@mui/lab";
 import { HttpError, useTranslate } from "@refinedev/core";
 
 import {
-// Autocomplete,
-// useAutocomplete,
-Edit
+  // Autocomplete,
+  // useAutocomplete,
+  Edit,
 } from "@refinedev/mui";
 
 import {
-Box, TextField, Stack, // FormControl,
-// InputLabel,
-// MenuItem,
-// Select,
-// SelectChangeEvent,
-Typography
+  Box,
+  TextField,
+  Stack, // FormControl,
+  // InputLabel,
+  // MenuItem,
+  // Select,
+  // SelectChangeEvent,
+  Typography,
 } from "@mui/material";
 
 import { useForm } from "@refinedev/react-hook-form";
@@ -22,6 +24,8 @@ import { Controller } from "react-hook-form";
 
 import { IDiseasesGroup } from "interfaces";
 import { useState, useEffect, ChangeEvent } from "react";
+
+// import { DiseasesGroupEditor } from "@/components/deseases-groups-statistics-editor";
 
 export const DiseaseGroupEdit: React.FC = () => {
   const t = useTranslate();
@@ -48,15 +52,56 @@ export const DiseaseGroupEdit: React.FC = () => {
     formState: { errors },
   } = useForm<IDiseasesGroup, HttpError, IDiseasesGroup>();
 
+  interface ageJSONStatisticsValue {
+    combined: number;
+    female: number;
+  }
+
+  interface IDataItem {
+    age: string;
+    combined: number;
+    female: number;
+  }
+
+  // function jsonToGraphArray(json?: object) {
+  //   console.log(JSON.stringify(json));
+  //   const map = new Map(Object.entries(JSON.parse(JSON.stringify(json))));
+  //   const graphArray = new Array<IDataItem>();
+  //   map.forEach((value, key) => {
+  //     graphArray.push({
+  //       age: key,
+  //       combined: (value as ageJSONStatisticsValue).combined,
+  //       female: (value as ageJSONStatisticsValue).female,
+  //     });
+  //   });
+  //   console.log(map);
+  //   console.log(graphArray);
+  //   return graphArray;
+  // }
+
   useEffect(() => {
     if (!formLoading && !queryResult?.isLoading) {
       console.log(getValues());
-      reset();
+      // reset();
       setGroupName(getValues("group_name"));
       setIcd10Code(getValues("icd10_code"));
       setVnCode(getValues("vn_code"));
+      // jsonToGraphArray(queryResult?.data?.data.statistics);
+      const map = new Map(
+        Object.entries(
+          JSON.parse(JSON.stringify(queryResult?.data?.data.statistics))
+        )
+      );
+      console.log(map);
     }
-  }, [getValues, reset, queryResult?.isLoading, formLoading]);
+  }, [
+    getValues,
+    reset,
+    queryResult?.isLoading,
+    formLoading,
+    queryResult?.data?.data.statistics,
+    // jsonToGraphArray,
+  ]);
 
   // const { autocompleteProps } = useAutocomplete<IClinic>({
   //   resource: "clinics",
@@ -208,6 +253,8 @@ export const DiseaseGroupEdit: React.FC = () => {
                 </Box>
               </Stack>
             </Stack>
+
+            {/* <DiseasesGroupEditor /> */}
 
             <Stack direction="column">
               <Typography variant="body1">

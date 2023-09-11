@@ -23,16 +23,16 @@ import { CardMembership } from "@mui/icons-material";
 // import { List } from "@refinedev/mui";
 
 import {
-  IHealthStatusCertificates,
+  IExaminationRecordView,
   IPatient,
   IClinic,
-  IDoctor,
-  IDisease,
+  // IDoctor,
+  // IDisease,
 } from "interfaces";
 
 import {
   CertificateEditorDialog,
-  CertificateDetailDialog,
+  // CertificateDetailDialog,
 } from "components/health-status-certificate-dialog";
 import { SubresourceList } from "components/crud/list-subresource";
 
@@ -41,25 +41,25 @@ export const PatientShow: React.FC = () => {
 
   const { queryResult } = useShow<IPatient>();
 
-  const { queryResult: certificateQueryResult, setShowId } =
-    useShow<IHealthStatusCertificates>({
-      resource: "health_status_certificates",
-      id: "0",
-    });
+  // const { queryResult: certificateQueryResult, setShowId } =
+  //   useShow<IExaminationRecordView>({
+  //     resource: "examination_records_view",
+  //     id: "0",
+  //   });
 
-  const { data: certificateData, isLoading: certificateLoading } =
-    certificateQueryResult;
+  // const { data: certificateData, isLoading: certificateLoading } =
+  //   certificateQueryResult;
 
-  const {
-    show: showDetailModal,
-    close: closeDetailModal,
-    visible: detailModalVisible,
-  } = useModal();
+  // const {
+  //   show: showDetailModal,
+  //   close: closeDetailModal,
+  //   visible: detailModalVisible,
+  // } = useModal();
 
   const createModalFormReturnValues = useModalForm({
     refineCoreProps: {
       action: "create",
-      resource: "health_status_certificates",
+      resource: "examination_records",
       redirect: false,
     },
   });
@@ -67,7 +67,7 @@ export const PatientShow: React.FC = () => {
   const editModalFormReturnValues = useModalForm({
     refineCoreProps: {
       action: "edit",
-      resource: "health_status_certificates",
+      resource: "examination_records",
       redirect: false,
     },
   });
@@ -100,8 +100,8 @@ export const PatientShow: React.FC = () => {
     }
   }, [isLoading, record?.id, setValue]);
 
-  const { dataGridProps } = useDataGrid<IHealthStatusCertificates>({
-    resource: "health_status_certificates",
+  const { dataGridProps } = useDataGrid<IExaminationRecordView>({
+    resource: "examination_records_view",
 
     queryOptions: {
       enabled: !isLoading,
@@ -112,14 +112,14 @@ export const PatientShow: React.FC = () => {
     },
   });
 
-  const diseaseIds = dataGridProps.rows.map((item) => item.disease);
-  const { data: diseasesData, isLoading: diseasesLoading } = useMany<IDisease>({
-    resource: "diseases",
-    ids: diseaseIds,
-    queryOptions: {
-      enabled: diseaseIds.length > 0,
-    },
-  });
+  // const diseaseIds = dataGridProps.rows.map((item) => item.disease);
+  // const { data: diseasesData, isLoading: diseasesLoading } = useMany<IDisease>({
+  //   resource: "diseases",
+  //   ids: diseaseIds,
+  //   queryOptions: {
+  //     enabled: diseaseIds.length > 0,
+  //   },
+  // });
 
   // const issuerIds = dataGridProps.rows.map((item) => item.issuer);
   // const { data: issuersData, isLoading: issuersLoading } = useMany<IDoctor>({
@@ -140,55 +140,55 @@ export const PatientShow: React.FC = () => {
   //     },
   //   });
 
-  const examinersId = dataGridProps.rows.map((item) => item.examiner);
-  const { data: examinersData, isLoading: examinersLoading } = useMany<IDoctor>(
-    {
-      resource: "doctors",
-      ids: examinersId,
-      queryOptions: {
-        enabled: examinersId.length > 0,
-      },
-    }
-  );
+  // const examinersId = dataGridProps.rows.map((item) => item.examiner);
+  // const { data: examinersData, isLoading: examinersLoading } = useMany<IDoctor>(
+  //   {
+  //     resource: "doctors",
+  //     ids: examinersId,
+  //     queryOptions: {
+  //       enabled: examinersId.length > 0,
+  //     },
+  //   }
+  // );
 
   const certificatesColumns = React.useMemo<
-    GridColDef<IHealthStatusCertificates>[]
+    GridColDef<IExaminationRecordView>[]
   >(
     () => [
       {
         field: "id",
-        headerName: t("health_status_certificates.fields.id"),
+        headerName: t("examination_records.fields.id"),
         type: "number",
         width: 50,
       },
       {
         field: "name",
-        headerName: t("health_status_certificates.fields.name"),
+        headerName: t("examination_records.fields.name"),
         minWidth: 300,
         maxWidth: 300,
         flex: 1,
       },
       {
-        field: "disease",
-        headerName: t("health_status_certificates.fields.disease"),
+        field: "disease_name",
+        headerName: t("examination_records.fields.disease"),
         // type: "number",
         minWidth: 200,
         maxWidth: 200,
         flex: 1,
-        renderCell: ({ row }) => {
-          if (diseasesLoading) {
-            return "Loading...";
-          }
+        // renderCell: ({ row }) => {
+        //   if (diseasesLoading) {
+        //     return "Loading...";
+        //   }
 
-          const disease = diseasesData?.data.find(
-            (item) => item.id === row.disease
-          );
-          return disease?.name;
-        },
+        //   const disease = diseasesData?.data.find(
+        //     (item) => item.id === row.disease
+        //   );
+        //   return disease?.name;
+        // },
       },
       // {
       //   field: "issued_date",
-      //   headerName: t("health_status_certificates.fields.issued_date"),
+      //   headerName: t("examination_records.fields.issued_date"),
       //   minWidth: 100,
       //   maxWidth: 100,
       //   flex: 1,
@@ -198,7 +198,7 @@ export const PatientShow: React.FC = () => {
       // },
       // {
       //   field: "expired_date",
-      //   headerName: t("health_status_certificates.fields.expired_date"),
+      //   headerName: t("examination_records.fields.expired_date"),
       //   minWidth: 100,
       //   maxWidth: 100,
       //   flex: 1,
@@ -210,7 +210,7 @@ export const PatientShow: React.FC = () => {
       // },
       // {
       //   field: "issuer",
-      //   headerName: t("health_status_certificates.fields.issuer"),
+      //   headerName: t("examination_records.fields.issuer"),
       //   // type: "number",
       //   minWidth: 200,
       //   maxWidth: 200,
@@ -228,7 +228,7 @@ export const PatientShow: React.FC = () => {
       // },
       // {
       //   field: "validator",
-      //   headerName: t("health_status_certificates.fields.validator"),
+      //   headerName: t("examination_records.fields.validator"),
       //   // type: "number",
       //   minWidth: 200,
       //   maxWidth: 200,
@@ -245,26 +245,26 @@ export const PatientShow: React.FC = () => {
       //   },
       // },
       {
-        field: "examiner",
-        headerName: t("health_status_certificates.fields.examiner"),
+        field: "examiner_name",
+        headerName: t("examination_records.fields.examiner"),
         // type: "number",
         minWidth: 200,
         maxWidth: 200,
         flex: 1,
-        renderCell: ({ row }) => {
-          if (examinersLoading) {
-            return "Loading...";
-          }
+        // renderCell: ({ row }) => {
+        //   if (examinersLoading) {
+        //     return "Loading...";
+        //   }
 
-          const examiner = examinersData?.data.find(
-            (item) => item.id === row.examiner
-          );
-          return examiner?.first_name + " " + examiner?.last_name;
-        },
+        //   const examiner = examinersData?.data.find(
+        //     (item) => item.id === row.examiner
+        //   );
+        //   return examiner?.first_name + " " + examiner?.last_name;
+        // },
       },
       {
         field: "reexamine_at",
-        headerName: t("health_status_certificates.fields.reexamineAt"),
+        headerName: t("examination_records.fields.reexamineAt"),
         minWidth: 200,
         // maxWidth: 200,
         flex: 1,
@@ -274,7 +274,7 @@ export const PatientShow: React.FC = () => {
       },
       {
         field: "examined_at",
-        headerName: t("health_status_certificates.fields.examinedAt"),
+        headerName: t("examination_records.fields.examinedAt"),
         minWidth: 200,
         // maxWidth: 200,
         flex: 1,
@@ -307,13 +307,13 @@ export const PatientShow: React.FC = () => {
                 onClick={() => {
                   showEditModal(row.id);
                 }}
-                resource="health_status_certificates"
+                resource="examination_records"
                 recordItemId={row.id}
               />
               <DeleteButton
                 size="small"
                 hideText
-                resource="health_status_certificates"
+                resource="examination_records"
                 recordItemId={row.id}
               />
             </Stack>
@@ -324,51 +324,35 @@ export const PatientShow: React.FC = () => {
         minWidth: 80,
       },
     ],
-    [
-      t,
-      diseasesLoading,
-      diseasesData?.data,
-      // issuersLoading,
-      // issuersData?.data,
-      // validatorsLoading,
-      // validatorsData?.data,
-      examinersLoading,
-      examinersData?.data,
-      // setShowId,
-      // showDetailModal,
-      data?.data,
-      showEditModal,
-    ]
+    [t, data?.data, showEditModal]
   );
 
-  const { data: clinicData, isLoading: clinicLoading } = useOne<IClinic>({
-    resource: "clinics",
-    id: record?.clinic || "",
-    queryOptions: {
-      enabled: !!record?.clinic,
-    },
-  });
+  // const { data: clinicData, isLoading: clinicLoading } = useOne<IClinic>({
+  //   resource: "clinics",
+  //   id: record?.clinic || "",
+  //   queryOptions: {
+  //     enabled: !!record?.clinic,
+  //   },
+  // });
 
   return (
     <Show isLoading={isLoading}>
       <CertificateEditorDialog
-        submitButtonText={t("health_status_certificates.titles.create")}
+        submitButtonText={t("examination_records.titles.create")}
         {...createModalFormReturnValues}
       />
       <CertificateEditorDialog
-        submitButtonText={t("health_status_certificates.titles.edit")}
+        submitButtonText={t("examination_records.titles.edit")}
         {...editModalFormReturnValues}
       />
-      <CertificateDetailDialog
+      {/* <CertificateDetailDialog
         loading={certificateLoading}
         data={certificateData?.data}
-        diseasesData={diseasesData?.data}
-        // issuersData={issuersData?.data}
-        // validatorsData={validatorsData?.data}
-        examinersData={examinersData?.data}
+        // diseasesData={diseasesData?.data}
+        // examinersData={examinersData?.data}
         close={closeDetailModal}
         visible={detailModalVisible}
-      />
+      /> */}
       <Stack
         direction={{ sm: "column", md: "row" }}
         spacing={{ xs: 1, sm: 2, md: 4 }}
@@ -381,39 +365,40 @@ export const PatientShow: React.FC = () => {
           />
         </Stack>
         <Stack gap={1}>
+          <Stack
+            direction={{ sm: "column", md: "row" }}
+            spacing={{ xs: 1, sm: 2, md: 32 }}
+          >
+            <Stack gap={1}>
+              <Typography variant="body1" fontWeight="bold">
+                {t("patients.fields.first_name")}
+              </Typography>
+              <Typography variant="body2">{record?.first_name}</Typography>
+            </Stack>
+            <Stack gap={1}>
+              <Typography variant="body1" fontWeight="bold">
+                {t("patients.fields.last_name")}
+              </Typography>
+              <Typography variant="body2">{record?.last_name}</Typography>
+            </Stack>
+          </Stack>
           <Typography variant="body1" fontWeight="bold">
             {t("patients.fields.full_name")}
           </Typography>
           <Typography variant="body2">
             {record?.first_name + " " + record?.last_name}
           </Typography>
-          <Typography variant="body1" fontWeight="bold">
+          {/* <Typography variant="body1" fontWeight="bold">
             {t("patients.fields.clinic")}
           </Typography>
           <Typography variant="body2">
             {!clinicLoading ? clinicData?.data?.name : "Loading"}
-          </Typography>
+          </Typography> */}
         </Stack>
       </Stack>
       <Stack gap={1} marginTop={4}>
-        {/* <List resource="health_status_certificates">
-          <DataGrid
-            {...dataGridProps}
-            // rows={
-            //   tableQueryResult.data !== undefined
-            //     ? tableQueryResult.data.data
-            //     : []
-            // }
-            // loading={tableQueryResult.isLoading || tableQueryResult.isFetching}
-            filterModel={undefined}
-            disableColumnFilter={true}
-            // filterModel={}
-            columns={certificatesColumns}
-            autoHeight
-          />
-        </List> */}
         <SubresourceList
-          resource="health_status_certificates"
+          resource="examination_records"
           // modalToggle={showCreateModal}
           icon={<CardMembership sx={{ verticalAlign: "middle" }} />}
           canCreate={true}
