@@ -17,8 +17,6 @@ import {
 import { LoadingTextField } from "components/form-fields/loading-text-field";
 
 import dayjs, { Dayjs } from "dayjs";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import { LoadingButton } from "@mui/lab";
@@ -36,16 +34,18 @@ import { useTranslate } from "@refinedev/core";
 
 export type EditorDataProps = UseModalFormReturnType & {
   submitButtonText?: string;
+  onSuccess?: () => unknown;
 };
 
 export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
   register,
   control,
   refineCore: { formLoading, queryResult },
-  formState: { errors, isSubmitting },
+  formState: { errors, isSubmitting, isSubmitSuccessful },
   // handleSubmit,
   getValues,
   setValue,
+  onSuccess,
   modal: { visible, close },
   saveButtonProps,
   submitButtonText,
@@ -116,7 +116,6 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
     setImageFile(undefined);
     setImagePreview("");
     setValue("image", "");
-    reset();
     console.log(getValues());
     setCreator(null);
     setValidator(null);
@@ -124,13 +123,17 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
     setIssuedDate(dayjs());
     setExpiredAt(null);
     setType(null);
-    // console.log(imagePreview);
     setSubmitted(false);
+    if (onSuccess !== undefined) {
+      onSuccess();
+    }
+    reset();
     close();
     return;
   }, [
     close,
     getValues,
+    onSuccess,
     // imagePreview,
     reset,
     setValue,
@@ -138,12 +141,16 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
   ]);
 
   useEffect(() => {
-    console.log("submitted:" + submitted);
-    console.log("formLoading:" + formLoading);
-    if (formLoading === false && submitted) {
+    if (
+      formLoading === false &&
+      submitted &&
+      !isSubmitting &&
+      isSubmitSuccessful
+    ) {
+      console.log(isSubmitSuccessful);
       handleClose();
     }
-  }, [formLoading, handleClose, submitted]);
+  }, [formLoading, handleClose, submitted, isSubmitting, isSubmitSuccessful]);
 
   const {
     autocompleteProps: autocompleteCreatorProps,
@@ -312,11 +319,14 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
         setEditingCertificate(true);
         await sendFileToIPFS(imageFile);
       }
+      console.log(getValues());
       saveButtonProps.onClick(e);
+
       setEditingCertificate(false);
       setSubmitted(true);
       // throw new Error("Function not implemented.");
     } catch (error) {
+      console.log("sedkjfghsedjkhgf");
       setEditingCertificate(false);
     }
     // console.log(getValues());
@@ -334,74 +344,74 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
             Please enter the information of the professional certificate belong
             to this person
           </DialogContentText>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Stack gap={4} direction="row">
-              <Stack gap={1} width="40%">
-                <Box
-                  component="img"
-                  alt={getValues("name")}
-                  src={
-                    imagePreview ||
-                    getValues("image") ||
-                    "https://opuqcfkadzuitwfpengj.supabase.co/storage/v1/object/public/placeholder-images/product-placeholder.jpg"
-                  }
-                  // sx={{ width: 400, height: 400 }}
+
+          <Stack gap={4} direction="row">
+            <Stack gap={1} width="40%">
+              <Box
+                component="img"
+                alt={getValues("name")}
+                src={
+                  imagePreview ||
+                  getValues("image") ||
+                  "https://opuqcfkadzuitwfpengj.supabase.co/storage/v1/object/public/placeholder-images/product-placeholder.jpg"
+                }
+                // sx={{ width: 400, height: 400 }}
+              />
+              <label htmlFor="images-input">
+                <Input
+                  id="images-input"
+                  type="file"
+                  sx={{ display: "none" }}
+                  onChange={onChangeHandler}
+                  // onChange={(event) => {
+                  //   console.log(event.target);
+                  // }}
                 />
-                <label htmlFor="images-input">
-                  <Input
-                    id="images-input"
-                    type="file"
-                    sx={{ display: "none" }}
-                    onChange={onChangeHandler}
-                    // onChange={(event) => {
-                    //   console.log(event.target);
-                    // }}
-                  />
-                  <input
-                    id="file"
-                    {...register("image")}
-                    accept="image/*"
-                    type="hidden"
-                  />
-                  <LoadingButton
-                    // loading={isUploadLoading}
-                    loadingPosition="start"
-                    fullWidth
-                    startIcon={<FileUpload />}
-                    variant="contained"
-                    component="span"
-                  >
-                    Upload
-                  </LoadingButton>
-                  <br />
-                  {/* {errors.image && (
+                <input
+                  id="file"
+                  {...register("image")}
+                  accept="image/*"
+                  type="hidden"
+                />
+                <LoadingButton
+                  // loading={isUploadLoading}
+                  loadingPosition="start"
+                  fullWidth
+                  startIcon={<FileUpload />}
+                  variant="contained"
+                  component="span"
+                >
+                  Upload
+                </LoadingButton>
+                <br />
+                {/* {errors.image && (
                             <Typography variant="caption" color="#fa541c">
                                 {errors.image?.message}
                             </Typography>
                         )} */}
-                </label>
-              </Stack>
-              <Stack gap={1} width="60%">
-                <Box component="form" autoComplete="off">
-                  <LoadingTextField
-                    loading={queryResult?.isFetching}
-                    disabled={isSubmitting}
-                    registerProps={register("name", {
-                      required: "Name is required",
-                    })}
-                    error={!!errors?.name}
-                    helperText={errors.name?.message as string}
-                    autoFocus
-                    margin="dense"
-                    id="name"
-                    label={t("professional_certificates.fields.name")}
-                    name="name"
-                    required
-                    fullWidth
-                    variant="standard"
-                  />
+              </label>
+            </Stack>
+            <Stack gap={1} width="60%">
+              <Box component="form" autoComplete="off">
+                <LoadingTextField
+                  loading={queryResult?.isFetching}
+                  disabled={isSubmitting}
+                  registerProps={register("name", {
+                    required: "Name is required",
+                  })}
+                  error={!!errors?.name}
+                  helperText={errors.name?.message as string}
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  label={t("professional_certificates.fields.name")}
+                  name="name"
+                  required
+                  fullWidth
+                  variant="standard"
+                />
 
-                  {/* <TextField
+                {/* <TextField
               {...register("description")}
               margin="dense"
               id="description"
@@ -411,7 +421,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
               fullWidth
               variant="standard"
             /> */}
-                  {/* 
+                {/* 
                   <DatePicker
                     {...register("issued_date", {
                       required: "Issued Date is required",
@@ -444,304 +454,291 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
                     )}
                   /> */}
 
-                  <DatePicker
-                    {...register("issued_date", {
-                      required: "Issued Date is required",
-                    })}
-                    // error={!!errors?.issued_date}
-                    // helperText={errors.issued_date?.message as string}
-                    disableFuture
-                    loading={queryResult?.isFetching}
-                    label={t("professional_certificates.fields.issued_date")}
-                    openTo="day"
-                    views={["year", "month", "day"]}
-                    // views={["year", "month", "day"]}
-                    disabled={isSubmitting}
-                    // value={value}
-                    // onChange={(newValue) => setValue(newValue)}
-                    value={issuedDate}
-                    // onChange={}
-                    onChange={(newValue) => {
+                <DatePicker
+                  {...register("issued_date", {
+                    required: "Issued Date is required",
+                  })}
+                  disableFuture
+                  loading={queryResult?.isFetching}
+                  label={t("professional_certificates.fields.issued_date")}
+                  openTo="day"
+                  views={["year", "month", "day"]}
+                  disabled={isSubmitting}
+                  value={issuedDate}
+                  onChange={(newValue) => {
+                    setValue("issued_date", newValue?.toDate().toDateString());
+                    setIssuedDate(newValue);
+                  }}
+                  slotProps={{
+                    textField: {
+                      variant: "standard",
+                      error: !!errors?.issued_date,
+                      helperText: errors.issued_date?.message as string,
+                      fullWidth: true,
+                      margin: "dense",
+                    },
+                  }}
+                />
+
+                <DatePicker
+                  {...register("expired_at")}
+                  // id="expired_at"
+                  // error={!!errors?.expired_at}
+                  // helperText={errors.expired_at?.message as string}
+                  disablePast
+                  label={t("professional_certificates.fields.expired_at")}
+                  openTo="day"
+                  views={["year", "month", "day"]}
+                  value={expiredAt}
+                  disabled={isSubmitting}
+                  onChange={(newValue) => {
+                    console.log(newValue);
+                    // console.log(queryResult?.data?.data?.id);
+                    if (newValue === null) setValue("expired_at", null);
+                    else {
                       setValue(
-                        "issued_date",
-                        newValue?.toDate().toDateString()
+                        "expired_at",
+                        newValue?.toDate().toLocaleDateString()
                       );
-                      setIssuedDate(newValue);
-                    }}
-                    slotProps={{
-                      textField: {
-                        // loading: queryResult?.isFetching,
-                        variant: "standard",
-                        error: !!errors?.issued_date,
-                        helperText: errors.issued_date?.message as string,
-                        fullWidth: true,
-                        margin: "dense",
-                      },
-                    }}
-                  />
+                    }
+                    setExpiredAt(newValue);
+                    console.log(getValues());
+                  }}
+                  slotProps={{
+                    textField: {
+                      // loading: queryResult?.isFetching,
+                      variant: "standard",
+                      error: !!errors?.expired_at,
+                      helperText: errors.expired_at?.message as string,
+                      fullWidth: true,
+                      margin: "dense",
+                    },
+                  }}
+                  // renderInput={(params) => (
+                  //   <LoadingTextField
+                  //     loading={queryResult?.isFetching}
+                  //     // required
+                  //     // error={!!errors?.expired_at}
+                  //     // helperText={errors.expired_at?.message as string}
+                  //     fullWidth
+                  //     variant="standard"
+                  //     margin="dense"
+                  //     // name="expired_at"
+                  //     {...params}
+                  //   />
+                  // )}
+                />
 
-                  <DatePicker
-                    {...register("expired_at")}
-                    // id="expired_at"
-                    // error={!!errors?.expired_at}
-                    // helperText={errors.expired_at?.message as string}
-                    disablePast
-                    label={t("professional_certificates.fields.expired_at")}
-                    openTo="day"
-                    views={["year", "month", "day"]}
-                    value={expiredAt}
-                    disabled={isSubmitting}
-                    onChange={(newValue) => {
-                      console.log(newValue);
-                      // console.log(queryResult?.data?.data?.id);
-                      if (newValue === null) setValue("expired_at", null);
-                      else {
-                        setValue(
-                          "expired_at",
-                          newValue?.toDate().toLocaleDateString()
-                        );
+                <Controller
+                  control={control}
+                  name="creator"
+                  rules={{ required: "Creator is required" }}
+                  render={({ field }) => (
+                    <Autocomplete
+                      {...autocompleteCreatorProps}
+                      {...field}
+                      value={creator}
+                      onChange={(_, value) => {
+                        console.log(value);
+                        setCreator(value);
+                        field.onChange(value?.id);
+                      }}
+                      disabled={isSubmitting}
+                      getOptionLabel={(item) => {
+                        return item.name ? item.name : "";
+                      }}
+                      // getOptionLabel={(item) => {
+                      //   return (
+                      //     autocompleteCreatorProps?.options?.find(
+                      //       (p) => p?.id?.toString() === item?.id?.toString()
+                      //     )?.name ?? ""
+                      //   );
+                      // }}
+                      isOptionEqualToValue={(option, value) =>
+                        value === undefined || option.id === value.id
                       }
-                      setExpiredAt(newValue);
-                      console.log(getValues());
-                    }}
-                    slotProps={{
-                      textField: {
-                        // loading: queryResult?.isFetching,
-                        variant: "standard",
-                        error: !!errors?.expired_at,
-                        helperText: errors.expired_at?.message as string,
-                        fullWidth: true,
-                        margin: "dense",
-                      },
-                    }}
-                    // renderInput={(params) => (
-                    //   <LoadingTextField
-                    //     loading={queryResult?.isFetching}
-                    //     // required
-                    //     // error={!!errors?.expired_at}
-                    //     // helperText={errors.expired_at?.message as string}
-                    //     fullWidth
-                    //     variant="standard"
-                    //     margin="dense"
-                    //     // name="expired_at"
-                    //     {...params}
-                    //   />
-                    // )}
-                  />
+                      // isOptionEqualToValue={(option, value) =>
+                      //   value === undefined || option.id.toString() === value.toString()
+                      // }
+                      renderInput={(params) => (
+                        <LoadingTextField
+                          loading={queryResult?.isFetching}
+                          {...params}
+                          label={t("professional_certificates.fields.creator")}
+                          margin="dense"
+                          variant="standard"
+                          error={!!errors.creator}
+                          helperText={errors.creator?.message as string}
+                          fullWidth
+                        />
+                      )}
+                    />
+                  )}
+                />
 
-                  <Controller
-                    control={control}
-                    name="creator"
-                    rules={{ required: "Creator is required" }}
-                    render={({ field }) => (
-                      <Autocomplete
-                        {...autocompleteCreatorProps}
-                        {...field}
-                        value={creator}
-                        onChange={(_, value) => {
-                          console.log(value);
-                          setCreator(value);
-                          field.onChange(value?.id);
-                        }}
-                        disabled={isSubmitting}
-                        getOptionLabel={(item) => {
-                          return item.name ? item.name : "";
-                        }}
-                        // getOptionLabel={(item) => {
-                        //   return (
-                        //     autocompleteCreatorProps?.options?.find(
-                        //       (p) => p?.id?.toString() === item?.id?.toString()
-                        //     )?.name ?? ""
-                        //   );
-                        // }}
-                        isOptionEqualToValue={(option, value) =>
-                          value === undefined || option.id === value.id
-                        }
-                        // isOptionEqualToValue={(option, value) =>
-                        //   value === undefined || option.id.toString() === value.toString()
-                        // }
-                        renderInput={(params) => (
-                          <LoadingTextField
-                            loading={queryResult?.isFetching}
-                            {...params}
-                            label={t(
-                              "professional_certificates.fields.creator"
-                            )}
-                            margin="dense"
-                            variant="standard"
-                            error={!!errors.creator}
-                            helperText={errors.creator?.message as string}
-                            fullWidth
-                          />
-                        )}
-                      />
-                    )}
-                  />
+                <Controller
+                  control={control}
+                  name="validator"
+                  rules={{ required: "Validator is required" }}
+                  render={({ field }) => (
+                    <Autocomplete
+                      {...autocompleteValidatorProps}
+                      {...field}
+                      value={validator}
+                      disabled={isSubmitting}
+                      onChange={(_, value) => {
+                        setValidator(value);
+                        field.onChange(value?.id);
+                      }}
+                      getOptionLabel={(item) => {
+                        return item.full_name ? item.full_name : "";
+                      }}
+                      isOptionEqualToValue={(option, value) =>
+                        value === undefined || option.id === value.id
+                      }
+                      renderInput={(params) => (
+                        <LoadingTextField
+                          {...params}
+                          loading={queryResult?.isFetching}
+                          label={t(
+                            "professional_certificates.fields.validator"
+                          )}
+                          margin="dense"
+                          variant="standard"
+                          error={!!errors.validator}
+                          helperText={errors.validator?.message as string}
+                          fullWidth
+                        />
+                      )}
+                    />
+                  )}
+                />
 
-                  <Controller
-                    control={control}
-                    name="validator"
-                    rules={{ required: "Validator is required" }}
-                    render={({ field }) => (
-                      <Autocomplete
-                        {...autocompleteValidatorProps}
-                        {...field}
-                        value={validator}
-                        disabled={isSubmitting}
-                        onChange={(_, value) => {
-                          setValidator(value);
-                          field.onChange(value?.id);
-                        }}
-                        getOptionLabel={(item) => {
-                          return item.full_name ? item.full_name : "";
-                        }}
-                        isOptionEqualToValue={(option, value) =>
-                          value === undefined || option.id === value.id
-                        }
-                        renderInput={(params) => (
-                          <LoadingTextField
-                            {...params}
-                            loading={queryResult?.isFetching}
-                            label={t(
-                              "professional_certificates.fields.validator"
-                            )}
-                            margin="dense"
-                            variant="standard"
-                            error={!!errors.validator}
-                            helperText={errors.validator?.message as string}
-                            fullWidth
-                          />
-                        )}
-                      />
-                    )}
-                  />
+                <Controller
+                  control={control}
+                  name="speciality"
+                  rules={{ required: "Speciality is required" }}
+                  render={({ field }) => (
+                    <Autocomplete
+                      {...autocompleteSpecialityProps}
+                      {...field}
+                      value={speciality}
+                      disabled={isSubmitting}
+                      onChange={(_, value) => {
+                        setSpeciality(value);
+                        field.onChange(value?.id);
+                      }}
+                      getOptionLabel={(item) => {
+                        return item.name ? item.name : "";
+                      }}
+                      isOptionEqualToValue={(option, value) =>
+                        value === undefined || option.id === value.id
+                      }
+                      renderInput={(params) => (
+                        <LoadingTextField
+                          loading={queryResult?.isFetching}
+                          {...params}
+                          label={t(
+                            "professional_certificates.fields.speciality"
+                          )}
+                          margin="dense"
+                          variant="standard"
+                          error={!!errors.speciality}
+                          helperText={errors.speciality?.message as string}
+                          fullWidth
+                        />
+                      )}
+                    />
+                  )}
+                />
 
-                  <Controller
-                    control={control}
-                    name="speciality"
-                    rules={{ required: "Speciality is required" }}
-                    render={({ field }) => (
-                      <Autocomplete
-                        {...autocompleteSpecialityProps}
-                        {...field}
-                        value={speciality}
-                        disabled={isSubmitting}
-                        onChange={(_, value) => {
-                          setSpeciality(value);
-                          field.onChange(value?.id);
-                        }}
-                        getOptionLabel={(item) => {
-                          return item.name ? item.name : "";
-                        }}
-                        isOptionEqualToValue={(option, value) =>
-                          value === undefined || option.id === value.id
-                        }
-                        renderInput={(params) => (
-                          <LoadingTextField
-                            loading={queryResult?.isFetching}
-                            {...params}
-                            label={t(
-                              "professional_certificates.fields.speciality"
-                            )}
-                            margin="dense"
-                            variant="standard"
-                            error={!!errors.speciality}
-                            helperText={errors.speciality?.message as string}
-                            fullWidth
-                          />
-                        )}
-                      />
-                    )}
-                  />
+                <input
+                  {...register("holder", {
+                    required: "Holder is required",
+                  })}
+                  hidden
+                  id="holder"
+                  name="holder"
+                  // value={holder}
+                />
 
-                  <input
-                    {...register("holder", {
-                      required: "Holder is required",
-                    })}
-                    hidden
-                    id="holder"
-                    name="holder"
-                    // value={holder}
-                  />
+                <LoadingTextField
+                  loading={queryResult?.isFetching}
+                  disabled={isSubmitting}
+                  registerProps={register("program", {
+                    required: "Program is required",
+                  })}
+                  margin="dense"
+                  error={!!errors?.program}
+                  helperText={errors.program?.message as string}
+                  id="program"
+                  label={t("professional_certificates.fields.program")}
+                  name="program"
+                  fullWidth
+                  variant="standard"
+                />
 
-                  <LoadingTextField
-                    loading={queryResult?.isFetching}
-                    disabled={isSubmitting}
-                    registerProps={register("program", {
-                      required: "Program is required",
-                    })}
-                    margin="dense"
-                    error={!!errors?.program}
-                    helperText={errors.program?.message as string}
-                    id="program"
-                    label={t("professional_certificates.fields.program")}
-                    name="program"
-                    fullWidth
-                    variant="standard"
-                  />
+                <LoadingTextField
+                  loading={queryResult?.isFetching}
+                  disabled={isSubmitting}
+                  registerProps={register("level", {
+                    required: "Level is required",
+                  })}
+                  margin="dense"
+                  error={!!errors?.level}
+                  helperText={errors.level?.message as string}
+                  id="level"
+                  label={t("professional_certificates.fields.level")}
+                  name="level"
+                  type="number"
+                  fullWidth
+                  variant="standard"
+                />
 
-                  <LoadingTextField
-                    loading={queryResult?.isFetching}
-                    disabled={isSubmitting}
-                    registerProps={register("level", {
-                      required: "Level is required",
-                    })}
-                    margin="dense"
-                    error={!!errors?.level}
-                    helperText={errors.level?.message as string}
-                    id="level"
-                    label={t("professional_certificates.fields.level")}
-                    name="level"
-                    type="number"
-                    fullWidth
-                    variant="standard"
-                  />
-
-                  <Controller
-                    control={control}
-                    name="type"
-                    // rules={{
-                    //   required: t("errors.required.field", { field: "Type" }),
-                    // }}
-                    rules={{ required: "Type is required" }}
-                    render={({ field }) => (
-                      <Autocomplete
-                        options={[
-                          "Medical Degree",
-                          "Specialized Medical Degree",
-                          "Permission of Medical Professional Practices",
-                        ]}
-                        {...field}
-                        value={type}
-                        disabled={isSubmitting}
-                        onChange={(_, value) => {
-                          setType(value);
-                          field.onChange(value);
-                        }}
-                        isOptionEqualToValue={(option, value) =>
-                          value === undefined ||
-                          option.toString() === value.toString()
-                        }
-                        renderInput={(params) => (
-                          <LoadingTextField
-                            loading={queryResult?.isFetching}
-                            {...params}
-                            label={t("professional_certificates.fields.type")}
-                            margin="dense"
-                            variant="standard"
-                            error={!!errors?.type}
-                            helperText={errors.type?.message as string}
-                            fullWidth
-                            required
-                          />
-                        )}
-                      />
-                    )}
-                  />
-                </Box>
-              </Stack>
+                <Controller
+                  control={control}
+                  name="type"
+                  // rules={{
+                  //   required: t("errors.required.field", { field: "Type" }),
+                  // }}
+                  rules={{ required: "Type is required" }}
+                  render={({ field }) => (
+                    <Autocomplete
+                      options={[
+                        "Medical Degree",
+                        "Specialized Medical Degree",
+                        "Permission of Medical Professional Practices",
+                      ]}
+                      {...field}
+                      value={type}
+                      disabled={isSubmitting}
+                      onChange={(_, value) => {
+                        setType(value);
+                        field.onChange(value);
+                      }}
+                      isOptionEqualToValue={(option, value) =>
+                        value === undefined ||
+                        option.toString() === value.toString()
+                      }
+                      renderInput={(params) => (
+                        <LoadingTextField
+                          loading={queryResult?.isFetching}
+                          {...params}
+                          label={t("professional_certificates.fields.type")}
+                          margin="dense"
+                          variant="standard"
+                          error={!!errors?.type}
+                          helperText={errors.type?.message as string}
+                          fullWidth
+                          required
+                        />
+                      )}
+                    />
+                  )}
+                />
+              </Box>
             </Stack>
-          </LocalizationProvider>
+          </Stack>
         </DialogContent>
         <DialogActions>
           <LoadingButton
@@ -755,7 +752,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
             type="submit"
             startIcon={<AddCircleOutlineOutlined />}
             loadingPosition="start"
-            loading={formLoading || editingCertificate}
+            loading={formLoading || editingCertificate || isSubmitting}
             // {...saveButtonProps}
             onClick={(e) => submitButtonClick(e)}
           >
