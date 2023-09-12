@@ -166,10 +166,10 @@ function App() {
                 <Refine
                   accessControlProvider={{
                     can: async ({ resource, action }) => {
-                      console.log(resource + " + " + action);
-                      console.log(
-                        localStorage.getItem("role") ?? "unauthenticated"
-                      );
+                      // console.log(resource + " + " + action);
+                      // console.log(
+                      //   localStorage.getItem("role") ?? "unauthenticated"
+                      // );
                       const enforcer = await newEnforcer(model, adapter);
                       const can = await enforcer.enforce(
                         localStorage.getItem("role") ?? "unauthenticated",

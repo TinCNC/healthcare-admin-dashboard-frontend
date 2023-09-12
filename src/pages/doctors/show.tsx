@@ -98,7 +98,10 @@ export const DoctorShow: React.FC = () => {
     }
   }, [isLoading, record?.id, setValue]);
 
-  const { dataGridProps } = useDataGrid<IProfessionalCertificatesView>({
+  const {
+    dataGridProps,
+    tableQueryResult: { refetch: refetchCertificatesList },
+  } = useDataGrid<IProfessionalCertificatesView>({
     resource: "professional_certificates_view",
 
     queryOptions: {
@@ -425,6 +428,9 @@ export const DoctorShow: React.FC = () => {
                 size="small"
                 hideText
                 resource="professional_certificates"
+                onSuccess={() => {
+                  refetchCertificatesList();
+                }}
                 recordItemId={row.id}
               />
             </Stack>
@@ -435,17 +441,23 @@ export const DoctorShow: React.FC = () => {
         minWidth: 80,
       },
     ],
-    [t, setShowId, showDetailModal, showEditModal]
+    [t, setShowId, showDetailModal, showEditModal, refetchCertificatesList]
   );
 
   return (
     <Show isLoading={isLoading}>
       <CertificateEditorDialog
         submitButtonText={t("professional_certificates.titles.create")}
+        onSuccess={() => {
+          refetchCertificatesList();
+        }}
         {...createModalFormReturnValues}
       />
       <CertificateEditorDialog
         submitButtonText={t("professional_certificates.titles.edit")}
+        onSuccess={() => {
+          refetchCertificatesList();
+        }}
         {...editModalFormReturnValues}
       />
       <CertificateDetailDialog
