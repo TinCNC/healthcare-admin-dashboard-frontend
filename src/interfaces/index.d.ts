@@ -1,3 +1,6 @@
+export * from "./building";
+export * from "./user";
+export * from "./material";
 export interface ICategory {
   id: number;
   title: string;
@@ -25,19 +28,6 @@ export interface IOrganization {
   type: string;
   address: string;
   created_at: string;
-}
-
-export interface IPatient {
-  id: number;
-  identity_number: string;
-  // username: string;
-  first_name: string;
-  last_name: string;
-  dob: string;
-  clinic: number;
-  image: string;
-  created_at: string;
-  updated_at: string;
 }
 
 export interface IProfile {
@@ -69,19 +59,6 @@ export interface ITechnicianView
   extends ITechnician,
     Omit<IProfile, "id" | "role"> {
   full_name: string;
-}
-
-export interface IDoctor {
-  id: number;
-  // username: string;
-  // first_name: string;
-  // last_name: string;
-  departments: number[];
-  clinics: number[];
-  // departments_isnotnumber?: iDepartment[];
-  // image: string;
-  created_at: string;
-  updated_at: string;
 }
 
 export interface IDoctorSalary {
@@ -154,19 +131,6 @@ export interface IDisease {
   created_at: string;
 }
 
-export interface ILaboratory {
-  id: number;
-  name: string;
-  address: string;
-  director: number;
-  speciality: number[];
-  email: string;
-  phone: string;
-  website: string;
-  workload_capacity: number;
-  created_at: string;
-}
-
 export interface IPrescription {
   id: number;
   medicine: number;
@@ -217,15 +181,6 @@ export interface IOrder {
     | "Printed"
     | "Product Arrived";
   quantity: number;
-  created_at: string;
-}
-
-export interface IMaterial {
-  id: number;
-  laboratory: string;
-  material_name: string;
-  price: number;
-  description: string;
   created_at: string;
 }
 

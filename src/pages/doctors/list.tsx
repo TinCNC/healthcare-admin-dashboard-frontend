@@ -17,7 +17,7 @@ import {
 
 import { List } from "components/crud/list-gridview";
 
-import { IClinic, IDoctorView } from "interfaces";
+import { IDoctor, IHospital } from "interfaces";
 
 import { DoctorCard } from "../../components/doctor-card";
 
@@ -29,7 +29,7 @@ export const DoctorList: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [doctorListResponse, setDoctorListResponse] =
-    useState<GetListResponse<IDoctorView>>();
+    useState<GetListResponse<IDoctor>>();
 
   // const [userNameSearch, setUserNameSearch] = useState<string>("");
 
@@ -46,20 +46,18 @@ export const DoctorList: React.FC = () => {
   // );
   const [pageSize, setPageSize] = useState<number>(5);
 
-  const [selectClinics, setSelectClinics] = useState<IClinic[]>([]);
+  const [selectClinics, setSelectClinics] = useState<IHospital[]>([]);
 
-  const clinicsListQueryResult = useList<IClinic>({
-    resource: "clinics",
-  });
+  // const clinicsListQueryResult = useList<IHospital>({
+  //   resource: "hospitals",
+  // });
 
-  // const { dataGridProps } = useDataGrid<ITrainer>();
-
-  const { refetch: refetchDoctors } = useList<IDoctorView>({
-    resource: "doctors_view",
-    pagination: {
-      current,
-      pageSize,
-    },
+  const { refetch: refetchDoctors, data: testingData } = useList<IDoctor>({
+    resource: "doctors",
+    // pagination: {
+    //   current,
+    //   pageSize,
+    // },
     queryOptions: {
       enabled: false,
       onSuccess: (data) => {
@@ -72,13 +70,15 @@ export const DoctorList: React.FC = () => {
     },
 
     // pagination: { current: 1, pageSize: 10 },
-    filters: [
-      { field: "full_name", operator: "contains", value: nameSearch },
-      // { field: "username", operator: "contains", value: userNameSearch },
-      // { field: "first_name", operator: "contains", value: firstNameSearch },
-      // { field: "last_name", operator: "contains", value: lastNameSearch },
-    ],
+    // filters: [
+    //   { field: "full_name", operator: "contains", value: nameSearch },
+    //   // { field: "username", operator: "contains", value: userNameSearch },
+    //   // { field: "first_name", operator: "contains", value: firstNameSearch },
+    //   // { field: "last_name", operator: "contains", value: lastNameSearch },
+    // ],
   });
+
+  console.log(testingData);
 
   useEffect(() => {
     setIsLoading(true);
@@ -132,7 +132,7 @@ export const DoctorList: React.FC = () => {
           orientation="vertical"
           flexItem
         />
-        <FormControl sx={{ minWidth: 320 }}>
+        {/* <FormControl sx={{ minWidth: 320 }}>
           <Autocomplete
             multiple
             // id=""
@@ -166,8 +166,8 @@ export const DoctorList: React.FC = () => {
               />
             )}
           />
-        </FormControl>
-        <Divider
+        </FormControl> */}
+        {/* <Divider
           sx={{
             color: "text.secondary",
             borderColor: "text.secondary",
@@ -244,7 +244,7 @@ export const DoctorList: React.FC = () => {
               />
             )}
           />
-        </FormControl>
+        </FormControl> */}
         {/* <InputBase
           sx={{ ml: 1, flex: 1 }}
           placeholder="Search First Name"

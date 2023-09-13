@@ -15,7 +15,8 @@ import { model, adapter } from "./accessControl";
 
 import { ThemedLayoutV2 } from "./components/themedLayoutV2";
 
-import { dataProvider, liveProvider } from "@refinedev/supabase";
+// import { dataProvider, liveProvider } from "@refinedev/supabase";
+import dataProvider from "@refinedev/simple-rest";
 import { CssBaseline, GlobalStyles } from "@mui/material";
 import { BrowserRouter, Route, Routes, Outlet } from "react-router-dom";
 import routerBindings, {
@@ -124,16 +125,18 @@ import {
 
 import { Category, Google } from "@mui/icons-material";
 import { OrderList } from "@/pages/order";
-import { supabaseClient } from "utility";
+// import { supabaseClient } from "utility";
 import { ColorModeContextProvider } from "./contexts/color-mode";
 // import { Header } from "./components/header";
-import authProvider from "./authProvider";
+// import authProvider from "./authProvider";
 import { SolanaProvider } from "@/components/payment-solana";
 import { ForbiddenComponent } from "@/components/pages/forbidden";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { MedicineEdit, MedicineList, MedicineShow } from "./pages/medicines";
 import { PatientRecord } from "./pages/patients/patient_record";
+import { InterpolationMap, TOptionsBase } from "i18next";
+import { $Dictionary } from "i18next/typescript/helpers";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -141,7 +144,10 @@ function App() {
   // const [role, setRole] = useState("guest");
 
   const i18nProvider = {
-    translate: (key: string, params: object) => t(key, params),
+    translate: (
+      key: string | TemplateStringsArray | (string | TemplateStringsArray)[],
+      params?: TOptionsBase & $Dictionary & InterpolationMap<unknown>
+    ) => t(key, params),
     changeLocale: (lang: string) => i18n.changeLanguage(lang),
     getLocale: () => i18n.language,
   };
@@ -164,24 +170,25 @@ function App() {
               />
               <RefineSnackbarProvider>
                 <Refine
-                  accessControlProvider={{
-                    can: async ({ resource, action }) => {
-                      // console.log(resource + " + " + action);
-                      // console.log(
-                      //   localStorage.getItem("role") ?? "unauthenticated"
-                      // );
-                      const enforcer = await newEnforcer(model, adapter);
-                      const can = await enforcer.enforce(
-                        localStorage.getItem("role") ?? "unauthenticated",
-                        resource,
-                        action
-                      );
-                      return { can };
-                    },
-                  }}
-                  dataProvider={dataProvider(supabaseClient)}
-                  liveProvider={liveProvider(supabaseClient)}
-                  authProvider={authProvider}
+                  // accessControlProvider={{
+                  //   can: async ({ resource, action }) => {
+                  //     // console.log(resource + " + " + action);
+                  //     // console.log(
+                  //     //   localStorage.getItem("role") ?? "unauthenticated"
+                  //     // );
+                  //     const enforcer = await newEnforcer(model, adapter);
+                  //     const can = await enforcer.enforce(
+                  //       localStorage.getItem("role") ?? "unauthenticated",
+                  //       resource,
+                  //       action
+                  //     );
+                  //     return { can };
+                  //   },
+                  // }}
+                  // dataProvider={dataProvider(supabaseClient)}
+                  dataProvider={dataProvider("http://localhost:8080")}
+                  // liveProvider={liveProvider(supabaseClient)}
+                  // authProvider={authProvider}
                   routerProvider={routerBindings}
                   notificationProvider={notificationProvider}
                   i18nProvider={i18nProvider}
@@ -386,28 +393,6 @@ function App() {
                       },
                     },
                   ]}
-                  // resources={[
-                  //   {
-                  //     name: "blog_posts",
-                  //     list: "/blog-posts",
-                  //     create: "/blog-posts/create",
-                  //     edit: "/blog-posts/edit/:id",
-                  //     show: "/blog-posts/show/:id",
-                  //     meta: {
-                  //       canDelete: true,
-                  //     },
-                  //   },
-                  //   {
-                  //     name: "categories",
-                  //     list: "/categories",
-                  //     create: "/categories/create",
-                  //     edit: "/categories/edit/:id",
-                  //     show: "/categories/show/:id",
-                  //     meta: {
-                  //       canDelete: true,
-                  //     },
-                  //   },
-                  // ]}
                   options={{
                     syncWithLocation: true,
                     warnWhenUnsavedChanges: true,
@@ -509,8 +494,6 @@ function App() {
                       <Route path="/3d_objects">
                         <Route index element={<_3DObjectList />} />
                         <Route path="create" element={<_3DObjectShow />} />
-                        {/* <Route path="edit/:id" element={<ClinicEdit />} /> */}
-                        {/* <Route path="show/:id" element={<ClinicShow />} /> */}
                       </Route>
                       <Route path="/products">
                         <Route index element={<ProductList />} />
@@ -520,9 +503,6 @@ function App() {
                       </Route>
                       <Route path="/categories">
                         <Route index element={<CategoriesList />} />
-                        {/* <Route path="create" element={<CategoriesCreate />} />
-                  <Route path="edit/:id" element={<CategoriesEdit />} />
-                  <Route path="show/:id" element={<CategoriesShow />} /> */}
                       </Route>
                       <Route path="/orders">
                         <Route index element={<OrderList />} />
