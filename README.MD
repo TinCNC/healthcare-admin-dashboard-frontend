@@ -42,10 +42,11 @@ Refine offers lots of out-of-the box functionality for rapid development, withou
 
 To learn more about **refine**, please check out the [Documentation](https://refine.dev/docs)
 
-- **Supabase Data Provider** [Docs](https://refine.dev/docs/core/providers/data-provider/#overview)
+- **REST Data Provider** [Docs](https://refine.dev/docs/core/providers/data-provider/#overview)
 - **Material UI** [Docs](https://refine.dev/docs/ui-frameworks/mui/tutorial/)
 - **Inferencer** [Docs](https://refine.dev/docs/packages/documentation/inferencer)
 - **React Router** [Docs](https://refine.dev/docs/core/providers/router-provider/)
+- **Custom Auth Provider** [Docs](https://refine.dev/docs/core/providers/auth-provider/)
 - **i18n** [Docs](https://refine.dev/docs/core/providers/i18n-provider/)
 
 ## License
