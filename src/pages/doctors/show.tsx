@@ -18,11 +18,13 @@ import { Show } from "components/crud/show";
 import { CardMembership } from "@mui/icons-material";
 
 import {
+  ICertificate,
   // IDoctor,
   // IDepartment,
-  IProfessionalCertificatesView,
-  IDoctorView,
-  IDoctorSalaryView,
+  // IProfessionalCertificatesView,
+  IDoctor,
+  IWorkHistory,
+  // IDoctorSalaryView,
 } from "interfaces";
 import {
   CertificateDetailDialog,
@@ -32,18 +34,20 @@ import {
 export const DoctorShow: React.FC = () => {
   const t = useTranslate();
 
-  const { queryResult } = useShow<IDoctorView>({
-    resource: "doctors_view",
-    id: useResource().id,
-  });
+  const { queryResult } = useShow<IDoctor>();
 
-  const {
-    queryResult: { data: certificateData, isFetching: certificateFetching },
-    setShowId,
-  } = useShow<IProfessionalCertificatesView>({
-    resource: "professional_certificates_view",
-    id: "0",
-  });
+  // const { queryResult } = useShow<IDoctor>({
+  //   resource: "doctors",
+  //   id: useResource().id,
+  // });
+
+  // const {
+  //   queryResult: { data: certificateData, isFetching: certificateFetching },
+  //   setShowId,
+  // } = useShow<IProfessionalCertificatesView>({
+  //   resource: "professional_certificates_view",
+  //   id: "0",
+  // });
 
   // console.log(certificateData);
 
@@ -90,41 +94,43 @@ export const DoctorShow: React.FC = () => {
   const { data, isLoading } = queryResult;
   const record = data?.data;
 
-  useEffect(() => {
-    if (!isLoading) {
-      console.log("loaded");
-      setValue("holder", record?.id);
-      // setGetAutocompleteValue(false);
-    }
-  }, [isLoading, record?.id, setValue]);
+  console.log(record?.certificates);
 
-  const {
-    dataGridProps,
-    tableQueryResult: { refetch: refetchCertificatesList },
-  } = useDataGrid<IProfessionalCertificatesView>({
-    resource: "professional_certificates_view",
+  // useEffect(() => {
+  //   if (!isLoading) {
+  //     console.log("loaded");
+  //     setValue("holder", record?.id);
+  //     // setGetAutocompleteValue(false);
+  //   }
+  // }, [isLoading, record?.id, setValue]);
 
-    queryOptions: {
-      enabled: !isLoading,
-    },
+  // const {
+  //   dataGridProps,
+  //   tableQueryResult: { refetch: refetchCertificatesList },
+  // } = useDataGrid<IProfessionalCertificatesView>({
+  //   resource: "professional_certificates_view",
 
-    filters: {
-      permanent: [{ field: "holder", value: record?.id, operator: "eq" }],
-    },
-  });
+  //   queryOptions: {
+  //     enabled: !isLoading,
+  //   },
 
-  const { dataGridProps: workHistoryDataGridProps } =
-    useDataGrid<IDoctorSalaryView>({
-      resource: "doctors_salary_view",
+  //   filters: {
+  //     permanent: [{ field: "holder", value: record?.id, operator: "eq" }],
+  //   },
+  // });
 
-      queryOptions: {
-        enabled: !isLoading,
-      },
+  // const { dataGridProps: workHistoryDataGridProps } =
+  //   useDataGrid<IDoctorSalaryView>({
+  //     resource: "doctors_salary_view",
 
-      filters: {
-        permanent: [{ field: "doctor_id", value: record?.id, operator: "eq" }],
-      },
-    });
+  //     queryOptions: {
+  //       enabled: !isLoading,
+  //     },
+
+  //     filters: {
+  //       permanent: [{ field: "doctor_id", value: record?.id, operator: "eq" }],
+  //     },
+  //   });
 
   // const creatorIds = dataGridProps.rows.map((item) => item.creator);
   // const { data: creatorsData, isLoading: creatorsLoading } =
@@ -165,16 +171,16 @@ export const DoctorShow: React.FC = () => {
   //     },
   //   });
 
-  const salariesColumns = React.useMemo<GridColDef<IDoctorSalaryView>[]>(
+  const salariesColumns = React.useMemo<GridColDef<IWorkHistory>[]>(
     () => [
+      // {
+      //   field: "id",
+      //   headerName: t("doctor_salaries.fields.id"),
+      //   type: "number",
+      //   width: 50,
+      // },
       {
-        field: "id",
-        headerName: t("doctor_salaries.fields.id"),
-        type: "number",
-        width: 50,
-      },
-      {
-        field: "clinic_name",
+        field: "hospital",
         headerName: t("doctor_salaries.fields.clinic"),
         minWidth: 200,
         maxWidth: 200,
@@ -217,27 +223,27 @@ export const DoctorShow: React.FC = () => {
               <ShowButton
                 size="small"
                 hideText
-                onClick={() => {
-                  setShowId(row.id);
-                  showDetailModal();
-                }}
-                resource="professional_certificates"
-                recordItemId={row.id}
+                // onClick={() => {
+                //   setShowId(row.id);
+                //   showDetailModal();
+                // }}
+                // resource="professional_certificates"
+                // recordItemId={row.id}
               />
               <EditButton
                 size="small"
                 hideText
-                onClick={() => {
-                  showEditModal(row.id);
-                }}
-                resource="professional_certificates"
-                recordItemId={row.id}
+                // onClick={() => {
+                //   showEditModal(row.id);
+                // }}
+                // resource="professional_certificates"
+                // recordItemId={row.id}
               />
               <DeleteButton
                 size="small"
                 hideText
-                resource="professional_certificates"
-                recordItemId={row.id}
+                // resource="professional_certificates"
+                // recordItemId={row.id}
               />
             </Stack>
           );
@@ -247,19 +253,18 @@ export const DoctorShow: React.FC = () => {
         minWidth: 80,
       },
     ],
-    [t, setShowId, showDetailModal, showEditModal]
+    // [t, setShowId, showDetailModal, showEditModal]
+    [t]
   );
 
-  const certificatesColumns = React.useMemo<
-    GridColDef<IProfessionalCertificatesView>[]
-  >(
+  const certificatesColumns = React.useMemo<GridColDef<ICertificate>[]>(
     () => [
-      {
-        field: "id",
-        headerName: t("professional_certificates.fields.id"),
-        type: "number",
-        width: 50,
-      },
+      // {
+      //   field: "_id",
+      //   headerName: t("professional_certificates.fields.id"),
+      //   type: "number",
+      //   width: 50,
+      // },
       {
         field: "name",
         headerName: t("professional_certificates.fields.name"),
@@ -300,12 +305,17 @@ export const DoctorShow: React.FC = () => {
       //   flex: 1,
       // },
       {
-        field: "creator_name",
+        field: "issuer",
         headerName: t("professional_certificates.fields.creator"),
         // type: "number",
         minWidth: 220,
         maxWidth: 220,
         flex: 1,
+        renderCell: (params) => {
+          return (
+            params.value.info.first_name + " " + params.value.info.last_name
+          );
+        },
         // renderCell: ({ row }) => {
         //   if (creatorsLoading) {
         //     return "Loading...";
@@ -318,12 +328,17 @@ export const DoctorShow: React.FC = () => {
         // },
       },
       {
-        field: "validator_name",
+        field: "validator",
         headerName: t("professional_certificates.fields.validator"),
         // type: "number",
         minWidth: 200,
         maxWidth: 200,
         flex: 1,
+        renderCell: (params) => {
+          return (
+            params.value.info.first_name + " " + params.value.info.last_name
+          );
+        },
         // renderCell: ({ row }) => {
         //   if (validatorsLoading) {
         //     return "Loading...";
@@ -408,30 +423,30 @@ export const DoctorShow: React.FC = () => {
               <ShowButton
                 size="small"
                 hideText
-                onClick={() => {
-                  setShowId(row.id);
-                  showDetailModal();
-                }}
-                resource="professional_certificates"
-                recordItemId={row.id}
+                // onClick={() => {
+                //   setShowId(row.id);
+                //   showDetailModal();
+                // }}
+                // resource="professional_certificates"
+                // recordItemId={row.id}
               />
               <EditButton
                 size="small"
                 hideText
-                onClick={() => {
-                  showEditModal(row.id);
-                }}
-                resource="professional_certificates"
-                recordItemId={row.id}
+                // onClick={() => {
+                //   showEditModal(row.id);
+                // }}
+                // resource="professional_certificates"
+                // recordItemId={row.id}
               />
               <DeleteButton
                 size="small"
                 hideText
-                resource="professional_certificates"
-                onSuccess={() => {
-                  refetchCertificatesList();
-                }}
-                recordItemId={row.id}
+                // resource="professional_certificates"
+                // onSuccess={() => {
+                //   refetchCertificatesList();
+                // }}
+                // recordItemId={row._id}
               />
             </Stack>
           );
@@ -441,39 +456,44 @@ export const DoctorShow: React.FC = () => {
         minWidth: 80,
       },
     ],
-    [t, setShowId, showDetailModal, showEditModal, refetchCertificatesList]
+    // [t, setShowId, showDetailModal, showEditModal, refetchCertificatesList]
+    [t]
   );
 
   return (
     <Show isLoading={isLoading}>
-      <CertificateEditorDialog
+      {/* <CertificateEditorDialog
         submitButtonText={t("professional_certificates.titles.create")}
-        onSuccess={() => {
-          refetchCertificatesList();
-        }}
+        // onSuccess={() => {
+        //   refetchCertificatesList();
+        // }}
         {...createModalFormReturnValues}
       />
       <CertificateEditorDialog
         submitButtonText={t("professional_certificates.titles.edit")}
-        onSuccess={() => {
-          refetchCertificatesList();
-        }}
+        // onSuccess={() => {
+        //   refetchCertificatesList();
+        // }}
         {...editModalFormReturnValues}
-      />
-      <CertificateDetailDialog
+      /> */}
+      {/* <CertificateDetailDialog
         loading={certificateFetching}
         data={certificateData?.data}
         close={closeDetailModal}
         visible={detailModalVisible}
-      />
+      /> */}
       <Stack
         direction={{ sm: "column", md: "row" }}
         spacing={{ xs: 1, sm: 2, md: 4 }}
       >
         <Stack gap={1}>
           <Avatar
-            alt={record?.full_name}
-            src={record?.avatar}
+            alt={
+              record?.user_ref.info.first_name +
+              " " +
+              record?.user_ref.info.last_name
+            }
+            src={record?.user_ref.info.avatar}
             sx={{ width: 192, height: 192 }}
           />
         </Stack>
@@ -486,13 +506,17 @@ export const DoctorShow: React.FC = () => {
               <Typography variant="body1" fontWeight="bold">
                 {t("patients.fields.first_name")}
               </Typography>
-              <Typography variant="body2">{record?.first_name}</Typography>
+              <Typography variant="body2">
+                {record?.user_ref.info.first_name}
+              </Typography>
             </Stack>
             <Stack gap={1}>
               <Typography variant="body1" fontWeight="bold">
                 {t("patients.fields.last_name")}
               </Typography>
-              <Typography variant="body2">{record?.last_name}</Typography>
+              <Typography variant="body2">
+                {record?.user_ref.info.last_name}
+              </Typography>
             </Stack>
           </Stack>
           <Stack
@@ -504,14 +528,18 @@ export const DoctorShow: React.FC = () => {
                 {t("doctors.fields.full_name")}
               </Typography>
               <Typography variant="body2">
-                {record?.first_name + " " + record?.last_name}
+                {record?.user_ref.info.first_name +
+                  " " +
+                  record?.user_ref.info.last_name}
               </Typography>
             </Stack>
             <Stack gap={1}>
               <Typography variant="body1" fontWeight="bold">
                 {t("profiles.fields.gender")}
               </Typography>
-              <Typography variant="body2">{record?.gender}</Typography>
+              <Typography variant="body2">
+                {record?.user_ref.info.gender}
+              </Typography>
             </Stack>
           </Stack>
           <Stack
@@ -524,7 +552,7 @@ export const DoctorShow: React.FC = () => {
               </Typography>
               <Typography variant="body2">
                 {record !== undefined &&
-                  new Date(record?.dob).toLocaleDateString()}
+                  new Date(record?.user_ref.info.dob).toLocaleDateString()}
               </Typography>
             </Stack>
             <Stack gap={1}>
@@ -536,7 +564,7 @@ export const DoctorShow: React.FC = () => {
             </Stack>
           </Stack>
 
-          <Typography variant="body1" fontWeight="bold">
+          {/* <Typography variant="body1" fontWeight="bold">
             {t("doctors.fields.departments")}
           </Typography>
           <Typography variant="body2">
@@ -548,7 +576,7 @@ export const DoctorShow: React.FC = () => {
                   return <TagField sx={{ marginRight: "12px" }} value={item} />;
                 })}
             </Typography>
-          </Typography>
+          </Typography> */}
           {/* <Typography variant="body1" fontWeight="bold">
             {t("doctors.fields.clinics")}
           </Typography>
@@ -566,7 +594,7 @@ export const DoctorShow: React.FC = () => {
             {t("doctors.fields.biography")}
           </Typography> */}
         </Stack>
-        <Stack gap={1}>
+        {/* <Stack gap={1}>
           <SubresourceList
             resource="doctor_salaries"
             // title="Salary History"
@@ -576,12 +604,12 @@ export const DoctorShow: React.FC = () => {
             // breadcrumb={false}
           >
             <DataGrid
-              {...workHistoryDataGridProps}
+              // {...workHistoryDataGridProps}
               columns={salariesColumns}
               autoHeight
             />
           </SubresourceList>
-        </Stack>
+        </Stack> */}
       </Stack>
       <Stack gap={1} marginTop={4}>
         <SubresourceList
@@ -592,7 +620,19 @@ export const DoctorShow: React.FC = () => {
           // breadcrumb={false}
         >
           <DataGrid
-            {...dataGridProps}
+            // {...dataGridProps}
+            rows={record?.certificates || []}
+            getRowId={(row) => row._id}
+            sx={{
+              border: "none",
+              "& .MuiDataGrid-columnHeaders": {
+                background: "rgb(242, 242, 242)",
+                borderBottom: "1px solid rgb(229, 229, 229)",
+              },
+              "& .MuiDataGrid-cell": {
+                borderBottom: "1px solid rgb(242, 242, 242)",
+              },
+            }}
             columns={certificatesColumns}
             autoHeight
           />

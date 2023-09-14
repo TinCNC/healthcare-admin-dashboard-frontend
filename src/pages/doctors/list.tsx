@@ -22,6 +22,7 @@ import { IDoctor, IHospital } from "interfaces";
 import { DoctorCard } from "../../components/doctor-card";
 
 import { Search } from "@mui/icons-material";
+import { useDataGrid } from "@refinedev/mui";
 
 export const DoctorList: React.FC = () => {
   const t = useTranslate();
@@ -52,6 +53,14 @@ export const DoctorList: React.FC = () => {
   //   resource: "hospitals",
   // });
 
+  const { dataGridProps: testDataGrid } = useDataGrid<IDoctor>({
+    resource: "doctors",
+    // pagination: {
+    //   current,
+    //   pageSize,
+    // },
+  });
+
   const { refetch: refetchDoctors, data: testingData } = useList<IDoctor>({
     resource: "doctors",
     // pagination: {
@@ -78,7 +87,7 @@ export const DoctorList: React.FC = () => {
     // ],
   });
 
-  console.log(testingData);
+  console.log(testDataGrid);
 
   useEffect(() => {
     setIsLoading(true);
