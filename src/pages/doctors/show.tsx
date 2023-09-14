@@ -312,10 +312,11 @@ export const DoctorShow: React.FC = () => {
         maxWidth: 220,
         flex: 1,
         renderCell: (params) => {
-          return (
-            params.value.info.first_name + " " + params.value.info.last_name
-          );
+          return params.value.name;
         },
+        // renderCell: (params) => {
+        //   if (params !== undefined || params !== null) return params.value;
+        // },
         // renderCell: ({ row }) => {
         //   if (creatorsLoading) {
         //     return "Loading...";
