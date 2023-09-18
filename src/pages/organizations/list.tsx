@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useTranslate, CrudFilters } from "@refinedev/core";
-import { useDataGrid, EditButton, DeleteButton, ShowButton } from "@refinedev/mui";
+import {
+  useDataGrid,
+  EditButton,
+  DeleteButton,
+  ShowButton,
+} from "@refinedev/mui";
 
 import {
   Stack,
@@ -32,14 +37,14 @@ export const OrganizationList: React.FC = () => {
 
   const [typeSearch, setTypeSearch] = useState<string>("");
 
-  // const [selectClinics, setSelectClinics] = useState<number[]>([]);
+  // const [selectHospitals, setSelectHospitals] = useState<number[]>([]);
 
-  // const clinicsListQueryResult = useList<IClinic>({
-  //   resource: "clinics",
+  // const hospitalsListQueryResult = useList<IHospital>({
+  //   resource: "hospitals",
   // });
 
   useEffect(() => {
-    // console.log(selectClinics);
+    // console.log(selectHospitals);
     const filter: CrudFilters = [
       {
         field: "name",
@@ -207,12 +212,12 @@ export const OrganizationList: React.FC = () => {
             sx={{ ml: 1, flex: 1 }}
             multiple
             variant="standard"
-            value={selectClinics}
+            value={selectHospitals}
             onChange={(
               event: SelectChangeEvent<number[]>,
               child: React.ReactNode
             ) => {
-              setSelectClinics(event.target.value as number[]);
+              setSelectHospitals(event.target.value as number[]);
             }}
             // onChange={(
             //   event: SelectChangeEvent<number>,
@@ -222,9 +227,9 @@ export const OrganizationList: React.FC = () => {
             // }}
             // label="Select Author"
           >
-            {clinicsListQueryResult.data !== undefined &&
-              clinicsListQueryResult.data.total > 0 &&
-              clinicsListQueryResult.data.data.map((row, index) => (
+            {hospitalsListQueryResult.data !== undefined &&
+              hospitalsListQueryResult.data.total > 0 &&
+              hospitalsListQueryResult.data.data.map((row, index) => (
                 <MenuItem key={row.id} value={row.id}>
                   {row.name}
                 </MenuItem>

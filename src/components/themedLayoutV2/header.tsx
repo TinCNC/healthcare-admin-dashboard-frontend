@@ -34,7 +34,7 @@ import {
   ShoppingCart,
 } from "@mui/icons-material";
 
-import { getStoredProcedures } from "api";
+// import { getStoredProcedures } from "api";
 
 import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
 
@@ -85,9 +85,9 @@ export const ThemedHeaderV2: React.FC<RefineThemedLayoutV2HeaderProps> = ({
   const locale = useGetLocale();
   const currentLocale = locale();
 
-  getStoredProcedures("totalcarts").then((count) => {
-    setCartCount(count);
-  });
+  // getStoredProcedures("totalcarts").then((count) => {
+  //   setCartCount(count);
+  // });
 
   return (
     <AppBar position={prefferedSticky ? "sticky" : "relative"}>

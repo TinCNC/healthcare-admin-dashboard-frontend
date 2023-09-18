@@ -13,18 +13,11 @@ import {
 import { useForm } from "@refinedev/react-hook-form";
 import { Controller } from "react-hook-form";
 
-import { IPatient, IClinic } from "interfaces";
+import { IPatient, IHospital } from "interfaces";
 
 import { FileUpload } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { BaseSyntheticEvent, useState } from "react";
-
-import {
-  uploadImage,
-  getPublicImageUrl,
-  // getSignedImageUrl,
-  // downloadImage,
-} from "api";
 
 export const PatientCreate: React.FC = () => {
   const t = useTranslate();
@@ -37,7 +30,7 @@ export const PatientCreate: React.FC = () => {
     getValues,
     setValue,
     formState: { errors },
-  } = useForm<IPatient, HttpError, IPatient & { clinic: IClinic }>();
+  } = useForm<IPatient, HttpError, IPatient & { hospital: IHospital }>();
 
   // const imageInput = watch("image");
 
@@ -56,28 +49,28 @@ export const PatientCreate: React.FC = () => {
     // console.log(imageFile);
 
     try {
-      if (imageFile !== undefined) {
-        setCreatingPatient(true);
-        const uploaded = await uploadImage(
-          imageFile,
-          "profile-image",
-          `patients/${getValues("username")}/`
-        );
-        if (uploaded !== undefined) {
-          const imageUrl = await getPublicImageUrl(
-            "profile-image",
-            uploaded?.path
-          );
-          if (imageUrl !== undefined) setValue("image", imageUrl?.publicUrl);
-        }
-        // if (uploaded !== undefined) {
-        //   const imageUrl = await getSignedImageUrl(
-        //     "profile-image",
-        //     uploaded?.Key
-        //   );
-        //   if (imageUrl !== undefined) setValue("image", imageUrl?.signedURL);
-        // }
-      }
+      //   if (imageFile !== undefined) {
+      //     setCreatingPatient(true);
+      //     const uploaded = await uploadImage(
+      //       imageFile,
+      //       "profile-image",
+      //       `patients/${getValues("username")}/`
+      //     );
+      //     if (uploaded !== undefined) {
+      //       const imageUrl = await getPublicImageUrl(
+      //         "profile-image",
+      //         uploaded?.path
+      //       );
+      //       if (imageUrl !== undefined) setValue("image", imageUrl?.publicUrl);
+      //     }
+      //     // if (uploaded !== undefined) {
+      //     //   const imageUrl = await getSignedImageUrl(
+      //     //     "profile-image",
+      //     //     uploaded?.Key
+      //     //   );
+      //     //   if (imageUrl !== undefined) setValue("image", imageUrl?.signedURL);
+      //     // }
+      //   }
 
       setCreatingPatient(true);
       saveButtonProps.onClick(e);
@@ -140,8 +133,8 @@ export const PatientCreate: React.FC = () => {
     }
   };
 
-  const { autocompleteProps } = useAutocomplete<IClinic>({
-    resource: "clinics",
+  const { autocompleteProps } = useAutocomplete<IHospital>({
+    resource: "hospitals",
     onSearch: (value: any) => [
       {
         field: "name",
@@ -227,8 +220,8 @@ export const PatientCreate: React.FC = () => {
         /> */}
         <Controller
           control={control}
-          name="clinic"
-          rules={{ required: "Clinic is required" }}
+          name="hospital"
+          rules={{ required: "Hospital is required" }}
           render={({ field }) => (
             <Autocomplete
               {...autocompleteProps}
@@ -245,11 +238,11 @@ export const PatientCreate: React.FC = () => {
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label={t("patients.fields.clinic")}
+                  label={t("patients.fields.hospital")}
                   margin="normal"
                   variant="outlined"
-                  error={!!errors.clinic}
-                  helperText={errors.clinic?.message}
+                  error={!!errors.hospital}
+                  helperText={errors.hospital?.message}
                   required
                 />
               )}

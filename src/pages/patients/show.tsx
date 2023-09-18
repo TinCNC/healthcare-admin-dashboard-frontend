@@ -23,9 +23,10 @@ import { CardMembership } from "@mui/icons-material";
 // import { List } from "@refinedev/mui";
 
 import {
-  IExaminationRecordView,
+  IDiseaseHistory,
+  // IExaminationRecordView,
   IPatient,
-  IClinic,
+  // IHospital,
   // IDoctor,
   // IDisease,
 } from "interfaces";
@@ -35,6 +36,7 @@ import {
   // CertificateDetailDialog,
 } from "components/health-status-certificate-dialog";
 import { SubresourceList } from "components/crud/list-subresource";
+import { dataGridSxProps } from "@/dataGridSxProps";
 
 export const PatientShow: React.FC = () => {
   const t = useTranslate();
@@ -92,25 +94,25 @@ export const PatientShow: React.FC = () => {
   const { data, isLoading } = queryResult;
   const record = data?.data;
 
-  useEffect(() => {
-    if (!isLoading) {
-      console.log("loaded");
-      setValue("holder", record?.id);
-      // setGetAutocompleteValue(false);
-    }
-  }, [isLoading, record?.id, setValue]);
+  // useEffect(() => {
+  //   if (!isLoading) {
+  //     console.log("loaded");
+  //     setValue("holder", record?.id);
+  //     // setGetAutocompleteValue(false);
+  //   }
+  // }, [isLoading, record?.id, setValue]);
 
-  const { dataGridProps } = useDataGrid<IExaminationRecordView>({
-    resource: "examination_records_view",
+  // const { dataGridProps } = useDataGrid<IExaminationRecordView>({
+  //   resource: "examination_records_view",
 
-    queryOptions: {
-      enabled: !isLoading,
-    },
+  //   queryOptions: {
+  //     enabled: !isLoading,
+  //   },
 
-    filters: {
-      permanent: [{ field: "holder", value: record?.id, operator: "eq" }],
-    },
-  });
+  //   filters: {
+  //     permanent: [{ field: "holder", value: record?.id, operator: "eq" }],
+  //   },
+  // });
 
   // const diseaseIds = dataGridProps.rows.map((item) => item.disease);
   // const { data: diseasesData, isLoading: diseasesLoading } = useMany<IDisease>({
@@ -132,8 +134,8 @@ export const PatientShow: React.FC = () => {
 
   // const validatorIds = dataGridProps.rows.map((item) => item.validator);
   // const { data: validatorsData, isLoading: validatorsLoading } =
-  //   useMany<IClinic>({
-  //     resource: "clinics",
+  //   useMany<IHospital>({
+  //     resource: "hospitals",
   //     ids: validatorIds,
   //     queryOptions: {
   //       enabled: validatorIds.length > 0,
@@ -151,16 +153,14 @@ export const PatientShow: React.FC = () => {
   //   }
   // );
 
-  const certificatesColumns = React.useMemo<
-    GridColDef<IExaminationRecordView>[]
-  >(
+  const certificatesColumns = React.useMemo<GridColDef<IDiseaseHistory>[]>(
     () => [
-      {
-        field: "id",
-        headerName: t("examination_records.fields.id"),
-        type: "number",
-        width: 50,
-      },
+      // {
+      //   field: "id",
+      //   headerName: t("examination_records.fields.id"),
+      //   type: "number",
+      //   width: 50,
+      // },
       {
         field: "name",
         headerName: t("examination_records.fields.name"),
@@ -169,88 +169,25 @@ export const PatientShow: React.FC = () => {
         flex: 1,
       },
       {
-        field: "disease_name",
+        field: "disease",
         headerName: t("examination_records.fields.disease"),
         // type: "number",
         minWidth: 200,
         maxWidth: 200,
         flex: 1,
-        // renderCell: ({ row }) => {
-        //   if (diseasesLoading) {
-        //     return "Loading...";
-        //   }
-
-        //   const disease = diseasesData?.data.find(
-        //     (item) => item.id === row.disease
-        //   );
-        //   return disease?.name;
-        // },
+        valueGetter: (tableData) => tableData.row.disease.name,
       },
-      // {
-      //   field: "issued_date",
-      //   headerName: t("examination_records.fields.issued_date"),
-      //   minWidth: 100,
-      //   maxWidth: 100,
-      //   flex: 1,
-      //   renderCell: ({ row }) => {
-      //     return new Date(row.issued_date).toLocaleDateString();
-      //   },
-      // },
-      // {
-      //   field: "expired_date",
-      //   headerName: t("examination_records.fields.expired_date"),
-      //   minWidth: 100,
-      //   maxWidth: 100,
-      //   flex: 1,
-      //   renderCell: ({ row }) => {
-      //     if (row.expired_date === undefined || row.expired_date === null)
-      //       return "Never Expire";
-      //     return new Date(row.expired_date).toLocaleDateString();
-      //   },
-      // },
-      // {
-      //   field: "issuer",
-      //   headerName: t("examination_records.fields.issuer"),
-      //   // type: "number",
-      //   minWidth: 200,
-      //   maxWidth: 200,
-      //   flex: 1,
-      //   renderCell: ({ row }) => {
-      //     if (issuersLoading) {
-      //       return "Loading...";
-      //     }
-
-      //     const issuer = issuersData?.data.find(
-      //       (item) => item.id === row.issuer
-      //     );
-      //     return issuer?.first_name + " " + issuer?.last_name;
-      //   },
-      // },
-      // {
-      //   field: "validator",
-      //   headerName: t("examination_records.fields.validator"),
-      //   // type: "number",
-      //   minWidth: 200,
-      //   maxWidth: 200,
-      //   flex: 1,
-      //   renderCell: ({ row }) => {
-      //     if (validatorsLoading) {
-      //       return "Loading...";
-      //     }
-
-      //     const validator = validatorsData?.data.find(
-      //       (item) => item.id === row.validator
-      //     );
-      //     return validator?.name;
-      //   },
-      // },
       {
-        field: "examiner_name",
+        field: "examiner",
         headerName: t("examination_records.fields.examiner"),
         // type: "number",
         minWidth: 200,
         maxWidth: 200,
         flex: 1,
+        valueGetter: (tableData) =>
+          tableData.row.examiner.user_ref.info.first_name +
+          " " +
+          tableData.row.examiner.user_ref.info.last_name,
         // renderCell: ({ row }) => {
         //   if (examinersLoading) {
         //     return "Loading...";
@@ -298,8 +235,8 @@ export const PatientShow: React.FC = () => {
                 //   showDetailModal();
                 // }}
                 resource="patient_record"
-                meta={{ patientId: data?.data.id }}
-                recordItemId={row.id}
+                meta={{ patientId: data?.data._id }}
+                recordItemId={row._id}
               />
               <EditButton
                 size="small"
@@ -308,13 +245,13 @@ export const PatientShow: React.FC = () => {
                   showEditModal(row.id);
                 }}
                 resource="examination_records"
-                recordItemId={row.id}
+                recordItemId={row._id}
               />
               <DeleteButton
                 size="small"
                 hideText
                 resource="examination_records"
-                recordItemId={row.id}
+                recordItemId={row._id}
               />
             </Stack>
           );
@@ -327,11 +264,11 @@ export const PatientShow: React.FC = () => {
     [t, data?.data, showEditModal]
   );
 
-  // const { data: clinicData, isLoading: clinicLoading } = useOne<IClinic>({
-  //   resource: "clinics",
-  //   id: record?.clinic || "",
+  // const { data: hospitalData, isLoading: hospitalLoading } = useOne<IHospital>({
+  //   resource: "hospitals",
+  //   id: record?.hospital || "",
   //   queryOptions: {
-  //     enabled: !!record?.clinic,
+  //     enabled: !!record?.hospital,
   //   },
   // });
 
@@ -359,8 +296,8 @@ export const PatientShow: React.FC = () => {
       >
         <Stack gap={1}>
           <Avatar
-            alt={record?.username}
-            src={record?.image}
+            alt={record?.user_ref.username}
+            src={record?.user_ref.info.avatar}
             sx={{ width: 192, height: 192 }}
           />
         </Stack>
@@ -373,38 +310,46 @@ export const PatientShow: React.FC = () => {
               <Typography variant="body1" fontWeight="bold">
                 {t("patients.fields.first_name")}
               </Typography>
-              <Typography variant="body2">{record?.first_name}</Typography>
+              <Typography variant="body2">
+                {record?.user_ref.info.first_name}
+              </Typography>
             </Stack>
             <Stack gap={1}>
               <Typography variant="body1" fontWeight="bold">
                 {t("patients.fields.last_name")}
               </Typography>
-              <Typography variant="body2">{record?.last_name}</Typography>
+              <Typography variant="body2">
+                {record?.user_ref.info.last_name}
+              </Typography>
             </Stack>
           </Stack>
           <Typography variant="body1" fontWeight="bold">
             {t("patients.fields.full_name")}
           </Typography>
           <Typography variant="body2">
-            {record?.first_name + " " + record?.last_name}
+            {record?.user_ref.info.first_name +
+              " " +
+              record?.user_ref.info.last_name}
           </Typography>
           {/* <Typography variant="body1" fontWeight="bold">
-            {t("patients.fields.clinic")}
+            {t("patients.fields.hospital")}
           </Typography>
           <Typography variant="body2">
-            {!clinicLoading ? clinicData?.data?.name : "Loading"}
+            {!hospitalLoading ? hospitalData?.data?.name : "Loading"}
           </Typography> */}
         </Stack>
       </Stack>
       <Stack gap={1} marginTop={4}>
         <SubresourceList
-          resource="examination_records"
+          // resource="examination_records"
           // modalToggle={showCreateModal}
           icon={<CardMembership sx={{ verticalAlign: "middle" }} />}
           canCreate={true}
         >
           <DataGrid
-            {...dataGridProps}
+            rows={record?.disease_history || []}
+            getRowId={(row) => row._id}
+            sx={dataGridSxProps}
             columns={certificatesColumns}
             autoHeight
           />

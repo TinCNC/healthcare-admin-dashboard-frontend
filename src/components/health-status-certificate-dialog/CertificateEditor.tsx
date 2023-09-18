@@ -50,7 +50,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
 
   const [disease, setDisease] = useState<IDisease | null>(null);
   // const [issuer, setIssuer] = useState<IDoctor | null>(null);
-  // const [validator, setValidator] = useState<IClinic | null>(null);
+  // const [validator, setValidator] = useState<IHospital | null>(null);
   const [examiner, setExaminer] = useState<IDoctor | null>(null);
   const [submitted, setSubmitted] = useState<boolean>(false);
 
@@ -124,8 +124,8 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
   // const {
   //   autocompleteProps: autocompleteValidatorProps,
   //   defaultValueQueryResult: defaultValueValidatorQueryResult,
-  // } = useAutocomplete<IClinic>({
-  //   resource: "clinics",
+  // } = useAutocomplete<IHospital>({
+  //   resource: "hospitals",
   //   defaultValue: queryResult?.data?.data?.validator,
   //   pagination: { current: 1, pageSize: 10000 },
   //   onSearch: (value: string) => [
@@ -460,8 +460,8 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
                       label={t("examination_records.fields.issuer")}
                       margin="normal"
                       variant="standard"
-                      error={!!errors.creator}
-                      helperText={errors.creator?.message as string}
+                      error={!!errors.issuer}
+                      helperText={errors.issuer?.message as string}
                       required
                     />
                   )}

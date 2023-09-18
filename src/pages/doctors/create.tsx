@@ -19,13 +19,6 @@ import { FileUpload, SaveOutlined } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { BaseSyntheticEvent, useState } from "react";
 
-import {
-  uploadImage,
-  getPublicImageUrl,
-  // getSignedImageUrl,
-  // downloadImage,
-} from "api";
-
 export const DoctorCreate: React.FC = () => {
   const t = useTranslate();
   const {
@@ -56,22 +49,22 @@ export const DoctorCreate: React.FC = () => {
     // console.log(imageFile);
 
     try {
-      if (imageFile !== undefined) {
-        setCreatingPatient(true);
-        const uploaded = await uploadImage(
-          imageFile,
-          "profile-image",
-          `doctors/${getValues("username")}/`
-        );
-        if (uploaded !== undefined) {
-          const imageUrl = await getPublicImageUrl(
-            "profile-image",
-            // uploaded?.path.substring(uploaded?.path.indexOf("/") + 1)
-            uploaded?.path
-          );
-          if (imageUrl !== undefined) setValue("image", imageUrl?.publicUrl);
-        }
-      }
+      // if (imageFile !== undefined) {
+      //   setCreatingPatient(true);
+      //   const uploaded = await uploadImage(
+      //     imageFile,
+      //     "profile-image",
+      //     `doctors/${getValues("username")}/`
+      //   );
+      //   if (uploaded !== undefined) {
+      //     const imageUrl = await getPublicImageUrl(
+      //       "profile-image",
+      //       // uploaded?.path.substring(uploaded?.path.indexOf("/") + 1)
+      //       uploaded?.path
+      //     );
+      //     if (imageUrl !== undefined) setValue("image", imageUrl?.publicUrl);
+      //   }
+      // }
 
       setCreatingPatient(false);
       saveButtonProps.onClick(e);

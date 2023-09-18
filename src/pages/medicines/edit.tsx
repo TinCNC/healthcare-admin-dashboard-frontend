@@ -8,10 +8,8 @@ import { Box, Autocomplete, Stack, Input } from "@mui/material";
 import { useForm } from "@refinedev/react-hook-form";
 import { Controller } from "react-hook-form";
 
-import { IClinic, IMedicine } from "interfaces";
+import { IHospital, IMedicine } from "interfaces";
 import { LoadingTextField } from "@/components/form-fields/loading-text-field";
-
-import { uploadImage, getPublicImageUrl } from "api";
 
 export const MedicineEdit: React.FC = () => {
   const t = useTranslate();
@@ -26,7 +24,7 @@ export const MedicineEdit: React.FC = () => {
 
   const [price, setPrice] = useState<number | undefined>();
 
-  const [clinic, setClinic] = useState<IClinic | null>(null);
+  const [hospital, setHospital] = useState<IHospital | null>(null);
 
   const {
     saveButtonProps,
@@ -37,7 +35,7 @@ export const MedicineEdit: React.FC = () => {
     formState: { errors, isSubmitting },
     refineCore: { formLoading, queryResult },
     reset,
-  } = useForm<IMedicine, HttpError, IMedicine & { clinic: IClinic }>();
+  } = useForm<IMedicine, HttpError, IMedicine & { hospital: IHospital }>();
 
   const [imagePreview, setImagePreview] = useState<string>("");
 
@@ -49,21 +47,21 @@ export const MedicineEdit: React.FC = () => {
   const handleSubmit = async (e: BaseSyntheticEvent<object, any, any>) => {
     // console.log(saveButtonProps);
     try {
-      if (imageFile !== undefined) {
-        setCreatingMedicine(true);
-        const uploaded = await uploadImage(
-          imageFile,
-          "medicine-images",
-          `${clinic?.name}/${getValues("name")}/`
-        );
-        if (uploaded !== undefined) {
-          const imageUrl = await getPublicImageUrl(
-            "medicine-images",
-            uploaded?.path
-          );
-          if (imageUrl !== undefined) setValue("image", imageUrl?.publicUrl);
-        }
-      }
+      // if (imageFile !== undefined) {
+      //   setCreatingMedicine(true);
+      //   const uploaded = await uploadImage(
+      //     imageFile,
+      //     "medicine-images",
+      //     `${hospital?.name}/${getValues("name")}/`
+      //   );
+      //   if (uploaded !== undefined) {
+      //     const imageUrl = await getPublicImageUrl(
+      //       "medicine-images",
+      //       uploaded?.path
+      //     );
+      //     if (imageUrl !== undefined) setValue("image", imageUrl?.publicUrl);
+      //   }
+      // }
 
       setCreatingMedicine(true);
       saveButtonProps.onClick(e);
@@ -95,8 +93,8 @@ export const MedicineEdit: React.FC = () => {
   const { action } = useResource();
 
   const { autocompleteProps, defaultValueQueryResult } =
-    useAutocomplete<IClinic>({
-      resource: "clinics",
+    useAutocomplete<IHospital>({
+      resource: "hospitals",
       pagination: { current: 1, pageSize: 10000 },
       onSearch: (value: string) => [
         {
@@ -105,13 +103,13 @@ export const MedicineEdit: React.FC = () => {
           value,
         },
       ],
-      defaultValue: queryResult?.data?.data.clinic,
+      defaultValue: queryResult?.data?.data.hospital,
     });
 
   useEffect(() => {
     if (defaultValueQueryResult?.isFetched && !formLoading) {
       console.log("loaded");
-      setClinic(defaultValueQueryResult?.data?.data.at(0) || null);
+      setHospital(defaultValueQueryResult?.data?.data.at(0) || null);
       // setGetAutocompleteValue(false);
     }
   }, [
@@ -128,12 +126,12 @@ export const MedicineEdit: React.FC = () => {
 
       // reset();
       setName(getValues("name"));
-      // setClinic(getValues("clinic") || undefined);
+      // setHospital(getValues("hospital") || undefined);
       setBrand(getValues("brand"));
       setDescription(getValues("description") || "");
       setQuantity(getValues("quantity"));
       setPrice(getValues("price"));
-      // setClinic(getValues("workload_capacity"));
+      // setHospital(getValues("workload_capacity"));
       // console.log(defaultValueQueryResult.data?.data);
     }
   }, [getValues, reset, queryResult?.isLoading, formLoading]);
@@ -232,17 +230,17 @@ export const MedicineEdit: React.FC = () => {
           />
           <Controller
             control={control}
-            name="clinic"
-            rules={{ required: "Clinic is required" }}
+            name="hospital"
+            rules={{ required: "Hospital is required" }}
             render={({ field }) => (
               <Autocomplete
                 {...autocompleteProps}
                 {...field}
-                value={clinic}
+                value={hospital}
                 // defaultValue={defaultValueQueryResult?.data?.data[0]}
                 onChange={(_, value) => {
                   console.log(value);
-                  setClinic(value);
+                  setHospital(value);
                   field.onChange(value?.id);
                 }}
                 getOptionLabel={(item) => {
@@ -257,11 +255,11 @@ export const MedicineEdit: React.FC = () => {
                     loading={queryResult?.isFetching}
                     {...params}
                     // placeholder={defaultValueQueryResult?.data?.data[0].name}
-                    label="Clinic"
+                    label="Hospital"
                     margin="normal"
                     variant="outlined"
-                    error={!!errors.clinic}
-                    helperText={errors.clinic?.message}
+                    error={!!errors.hospital}
+                    helperText={errors.hospital?.message}
                     required
                   />
                 )}

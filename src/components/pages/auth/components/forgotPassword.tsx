@@ -11,7 +11,7 @@ import {
   useRouterType,
   useTranslate,
 } from "@refinedev/core";
-import { ThemedTitle } from "@refinedev/mui";
+import { ThemedTitleV2 } from "@refinedev/mui";
 import { FormPropsType } from "../index";
 import { layoutStyles, titleStyles } from "./styles";
 import {
@@ -73,7 +73,7 @@ export const ForgotPasswordPage: React.FC<ForgotPasswordProps> = ({
         }}
       >
         {title ?? (
-          <ThemedTitle
+          <ThemedTitleV2
             collapsed={false}
             wrapperStyles={{
               gap: "8px",

@@ -47,9 +47,9 @@ export const DoctorList: React.FC = () => {
   // );
   const [pageSize, setPageSize] = useState<number>(5);
 
-  const [selectClinics, setSelectClinics] = useState<IHospital[]>([]);
+  const [selectHospitals, setSelectHospitals] = useState<IHospital[]>([]);
 
-  // const clinicsListQueryResult = useList<IHospital>({
+  // const hospitalsListQueryResult = useList<IHospital>({
   //   resource: "hospitals",
   // });
 
@@ -146,19 +146,19 @@ export const DoctorList: React.FC = () => {
             multiple
             // id=""
             options={
-              clinicsListQueryResult.data !== undefined
-                ? clinicsListQueryResult?.data?.data?.map((item) => item)
-                : ([] as IClinic[])
+              hospitalsListQueryResult.data !== undefined
+                ? hospitalsListQueryResult?.data?.data?.map((item) => item)
+                : ([] as IHospital[])
             }
-            getOptionLabel={(option) => (option as IClinic).name ?? option}
-            value={selectClinics}
+            getOptionLabel={(option) => (option as IHospital).name ?? option}
+            value={selectHospitals}
             onChange={(_event, value) => {
-              setSelectClinics(value as IClinic[]);
+              setSelectHospitals(value as IHospital[]);
             }}
             // defaultValue={[top100Films[13].title]}
             freeSolo
-            renderTags={(value: readonly IClinic[], getTagProps) =>
-              value.map((option: IClinic, index: number) => (
+            renderTags={(value: readonly IHospital[], getTagProps) =>
+              value.map((option: IHospital, index: number) => (
                 <Chip
                   variant="outlined"
                   label={option.name}
@@ -189,19 +189,19 @@ export const DoctorList: React.FC = () => {
             multiple
             // id=""
             options={
-              clinicsListQueryResult.data !== undefined
-                ? clinicsListQueryResult?.data?.data?.map((item) => item)
-                : ([] as IClinic[])
+              hospitalsListQueryResult.data !== undefined
+                ? hospitalsListQueryResult?.data?.data?.map((item) => item)
+                : ([] as IHospital[])
             }
-            getOptionLabel={(option) => (option as IClinic).name ?? option}
-            value={selectClinics}
+            getOptionLabel={(option) => (option as IHospital).name ?? option}
+            value={selectHospitals}
             onChange={(_event, value) => {
-              setSelectClinics(value as IClinic[]);
+              setSelectHospitals(value as IHospital[]);
             }}
             // defaultValue={[top100Films[13].title]}
             freeSolo
-            renderTags={(value: readonly IClinic[], getTagProps) =>
-              value.map((option: IClinic, index: number) => (
+            renderTags={(value: readonly IHospital[], getTagProps) =>
+              value.map((option: IHospital, index: number) => (
                 <Chip
                   variant="outlined"
                   label={option.name}
@@ -213,8 +213,8 @@ export const DoctorList: React.FC = () => {
               <TextField
                 {...params}
                 variant="outlined"
-                label="Clinics"
-                placeholder="Clinics"
+                label="Hospitals"
+                placeholder="Hospitals"
               />
             )}
           />
@@ -224,19 +224,19 @@ export const DoctorList: React.FC = () => {
             multiple
             // id=""
             options={
-              clinicsListQueryResult.data !== undefined
-                ? clinicsListQueryResult?.data?.data?.map((item) => item)
-                : ([] as IClinic[])
+              hospitalsListQueryResult.data !== undefined
+                ? hospitalsListQueryResult?.data?.data?.map((item) => item)
+                : ([] as IHospital[])
             }
-            getOptionLabel={(option) => (option as IClinic).name ?? option}
-            value={selectClinics}
+            getOptionLabel={(option) => (option as IHospital).name ?? option}
+            value={selectHospitals}
             onChange={(_event, value) => {
-              setSelectClinics(value as IClinic[]);
+              setSelectHospitals(value as IHospital[]);
             }}
             // defaultValue={[top100Films[13].title]}
             freeSolo
-            renderTags={(value: readonly IClinic[], getTagProps) =>
-              value.map((option: IClinic, index: number) => (
+            renderTags={(value: readonly IHospital[], getTagProps) =>
+              value.map((option: IHospital, index: number) => (
                 <Chip
                   variant="outlined"
                   label={option.name}
@@ -296,17 +296,17 @@ export const DoctorList: React.FC = () => {
         <DirectionsIcon />
       </IconButton> */}
         {/* <FormControl sx={{ minWidth: 320 }}>
-          <InputLabel>Select Clinics</InputLabel>
+          <InputLabel>Select Hospitals</InputLabel>
           <Select
             sx={{ ml: 1, flex: 1 }}
             multiple
             variant="standard"
-            value={selectClinics}
+            value={selectHospitals}
             onChange={(
               event: SelectChangeEvent<number[]>,
               child: React.ReactNode
             ) => {
-              setSelectClinics(event.target.value as number[]);
+              setSelectHospitals(event.target.value as number[]);
             }}
             // onChange={(
             //   event: SelectChangeEvent<number>,
@@ -316,9 +316,9 @@ export const DoctorList: React.FC = () => {
             // }}
             // label="Select Author"
           >
-            {clinicsListQueryResult.data !== undefined &&
-              clinicsListQueryResult.data.total > 0 &&
-              clinicsListQueryResult.data.data.map((row, index) => (
+            {hospitalsListQueryResult.data !== undefined &&
+              hospitalsListQueryResult.data.total > 0 &&
+              hospitalsListQueryResult.data.data.map((row, index) => (
                 <MenuItem key={row.id} value={row.id}>
                   {row.name}
                 </MenuItem>

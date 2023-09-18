@@ -319,10 +319,10 @@ export const TechnicianShow: React.FC = () => {
           </Typography>
           <Typography variant="body2">{record?.profiles.gender}</Typography>
           {/* <Typography variant="body1" fontWeight="bold">
-            {t("patients.fields.clinic")}
+            {t("patients.fields.hospital")}
           </Typography>
           <Typography variant="body2">
-            {!clinicLoading ? clinicData?.data?.name : "Loading"}
+            {!hospitalLoading ? hospitalData?.data?.name : "Loading"}
           </Typography> */}
         </Stack>
       </Stack>

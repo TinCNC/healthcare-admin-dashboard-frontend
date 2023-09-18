@@ -38,7 +38,7 @@ import { Search } from "@mui/icons-material";
 export const PatientList: React.FC = () => {
   const t = useTranslate();
 
-  const { dataGridProps, setFilters } = useDataGrid<IPatient>();
+  const { dataGridProps, setFilters } = useDataGrid<IPatient>({});
 
   // const { tableQueryResult, setFilters: setFilters2 } = useTable<IPatient>();
 
@@ -48,14 +48,14 @@ export const PatientList: React.FC = () => {
 
   const [lastNameSearch, setLastNameSearch] = useState<string>("");
 
-  // const [selectClinics, setSelectClinics] = useState<number[]>([]);
+  // const [selectHospitals, setSelectHospitals] = useState<number[]>([]);
 
-  // const clinicsListQueryResult = useList<IClinic>({
-  //   resource: "clinics",
+  // const hospitalsListQueryResult = useList<IHospital>({
+  //   resource: "hospitals",
   // });
 
   useEffect(() => {
-    // console.log(selectClinics);
+    // console.log(selectHospitals);
     const filter: CrudFilters = [
       // {
       //   field: "username",
@@ -73,11 +73,11 @@ export const PatientList: React.FC = () => {
         value: lastNameSearch,
       },
     ];
-    // if (selectClinics !== undefined && selectClinics.length !== 0) {
+    // if (selectHospitals !== undefined && selectHospitals.length !== 0) {
     //   filter.push({
-    //     field: "clinic",
+    //     field: "hospital",
     //     operator: "in",
-    //     value: selectClinics,
+    //     value: selectHospitals,
     //   });
     // }
     setFilters(filter);
@@ -95,54 +95,37 @@ export const PatientList: React.FC = () => {
 
   const columns = React.useMemo<GridColDef<IPatient>[]>(
     () => [
+      // {
+      //   field: "id",
+      //   headerName: t("patients.fields.id"),
+      //   type: "number",
+      //   minWidth: 50,
+      //   maxWidth: 50,
+      //   flex: 1,
+      // },
       {
-        field: "id",
-        headerName: t("patients.fields.id"),
-        type: "number",
-        minWidth: 50,
-        maxWidth: 50,
-        flex: 1,
-      },
-      {
-        field: "first_name",
-        headerName: t("patients.fields.first_name"),
+        field: "full_name",
+        headerName: t("patients.fields.full_name"),
         minWidth: 100,
         flex: 1,
-      },
-      {
-        field: "last_name",
-        headerName: t("patients.fields.last_name"),
-        minWidth: 100,
-        flex: 1,
+        valueGetter: (tableData) =>
+          tableData.row.user_ref.info.first_name +
+          " " +
+          tableData.row.user_ref.info.last_name,
+        // renderCell: (params) => {
+        //   return (
+        //     params.value.info.first_name + " " + params.value.info.last_name
+        //   );
+        // },
       },
       {
         field: "dob",
         headerName: t("patients.fields.dob"),
         minWidth: 100,
         flex: 1,
+        valueGetter: (tableData) =>
+          new Date(tableData.row.user_ref.info.dob).toLocaleString(),
       },
-      // {
-      //   field: "clinic",
-      //   headerName: t("patients.fields.clinic"),
-      //   minWidth: 100,
-      //   flex: 1,
-      //   renderCell: ({ row }) => {
-      //     if (
-      //       clinicsListQueryResult.isFetching ||
-      //       clinicsListQueryResult.isLoading
-      //     ) {
-      //       return "Loading...";
-      //     }
-
-      //     const clinic =
-      //       clinicsListQueryResult.data !== undefined
-      //         ? clinicsListQueryResult?.data?.data.find(
-      //             (item) => item.id === row.clinic
-      //           )?.name
-      //         : "";
-      //     return clinic;
-      //   },
-      // },
       {
         field: "created_at",
         headerName: t("patients.fields.createdAt"),
@@ -152,15 +135,15 @@ export const PatientList: React.FC = () => {
           return new Date(row.created_at).toLocaleString();
         },
       },
-      // {
-      //   field: "updated_at",
-      //   headerName: t("patients.fields.updatedAt"),
-      //   minWidth: 400,
-      //   flex: 1,
-      //   renderCell: ({ row }) => {
-      //     return new Date(row.created_at).toLocaleString();
-      //   },
-      // },
+      {
+        field: "updated_at",
+        headerName: t("patients.fields.updatedAt"),
+        minWidth: 400,
+        flex: 1,
+        renderCell: ({ row }) => {
+          return new Date(row.created_at).toLocaleString();
+        },
+      },
       {
         field: "actions",
         type: "actions",
@@ -168,9 +151,9 @@ export const PatientList: React.FC = () => {
         renderCell: function render({ row }) {
           return (
             <Stack direction="row" spacing={1}>
-              <ShowButton hideText recordItemId={row.id} />
-              <EditButton size="small" hideText recordItemId={row.id} />
-              <DeleteButton size="small" hideText recordItemId={row.id} />
+              <ShowButton hideText recordItemId={row._id} />
+              <EditButton size="small" hideText recordItemId={row._id} />
+              <DeleteButton size="small" hideText recordItemId={row._id} />
             </Stack>
           );
         },
@@ -182,9 +165,9 @@ export const PatientList: React.FC = () => {
     ],
 
     [
-      // clinicsListQueryResult.data,
-      // clinicsListQueryResult.isFetching,
-      // clinicsListQueryResult.isLoading,
+      // hospitalsListQueryResult.data,
+      // hospitalsListQueryResult.isFetching,
+      // hospitalsListQueryResult.isLoading,
       t,
     ]
   );
@@ -217,25 +200,25 @@ export const PatientList: React.FC = () => {
   //     flex: 1,
   //   },
   //   {
-  //     field: "clinic",
-  //     headerName: t("patients.fields.clinic"),
+  //     field: "hospital",
+  //     headerName: t("patients.fields.hospital"),
   //     minWidth: 100,
   //     flex: 1,
   //     renderCell: ({ row }) => {
   //       if (
-  //         clinicsListQueryResult.isFetching ||
-  //         clinicsListQueryResult.isLoading
+  //         hospitalsListQueryResult.isFetching ||
+  //         hospitalsListQueryResult.isLoading
   //       ) {
   //         return "Loading...";
   //       }
 
-  //       const clinic =
-  //         clinicsListQueryResult.data !== undefined
-  //           ? clinicsListQueryResult?.data?.data.find(
-  //               (item) => item.id === row.clinic
+  //       const hospital =
+  //         hospitalsListQueryResult.data !== undefined
+  //           ? hospitalsListQueryResult?.data?.data.find(
+  //               (item) => item.id === row.hospital
   //             )?.name
   //           : "";
-  //       return clinic;
+  //       return hospital;
   //     },
   //   },
   //   {
@@ -356,17 +339,17 @@ export const PatientList: React.FC = () => {
         <DirectionsIcon />
       </IconButton> */}
         {/* <FormControl sx={{ minWidth: 320 }}>
-          <InputLabel>Select Clinics</InputLabel>
+          <InputLabel>Select Hospitals</InputLabel>
           <Select
             sx={{ ml: 1, flex: 1 }}
             multiple
             variant="standard"
-            value={selectClinics}
+            value={selectHospitals}
             onChange={(
               event: SelectChangeEvent<number[]>
               // child: React.ReactNode
             ) => {
-              setSelectClinics(event.target.value as number[]);
+              setSelectHospitals(event.target.value as number[]);
             }}
             // onChange={(
             //   event: SelectChangeEvent<number>,
@@ -376,9 +359,9 @@ export const PatientList: React.FC = () => {
             // }}
             // label="Select Author"
           >
-            {clinicsListQueryResult.data !== undefined &&
-              clinicsListQueryResult.data.total > 0 &&
-              clinicsListQueryResult.data.data.map((row) => (
+            {hospitalsListQueryResult.data !== undefined &&
+              hospitalsListQueryResult.data.total > 0 &&
+              hospitalsListQueryResult.data.data.map((row) => (
                 <MenuItem key={row.id} value={row.id}>
                   {row.name}
                 </MenuItem>
@@ -395,6 +378,7 @@ export const PatientList: React.FC = () => {
           //     : []
           // }
           // loading={tableQueryResult.isLoading || tableQueryResult.isFetching}
+          getRowId={(row) => row._id}
           filterModel={undefined}
           disableColumnFilter={true}
           // filterModel={}

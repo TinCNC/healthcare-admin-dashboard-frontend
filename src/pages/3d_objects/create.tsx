@@ -10,7 +10,7 @@ import { FileUpload, SaveOutlined } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { BaseSyntheticEvent, useState } from "react";
 
-import { uploadImage, getPublicImageUrl } from "api";
+// import { uploadImage, getPublicImageUrl } from "api";
 
 export const ProductCreate: React.FC = () => {
   const t = useTranslate();
@@ -42,28 +42,28 @@ export const ProductCreate: React.FC = () => {
     // console.log(imageFile);
 
     try {
-      if (imageFile !== undefined) {
-        setCreatingProduct(true);
-        const uploaded = await uploadImage(
-          imageFile,
-          "product-image",
-          `${getValues("name")}/`
-        );
-        if (uploaded !== undefined) {
-          const imageUrl = await getPublicImageUrl(
-            "product-image",
-            uploaded?.path
-          );
-          if (imageUrl !== undefined) setValue("image", imageUrl?.publicUrl);
-        }
-        // if (uploaded !== undefined) {
-        //   const imageUrl = await getSignedImageUrl(
-        //     "profile-image",
-        //     uploaded?.Key
-        //   );
-        //   if (imageUrl !== undefined) setValue("image", imageUrl?.signedURL);
-        // }
-      }
+      //   if (imageFile !== undefined) {
+      //     setCreatingProduct(true);
+      //     const uploaded = await uploadImage(
+      //       imageFile,
+      //       "product-image",
+      //       `${getValues("name")}/`
+      //     );
+      //     if (uploaded !== undefined) {
+      //       const imageUrl = await getPublicImageUrl(
+      //         "product-image",
+      //         uploaded?.path
+      //       );
+      //       if (imageUrl !== undefined) setValue("image", imageUrl?.publicUrl);
+      //     }
+      //     // if (uploaded !== undefined) {
+      //     //   const imageUrl = await getSignedImageUrl(
+      //     //     "profile-image",
+      //     //     uploaded?.Key
+      //     //   );
+      //     //   if (imageUrl !== undefined) setValue("image", imageUrl?.signedURL);
+      //     // }
+      //   }
 
       saveButtonProps.onClick(e);
       setCreatingProduct(false);

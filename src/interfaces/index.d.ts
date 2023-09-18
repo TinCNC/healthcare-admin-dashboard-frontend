@@ -1,6 +1,8 @@
 export * from "./building";
 export * from "./user";
 export * from "./material";
+export * from "./medicine";
+export * from "./disease";
 export interface ICategory {
   id: number;
   title: string;
@@ -64,7 +66,7 @@ export interface ITechnicianView
 export interface IDoctorSalary {
   id: number;
   doctor_id: number;
-  clinic: number;
+  hospital: number;
   salary: number;
   start_date: string;
   end_date: string;
@@ -72,21 +74,13 @@ export interface IDoctorSalary {
 }
 
 export interface IDoctorSalaryView extends IDoctorSalary {
-  clinic_name: string;
+  hospital_name: string;
 }
 
 export interface IDoctorView extends IDoctor, Omit<IProfile, "id" | "role"> {
   full_name: string;
   departments_name: string[];
-  clinics_name: string[];
-}
-
-export interface IClinic {
-  id: number;
-  name: string;
-  address: string;
-  capacity: number;
-  created_at: string;
+  hospitals_name: string[];
 }
 
 export interface I3DObjectMetadata {
@@ -118,19 +112,6 @@ export interface IDiseasesGroup {
   created_at: string;
 }
 
-export interface IDisease {
-  id: number;
-  name: string;
-  scientific_name: string;
-  other_name: string;
-  classification: string;
-  description: string;
-  // body_part: string;
-  body_parts: string[];
-  severity: string;
-  created_at: string;
-}
-
 export interface IPrescription {
   id: number;
   medicine: number;
@@ -147,23 +128,6 @@ export interface IPrescriptionView extends IPrescription {
   medicine_description: string;
   medicine_price: number;
   total_price: number;
-}
-
-interface IDosage {
-  time: number;
-  volume: number;
-}
-
-export interface IMedicine {
-  id: number;
-  name: string;
-  brand: string;
-  description: string;
-  quantity: number;
-  clinic: number;
-  price: number;
-  image: string;
-  created_at: string;
 }
 
 export interface IOrder {
@@ -202,7 +166,7 @@ export interface IProfessionalCertificates {
   description: string;
   issued_date: string;
   expired_at: string;
-  creator: number;
+  issuer: number;
   validator: number;
   holder: string;
   speciality: number;
@@ -218,8 +182,8 @@ export interface IProfessionalCertificates {
 
 export interface IProfessionalCertificatesView
   extends IProfessionalCertificates {
-  creator_name: string;
-  creator_type: string;
+  issuer_name: string;
+  issuer_type: string;
   validator_name: string;
   speciality_name: string;
 }
@@ -257,7 +221,7 @@ export interface IExaminationRecord {
 
 export interface IExaminationRecordView extends IExaminationRecord {
   examiner_name: string;
-  clinic_name: string;
+  hospital_name: string;
   disease_name: string;
   patient_name: string;
 }

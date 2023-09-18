@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useTranslate, CrudFilters } from "@refinedev/core";
-import { useDataGrid, ShowButton, EditButton, DeleteButton } from "@refinedev/mui";
+import {
+  useDataGrid,
+  ShowButton,
+  EditButton,
+  DeleteButton,
+} from "@refinedev/mui";
 
 import {
   Stack,
@@ -13,7 +18,7 @@ import {
   TextField,
 } from "@mui/material";
 
-import { DataGrid, GridColumns } from "@mui/x-data-grid";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 
 import { List } from "components/crud/list";
 
@@ -42,7 +47,7 @@ export const DiseaseList: React.FC = () => {
   // });
 
   useEffect(() => {
-    // console.log(selectClinics);
+    // console.log(selectHospitals);
     const filter: CrudFilters = [
       {
         field: "name",
@@ -71,13 +76,13 @@ export const DiseaseList: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nameSearch, classificationSearch, severitySearch]);
 
-  const columns: GridColumns<IDisease> = [
-    {
-      field: "id",
-      headerName: t("diseases.fields.id"),
-      type: "number",
-      width: 50,
-    },
+  const columns: GridColDef<IDisease>[] = [
+    // {
+    //   field: "id",
+    //   headerName: t("diseases.fields.id"),
+    //   type: "number",
+    //   width: 50,
+    // },
     {
       field: "name",
       headerName: t("diseases.fields.name"),
@@ -98,7 +103,7 @@ export const DiseaseList: React.FC = () => {
     },
     {
       field: "createdAt",
-      headerName: t("clinics.fields.createdAt"),
+      headerName: t("hospitals.fields.createdAt"),
       minWidth: 400,
       flex: 1,
       renderCell: ({ row }) => {
@@ -112,9 +117,9 @@ export const DiseaseList: React.FC = () => {
       renderCell: ({ row }) => {
         return (
           <Stack direction="row" spacing={1}>
-            <ShowButton size="small" hideText recordItemId={row.id} />
-            <EditButton size="small" hideText recordItemId={row.id} />
-            <DeleteButton size="small" hideText recordItemId={row.id} />
+            <ShowButton size="small" hideText recordItemId={row._id} />
+            <EditButton size="small" hideText recordItemId={row._id} />
+            <DeleteButton size="small" hideText recordItemId={row._id} />
           </Stack>
         );
       },
@@ -202,12 +207,12 @@ export const DiseaseList: React.FC = () => {
             sx={{ ml: 1, flex: 1 }}
             multiple
             variant="standard"
-            value={selectClinics}
+            value={selectHospitals}
             onChange={(
               event: SelectChangeEvent<number[]>,
               child: React.ReactNode
             ) => {
-              setSelectClinics(event.target.value as number[]);
+              setSelectHospitals(event.target.value as number[]);
             }}
             // onChange={(
             //   event: SelectChangeEvent<number>,
@@ -217,9 +222,9 @@ export const DiseaseList: React.FC = () => {
             // }}
             // label="Select Author"
           >
-            {clinicsListQueryResult.data !== undefined &&
-              clinicsListQueryResult.data.total > 0 &&
-              clinicsListQueryResult.data.data.map((row, index) => (
+            {hospitalsListQueryResult.data !== undefined &&
+              hospitalsListQueryResult.data.total > 0 &&
+              hospitalsListQueryResult.data.data.map((row, index) => (
                 <MenuItem key={row.id} value={row.id}>
                   {row.name}
                 </MenuItem>
@@ -230,6 +235,7 @@ export const DiseaseList: React.FC = () => {
       <List>
         <DataGrid
           {...dataGridProps}
+          getRowId={(row) => row._id}
           columns={columns}
           filterModel={undefined}
           disableColumnFilter={true}

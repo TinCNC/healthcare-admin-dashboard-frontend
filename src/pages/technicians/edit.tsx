@@ -11,7 +11,6 @@ import { FileUpload, SaveOutlined } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { BaseSyntheticEvent, useState } from "react";
 
-import { uploadImage, getPublicImageUrl } from "api";
 import { LoadingAvatar } from "components/form-fields/loading-avatar";
 
 export const TechnicianEdit: React.FC = () => {
@@ -43,21 +42,21 @@ export const TechnicianEdit: React.FC = () => {
     // console.log(imageFile);
 
     try {
-      if (imageFile !== undefined) {
-        setCreatingTechnician(true);
-        const uploaded = await uploadImage(
-          imageFile,
-          "profile-image",
-          `technicians/${getValues("username")}/`
-        );
-        if (uploaded !== undefined) {
-          const imageUrl = await getPublicImageUrl(
-            "profile-image",
-            uploaded?.path
-          );
-          if (imageUrl !== undefined) setValue("image", imageUrl?.publicUrl);
-        }
-      }
+      // if (imageFile !== undefined) {
+      //   setCreatingTechnician(true);
+      //   const uploaded = await uploadImage(
+      //     imageFile,
+      //     "profile-image",
+      //     `technicians/${getValues("username")}/`
+      //   );
+      //   if (uploaded !== undefined) {
+      //     const imageUrl = await getPublicImageUrl(
+      //       "profile-image",
+      //       uploaded?.path
+      //     );
+      //     if (imageUrl !== undefined) setValue("image", imageUrl?.publicUrl);
+      //   }
+      // }
       saveButtonProps.onClick(e);
       setCreatingTechnician(false);
       // throw new Error("Function not implemented.");
@@ -86,8 +85,8 @@ export const TechnicianEdit: React.FC = () => {
   // const {
   //   autocompleteProps,
   //   // defaultValueQueryResult
-  // } = useAutocomplete<IClinic>({
-  //   resource: "clinics",
+  // } = useAutocomplete<IHospital>({
+  //   resource: "hospitals",
   //   onSearch: (value) => [
   //     {
   //       field: "name",
@@ -95,7 +94,7 @@ export const TechnicianEdit: React.FC = () => {
   //       value,
   //     },
   //   ],
-  //   defaultValue: queryResult?.data?.data.clinic,
+  //   defaultValue: queryResult?.data?.data.hospital,
   // });
 
   return (
@@ -236,8 +235,8 @@ export const TechnicianEdit: React.FC = () => {
         /> */}
             {/* <Controller
               control={control}
-              name="clinic"
-              rules={{ required: "Clinic is required" }}
+              name="hospital"
+              rules={{ required: "Hospital is required" }}
               render={({ field }) => (
                 <Autocomplete
                   {...autocompleteProps}
@@ -257,11 +256,11 @@ export const TechnicianEdit: React.FC = () => {
                     <TextField
                       {...params}
                       // placeholder={defaultValueQueryResult?.data?.data[0].name}
-                      label="Clinic"
+                      label="Hospital"
                       margin="normal"
                       variant="outlined"
-                      error={!!errors.clinic}
-                      helperText={errors.clinic?.message}
+                      error={!!errors.hospital}
+                      helperText={errors.hospital?.message}
                       required
                     />
                   )}

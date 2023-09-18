@@ -13,7 +13,7 @@ import {
   useRouterType,
   useLink,
 } from "@refinedev/core";
-import { ThemedTitle } from "@/components/themedLayoutV1/title";
+import { ThemedTitleV2 } from "@/components/themedLayoutV2/title";
 import { FormPropsType } from "../index";
 import { layoutStyles, titleStyles } from "./styles";
 import {
@@ -82,7 +82,7 @@ export const LoginPage: React.FC<LoginProps> = ({
         }}
       >
         {title ?? (
-          <ThemedTitle
+          <ThemedTitleV2
             collapsed={false}
             wrapperStyles={{
               gap: "8px",

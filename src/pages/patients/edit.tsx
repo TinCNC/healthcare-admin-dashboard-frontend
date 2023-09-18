@@ -14,13 +14,12 @@ import { LoadingTextField } from "components/form-fields/loading-text-field";
 import { useForm } from "@refinedev/react-hook-form";
 import { Controller } from "react-hook-form";
 
-import { IPatient, IClinic } from "interfaces";
+import { IPatient, IHospital } from "interfaces";
 
 import { FileUpload } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { BaseSyntheticEvent, useState, useEffect } from "react";
 
-import { uploadImage, getPublicImageUrl } from "api";
 import { LoadingAvatar } from "components/form-fields/loading-avatar";
 
 import { useTranslate } from "@refinedev/core";
@@ -36,7 +35,7 @@ export const PatientEdit: React.FC = () => {
     control,
     getValues,
     setValue,
-  } = useForm<IPatient, HttpError, IPatient & { clinic: IClinic }>();
+  } = useForm<IPatient, HttpError, IPatient & { hospital: IHospital }>();
 
   const [imagePreview, setImagePreview] = useState<string>("");
 
@@ -53,21 +52,21 @@ export const PatientEdit: React.FC = () => {
     // console.log(saveButtonProps);
 
     try {
-      if (imageFile !== undefined) {
-        setCreatingPatient(true);
-        const uploaded = await uploadImage(
-          imageFile,
-          "profile-image",
-          `patients/${getValues("identity_number")}/`
-        );
-        if (uploaded !== undefined) {
-          const imageUrl = await getPublicImageUrl(
-            "profile-image",
-            uploaded?.path
-          );
-          if (imageUrl !== undefined) setValue("image", imageUrl?.publicUrl);
-        }
-      }
+      // if (imageFile !== undefined) {
+      //   setCreatingPatient(true);
+      //   const uploaded = await uploadImage(
+      //     imageFile,
+      //     "profile-image",
+      //     `patients/${getValues("identity_number")}/`
+      //   );
+      //   if (uploaded !== undefined) {
+      //     const imageUrl = await getPublicImageUrl(
+      //       "profile-image",
+      //       uploaded?.path
+      //     );
+      //     if (imageUrl !== undefined) setValue("image", imageUrl?.publicUrl);
+      //   }
+      // }
 
       setCreatingPatient(true);
       saveButtonProps.onClick(e);
@@ -94,11 +93,11 @@ export const PatientEdit: React.FC = () => {
     }
   };
 
-  const [clinic, setClinic] = useState<IClinic | null>(null);
+  const [hospital, setHospital] = useState<IHospital | null>(null);
 
   const { autocompleteProps, defaultValueQueryResult } =
-    useAutocomplete<IClinic>({
-      resource: "clinics",
+    useAutocomplete<IHospital>({
+      resource: "hospitals",
       pagination: { current: 1, pageSize: 10000 },
       onSearch: (value: string) => [
         {
@@ -107,7 +106,7 @@ export const PatientEdit: React.FC = () => {
           value,
         },
       ],
-      defaultValue: queryResult?.data?.data.clinic,
+      defaultValue: queryResult?.data?.data.hospital,
     });
 
   useEffect(() => {
@@ -125,7 +124,7 @@ export const PatientEdit: React.FC = () => {
   useEffect(() => {
     if (defaultValueQueryResult?.isFetched && !formLoading) {
       console.log("loaded");
-      setClinic(defaultValueQueryResult?.data?.data.at(0) || null);
+      setHospital(defaultValueQueryResult?.data?.data.at(0) || null);
       // setGetAutocompleteValue(false);
     }
   }, [
@@ -297,17 +296,17 @@ export const PatientEdit: React.FC = () => {
             </FormControl>
             {/* <Controller
               control={control}
-              name="clinic"
-              rules={{ required: "Clinic is required" }}
+              name="hospital"
+              rules={{ required: "Hospital is required" }}
               render={({ field }) => (
                 <Autocomplete
                   {...autocompleteProps}
                   {...field}
-                  value={clinic}
+                  value={hospital}
                   // defaultValue={defaultValueQueryResult?.data?.data[0]}
                   onChange={(_, value) => {
                     console.log(value);
-                    setClinic(value);
+                    setHospital(value);
                     field.onChange(value?.id);
                   }}
                   getOptionLabel={(item) => {
@@ -322,11 +321,11 @@ export const PatientEdit: React.FC = () => {
                       loading={queryResult?.isFetching}
                       {...params}
                       // placeholder={defaultValueQueryResult?.data?.data[0].name}
-                      label="Clinic"
+                      label="Hospital"
                       margin="normal"
                       variant="outlined"
-                      error={!!errors.clinic}
-                      helperText={errors.clinic?.message}
+                      error={!!errors.hospital}
+                      helperText={errors.hospital?.message}
                       required
                     />
                   )}

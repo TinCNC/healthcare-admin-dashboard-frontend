@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useTranslate, CrudFilters } from "@refinedev/core";
-import { useDataGrid, ShowButton, EditButton, DeleteButton } from "@refinedev/mui";
+import {
+  useDataGrid,
+  ShowButton,
+  EditButton,
+  DeleteButton,
+} from "@refinedev/mui";
 import { Stack, Divider, IconButton, InputBase, Paper } from "@mui/material";
 import { DataGrid, GridColumns } from "@mui/x-data-grid";
 
@@ -35,7 +40,7 @@ export const DiseaseGroupList: React.FC = () => {
   // });
 
   useEffect(() => {
-    // console.log(selectClinics);
+    // console.log(selectHospitals);
     const filter: CrudFilters = [
       {
         field: "group_name",

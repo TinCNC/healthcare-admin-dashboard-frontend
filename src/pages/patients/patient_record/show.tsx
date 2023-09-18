@@ -21,7 +21,11 @@ import { Show } from "components/crud/show";
 
 import { CardMembership } from "@mui/icons-material";
 
-import { IExaminationRecordView, IPrescriptionView } from "interfaces";
+import {
+  IExaminationRecordView,
+  IPatient,
+  IPrescriptionView,
+} from "interfaces";
 
 import {
   PrecriptionEditorDialog,
@@ -32,14 +36,23 @@ import { SubresourceList } from "components/crud/list-subresource";
 export const PatientRecord: React.FC = () => {
   const t = useTranslate();
 
-  const { queryResult } = useShow<IExaminationRecordView>({
-    id: useResource().id,
-    resource: "examination_records_view",
-  });
+  const test = useResource("patients");
 
-  const [selectedPrescriptionData, setSelectedPrescriptionData] = useState<
-    IPrescriptionView | undefined
-  >();
+  console.log(test);
+
+  // const { queryResult } = useShow<IExaminationRecordView>({
+  //   id: useResource().id,
+  //   resource: "examination_records_view",
+  // });
+
+  // const { queryResult } = useShow<IPatient>({
+  //   id: useResource().id,
+  //   resource: "examination_records_view",
+  // });
+
+  // const [selectedPrescriptionData, setSelectedPrescriptionData] = useState<
+  //   IPrescriptionView | undefined
+  // >();
 
   // console.log(queryResult);
 
@@ -122,14 +135,14 @@ export const PatientRecord: React.FC = () => {
 
   const prescriptionsColumns = React.useMemo<GridColDef<IPrescriptionView>[]>(
     () => [
+      // {
+      //   field: "id",
+      //   headerName: t("prescriptions.fields.id"),
+      //   type: "number",
+      //   width: 50,
+      // },
       {
-        field: "id",
-        headerName: t("prescriptions.fields.id"),
-        type: "number",
-        width: 50,
-      },
-      {
-        field: "medicine_name",
+        field: "medicine",
         headerName: t("prescriptions.fields.medicine"),
         minWidth: 280,
         maxWidth: 280,

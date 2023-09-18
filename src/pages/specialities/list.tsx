@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useTranslate, CrudFilters } from "@refinedev/core";
-import { useDataGrid, EditButton, DeleteButton, ShowButton } from "@refinedev/mui";
+import {
+  useDataGrid,
+  EditButton,
+  DeleteButton,
+  ShowButton,
+} from "@refinedev/mui";
 import { Stack, IconButton, InputBase, Paper } from "@mui/material";
 import { DataGrid, GridColumns } from "@mui/x-data-grid";
 
@@ -17,10 +22,10 @@ export const SpecialityList: React.FC = () => {
 
   const [nameSearch, setNameSearch] = useState<string>("");
 
-  // const [selectClinics, setSelectClinics] = useState<number[]>([]);
+  // const [selectHospitals, setSelectHospitals] = useState<number[]>([]);
 
-  // const clinicsListQueryResult = useList<IClinic>({
-  //   resource: "clinics",
+  // const hospitalsListQueryResult = useList<IHospital>({
+  //   resource: "hospitals",
   // });
 
   useEffect(() => {

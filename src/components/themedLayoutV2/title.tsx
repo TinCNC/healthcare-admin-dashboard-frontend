@@ -3,7 +3,7 @@ import { useRouterContext, useLink, useRouterType } from "@refinedev/core";
 import { Link as MuiLink, SvgIcon, Typography } from "@mui/material";
 import type { RefineLayoutThemedTitleProps } from "@refinedev/mui";
 
-const defaultText = "Custom Dental Part CMS";
+const defaultText = "Virtual Health Assistant";
 
 const defaultIcon = (
   <svg

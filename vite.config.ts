@@ -22,8 +22,7 @@ export default defineConfig({
       // src: "*",
       // prettier-ignore
       "@": path.resolve(__dirname, "src"),
-      // prettier-ignore
-      "api": path.resolve(__dirname, "src/api"),
+
       // prettier-ignore
       "components": path.resolve(__dirname, "src/components"),
       // prettier-ignore
@@ -32,8 +31,7 @@ export default defineConfig({
       "interfaces": path.resolve(__dirname, "src/interfaces"),
       // prettier-ignore
       "pages": path.resolve(__dirname, "src/pages"),
-      // prettier-ignore
-      "utility": path.resolve(__dirname, "src/utility"),
+
       stream: "rollup-plugin-node-polyfills/polyfills/stream",
       events: "rollup-plugin-node-polyfills/polyfills/events",
       assert: "assert",

@@ -28,14 +28,14 @@ export const LaboratoryList: React.FC = () => {
 
   const [emailSearch, setEmailSearch] = useState<string>("");
 
-  // const [selectClinics, setSelectClinics] = useState<number[]>([]);
+  // const [selectHospitals, setSelectHospitals] = useState<number[]>([]);
 
-  // const clinicsListQueryResult = useList<IClinic>({
-  //   resource: "clinics",
+  // const hospitalsListQueryResult = useList<IHospital>({
+  //   resource: "hospitals",
   // });
 
   useEffect(() => {
-    // console.log(selectClinics);
+    // console.log(selectHospitals);
     const filter: CrudFilters = [
       {
         field: "name",

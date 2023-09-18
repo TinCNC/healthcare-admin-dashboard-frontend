@@ -15,8 +15,6 @@ import { FileUpload } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { BaseSyntheticEvent, useState, useEffect } from "react";
 
-import { uploadImage, getPublicImageUrl } from "api";
-
 export const DoctorEdit: React.FC = () => {
   const t = useTranslate();
 
@@ -51,21 +49,21 @@ export const DoctorEdit: React.FC = () => {
     // console.log(imageFile);
 
     try {
-      if (imageFile !== undefined) {
-        setCreatingPatient(true);
-        const uploaded = await uploadImage(
-          imageFile,
-          "profile-image",
-          `doctors/${getValues("username")}/`
-        );
-        if (uploaded !== undefined) {
-          const imageUrl = await getPublicImageUrl(
-            "profile-image",
-            uploaded?.path
-          );
-          if (imageUrl !== undefined) setValue("image", imageUrl?.publicUrl);
-        }
-      }
+      // if (imageFile !== undefined) {
+      //   setCreatingPatient(true);
+      //   const uploaded = await uploadImage(
+      //     imageFile,
+      //     "profile-image",
+      //     `doctors/${getValues("username")}/`
+      //   );
+      //   if (uploaded !== undefined) {
+      //     const imageUrl = await getPublicImageUrl(
+      //       "profile-image",
+      //       uploaded?.path
+      //     );
+      //     if (imageUrl !== undefined) setValue("image", imageUrl?.publicUrl);
+      //   }
+      // }
 
       setCreatingPatient(false);
       saveButtonProps.onClick(e);

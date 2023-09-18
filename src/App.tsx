@@ -15,7 +15,6 @@ import { model, adapter } from "./accessControl";
 
 import { ThemedLayoutV2 } from "./components/themedLayoutV2";
 
-// import { dataProvider, liveProvider } from "@refinedev/supabase";
 import dataProvider from "@refinedev/simple-rest";
 import { CssBaseline, GlobalStyles } from "@mui/material";
 import { BrowserRouter, Route, Routes, Outlet } from "react-router-dom";
@@ -78,7 +77,7 @@ import {
   // DiseaseGroupCreate,
 } from "@/pages/diseases_groups";
 
-import { ClinicList, ClinicCreate, ClinicEdit } from "@/pages/clinics";
+import { HospitalList, HospitalCreate, HospitalEdit } from "@/pages/hospitals";
 
 import {
   DepartmentList,
@@ -123,9 +122,8 @@ import {
   faMedkit,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { Category, Google } from "@mui/icons-material";
+import { Category, Google, GridView } from "@mui/icons-material";
 import { OrderList } from "@/pages/order";
-// import { supabaseClient } from "utility";
 import { ColorModeContextProvider } from "./contexts/color-mode";
 // import { Header } from "./components/header";
 // import authProvider from "./authProvider";
@@ -137,6 +135,7 @@ import { MedicineEdit, MedicineList, MedicineShow } from "./pages/medicines";
 import { PatientRecord } from "./pages/patients/patient_record";
 import { InterpolationMap, TOptionsBase } from "i18next";
 import { $Dictionary } from "i18next/typescript/helpers";
+import { DashboardPage } from "@/pages/dashboard";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -151,10 +150,6 @@ function App() {
     changeLocale: (lang: string) => i18n.changeLanguage(lang),
     getLocale: () => i18n.language,
   };
-
-  // const dataProviderObj = dataProvider(supabaseClient);
-
-  // const liveProviderObj = liveProvider(supabaseClient);
 
   // const role = localStorage.getItem("role") ?? "unauthenticated";
 
@@ -194,10 +189,10 @@ function App() {
                   i18nProvider={i18nProvider}
                   resources={[
                     {
-                      name: "/",
+                      name: "dashboards",
                       list: "/",
                       meta: {
-                        hide: true,
+                        icon: <GridView />,
                       },
                     },
                     {
@@ -294,11 +289,11 @@ function App() {
                       },
                     },
                     {
-                      name: "clinics",
-                      list: "/clinics",
-                      create: "/clinics/create",
-                      edit: "/clinics/edit/:id",
-                      show: "/clinics/show/:id",
+                      name: "hospitals",
+                      list: "/hospitals",
+                      create: "/hospitals/create",
+                      edit: "/hospitals/edit/:id",
+                      show: "/hospitals/show/:id",
                       meta: {
                         canDelete: true,
                         icon: <FontAwesomeIcon icon={faHospital} />,
@@ -412,10 +407,11 @@ function App() {
                         </Authenticated>
                       }
                     >
-                      <Route
+                      {/* <Route
                         index
                         element={<NavigateToResource resource="departments" />}
-                      />
+                      /> */}
+                      <Route index element={<DashboardPage />} />
                       <Route path="/departments">
                         <Route index element={<DepartmentList />} />
                         <Route path="create" element={<DepartmentCreate />} />
@@ -442,7 +438,7 @@ function App() {
                       </Route>
                       <Route path="/diseases">
                         <Route index element={<DiseaseList />} />
-                        <Route path="create" element={<DiseaseCreate />} />
+                        <Route path="create" element={<DiseaseEdit />} />
                         <Route path="edit/:id" element={<DiseaseEdit />} />
                         <Route path="show/:id" element={<DiseaseShow />} />
                       </Route>
@@ -458,11 +454,11 @@ function App() {
                         <Route path="edit/:id" element={<MedicineEdit />} />
                         <Route path="show/:id" element={<MedicineShow />} />
                       </Route>
-                      <Route path="/clinics">
-                        <Route index element={<ClinicList />} />
-                        <Route path="create" element={<ClinicCreate />} />
-                        <Route path="edit/:id" element={<ClinicEdit />} />
-                        {/* <Route path="show/:id" element={<ClinicShow />} /> */}
+                      <Route path="/hospitals">
+                        <Route index element={<HospitalList />} />
+                        <Route path="create" element={<HospitalEdit />} />
+                        <Route path="edit/:id" element={<HospitalEdit />} />
+                        {/* <Route path="show/:id" element={<HospitalShow />} /> */}
                       </Route>
                       <Route path="/doctors">
                         <Route index element={<DoctorList />} />

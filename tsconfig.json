@@ -19,15 +19,11 @@
     "paths": {
       "@/*": ["src/*"],
       "src/*": ["./src/*"],
-      "api": ["./src/api"],
-      "api/*": ["./src/api/*"],
+
       "components/*": ["./src/components/*"],
       "contexts/*": ["./src/contexts/*"],
       "interfaces": ["./src/interfaces"],
-      "interfaces/*": ["./src/interfaces/*"],
-      "pages/*": ["./src/pages/*"],
-      "utility": ["./src/utility"],
-      "utility/*": ["./src/utility/*"]
+      "interfaces/*": ["./src/interfaces/*"]
     }
   },
   "include": ["src", "vite.config.ts"],

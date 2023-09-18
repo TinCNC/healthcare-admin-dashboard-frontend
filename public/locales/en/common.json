@@ -108,7 +108,40 @@
     "clone": "Clone"
   },
   "dashboard": {
-    "title": "Dashboard"
+    "good_morning": "Good morning",
+    "welcome_banner": "WELCOME TO YOUR PERSONAL VIRTUAL HEALTH ASSISTANT",
+    "title": "Dashboard",
+    "statistics_of_your_diseases": {
+      "title": "Statistics of your diseases",
+      "fever": "Fever",
+      "cough": "Cough",
+      "heart_burn": "Heart Burn",
+      "week": "Week",
+      "month": "Month",
+      "year": "Year"
+    },
+    "activity_feed": {
+      "title": "Activity Feed",
+      "all_activity": "All Activity",
+      "applying": "Applying",
+      "completed": "Completed"
+    },
+    "appointments": {
+      "title": "Appointments",
+      "create_new": "Create New",
+      "edit": "Edit"
+    },
+    "recent_transactions": {
+      "title": "Recent Transactions",
+      "create_new": "Create New",
+      "edit": "Edit",
+      "fields": {
+        "company_name": "Company Name",
+        "date": "Date",
+        "amount": "Amount",
+        "paid_by": "Paid By"
+      }
+    }
   },
   "posts": {
     "posts": "Posts",
@@ -148,7 +181,7 @@
       "dob": "DOB",
       "gender": "Gender",
       "image": "Image",
-      "clinic": "Clinic",
+      "hospital": "Hospital",
       "createdAt": "Created At",
       "updatedAt": "Updated At"
     },
@@ -210,8 +243,8 @@
       "show": "Show Categories"
     }
   },
-  "clinics": {
-    "clinics": "Clinics",
+  "hospitals": {
+    "hospitals": "Hospitals",
     "fields": {
       "id": "ID",
       "name": "Name",
@@ -220,10 +253,10 @@
       "createdAt": "Created At"
     },
     "titles": {
-      "create": "Create Clinic",
-      "edit": "Edit Clinic",
-      "list": "Clinics",
-      "show": "Clinic Information"
+      "create": "Create Hospital",
+      "edit": "Edit Hospital",
+      "list": "Hospitals",
+      "show": "Hospital Information"
     }
   },
   "diseases": {
@@ -421,7 +454,7 @@
       "full_name": "Full Name",
       "image": "Image",
       "departments": "Departments",
-      "clinics": "Clinics",
+      "hospitals": "Hospitals",
       "createdAt": "Created At",
       "updatedAt": "Updated At"
     },
@@ -438,7 +471,7 @@
     "fields": {
       "id": "ID",
       "doctor_id": "Doctor ID",
-      "clinic": "Clinic",
+      "hospital": "Hospital",
       "salary": "Salary",
       "start_date": "Start Date",
       "end_date": "End Date",
@@ -509,7 +542,7 @@
       "brand": "Brand",
       "description": "Description",
       "quantity": "Quantity",
-      "clinic": "Clinic",
+      "hospital": "Hospital",
       "price": "Price",
       "createdAt": "Created At"
     },
@@ -557,7 +590,7 @@
       "description": "Description",
       "issued_date": "Issued Date",
       "expired_at": "Expired At",
-      "creator": "Creator",
+      "issuer": "issuer",
       "validator": "Validator",
       "speciality": "Speciality",
       "holder": "Holder",

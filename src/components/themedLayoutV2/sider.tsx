@@ -134,7 +134,9 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
                     }
                   }}
                   sx={{
-                    pl: isNested ? 4 : 2,
+                    // pl: isNested ? 4 : 2,
+                    pl: isNested ? 5 : 3,
+                    py: isNested ? 1.75 : 1.5,
                     justifyContent: "center",
                     marginTop: "8px",
                   }}
@@ -209,10 +211,13 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
                 setSiderVisible?.(false);
               }}
               sx={{
-                pl: isNested ? 4 : 2,
-                py: isNested ? 1.25 : 1,
+                pl: isNested ? 5 : 3,
+                py: isNested ? 1.75 : 1.5,
                 justifyContent: "center",
                 color: isSelected ? "primary.main" : "text.primary",
+                backgroundImage: isSelected
+                  ? "linear-gradient(90deg, rgba(21, 191, 253, 0.10) 0%, rgba(0, 255, 194, 0.30) 117.12%)"
+                  : "none",
               }}
             >
               <ListItemIcon

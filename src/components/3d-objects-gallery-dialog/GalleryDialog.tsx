@@ -6,13 +6,19 @@ import { autoPlay } from "react-swipeable-views-utils";
 import { useTheme } from "@mui/material/styles";
 
 import {
-// TextField,
-MobileStepper, Paper, Dialog, DialogActions, DialogContent, // DialogContentText,
-DialogTitle, // TextFieldProps,
-// useAutocomplete,
-// Autocomplete,
-// Show,
-Box, Typography, Button
+  // TextField,
+  MobileStepper,
+  Paper,
+  Dialog,
+  DialogActions,
+  DialogContent, // DialogContentText,
+  DialogTitle, // TextFieldProps,
+  // useAutocomplete,
+  // Autocomplete,
+  // Show,
+  Box,
+  Typography,
+  Button,
 } from "@mui/material";
 
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
@@ -35,7 +41,7 @@ import { useTranslate } from "@refinedev/core";
 export type DataProps = {
   loading?: boolean;
   // data?: IProfessionalCertificates;
-  // creatorsData?: IOrganization[];
+  // issuersData?: IOrganization[];
   // validatorsData?: ITechnician[];
   // specialitiesData?: IMedicalSpeciality[];
   visible: boolean;
@@ -70,7 +76,7 @@ const images = [
 export const GalleryDialog: React.FC<DataProps> = ({
   loading,
   // data,
-  // creatorsData,
+  // issuersData,
   // validatorsData,
   // specialitiesData,
   visible,
@@ -88,7 +94,7 @@ export const GalleryDialog: React.FC<DataProps> = ({
   //   IProfessionalCertificates,
   //   HttpError,
   //   IProfessionalCertificates & {
-  //     creator: IOrganization;
+  //     issuer: IOrganization;
   //     validator: ITechnician;
   //   }
   // >({
@@ -104,7 +110,7 @@ export const GalleryDialog: React.FC<DataProps> = ({
   // });
   const t = useTranslate();
 
-  // const { autocompleteProps: autocompleteCreatorProps } =
+  // const { autocompleteProps: autocompleteIssuerProps } =
   //   useAutocomplete<IOrganization>({
   //     resource: "organizations",
   //     onSearch: (value) => [

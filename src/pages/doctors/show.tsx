@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { dataGridSxProps } from "@/dataGridSxProps";
 import { useShow, useTranslate, useModal, useResource } from "@refinedev/core";
 import { useModalForm } from "@refinedev/react-hook-form";
 import {
@@ -132,13 +133,13 @@ export const DoctorShow: React.FC = () => {
   //     },
   //   });
 
-  // const creatorIds = dataGridProps.rows.map((item) => item.creator);
-  // const { data: creatorsData, isLoading: creatorsLoading } =
+  // const issuerIds = dataGridProps.rows.map((item) => item.issuer);
+  // const { data: issuersData, isLoading: issuersLoading } =
   //   useMany<IOrganization>({
   //     resource: "organizations",
-  //     ids: creatorIds,
+  //     ids: issuerIds,
   //     queryOptions: {
-  //       enabled: creatorIds.length > 0,
+  //       enabled: issuerIds.length > 0,
   //     },
   //   });
 
@@ -171,20 +172,23 @@ export const DoctorShow: React.FC = () => {
   //     },
   //   });
 
-  const salariesColumns = React.useMemo<GridColDef<IWorkHistory>[]>(
+  const workHistoriesColumns = React.useMemo<GridColDef<IWorkHistory>[]>(
     () => [
       // {
-      //   field: "id",
+      //   field: "_id",
       //   headerName: t("doctor_salaries.fields.id"),
       //   type: "number",
       //   width: 50,
       // },
       {
         field: "hospital",
-        headerName: t("doctor_salaries.fields.clinic"),
+        headerName: t("doctor_salaries.fields.hospital"),
         minWidth: 200,
         maxWidth: 200,
         flex: 1,
+        renderCell: (params) => {
+          return params.value.name;
+        },
       },
       {
         field: "salary",
@@ -199,9 +203,12 @@ export const DoctorShow: React.FC = () => {
         minWidth: 100,
         maxWidth: 100,
         flex: 1,
-        renderCell: ({ row }) => {
-          return new Date(row.start_date).toLocaleDateString();
+        renderCell: (params) => {
+          return new Date(params.value).toLocaleDateString();
         },
+        // renderCell: ({ row }) => {
+        //   return new Date(row.start_date).toLocaleDateString();
+        // },
       },
       {
         field: "end_date",
@@ -209,9 +216,12 @@ export const DoctorShow: React.FC = () => {
         minWidth: 100,
         maxWidth: 100,
         flex: 1,
-        renderCell: ({ row }) => {
-          return new Date(row.end_date).toLocaleDateString();
+        renderCell: (params) => {
+          return new Date(params.value).toLocaleDateString();
         },
+        // renderCell: ({ row }) => {
+        //   return new Date(row.end_date).toLocaleDateString();
+        // },
       },
       {
         field: "actions",
@@ -298,15 +308,15 @@ export const DoctorShow: React.FC = () => {
         },
       },
       // {
-      //   field: "creator",
-      //   headerName: t("professional_certificates.fields.creator"),
+      //   field: "issuer",
+      //   headerName: t("professional_certificates.fields.issuer"),
       //   minWidth: 200,
       //   maxWidth: 200,
       //   flex: 1,
       // },
       {
         field: "issuer",
-        headerName: t("professional_certificates.fields.creator"),
+        headerName: t("professional_certificates.fields.issuer"),
         // type: "number",
         minWidth: 220,
         maxWidth: 220,
@@ -318,14 +328,14 @@ export const DoctorShow: React.FC = () => {
         //   if (params !== undefined || params !== null) return params.value;
         // },
         // renderCell: ({ row }) => {
-        //   if (creatorsLoading) {
+        //   if (issuersLoading) {
         //     return "Loading...";
         //   }
 
-        //   const creator = creatorsData?.data.find(
-        //     (item) => item.id === row.creator
+        //   const issuer = issuersData?.data.find(
+        //     (item) => item.id === row.issuer
         //   );
-        //   return creator?.name;
+        //   return issuer?.name;
         // },
       },
       {
@@ -579,14 +589,14 @@ export const DoctorShow: React.FC = () => {
             </Typography>
           </Typography> */}
           {/* <Typography variant="body1" fontWeight="bold">
-            {t("doctors.fields.clinics")}
+            {t("doctors.fields.hospitals")}
           </Typography>
           <Typography variant="body2">
             <Typography variant="body2">
-              {record?.clinics !== undefined &&
-                record?.clinics !== null &&
-                record?.clinics.length > 0 &&
-                record?.clinics_name.map((item) => {
+              {record?.hospitals !== undefined &&
+                record?.hospitals !== null &&
+                record?.hospitals.length > 0 &&
+                record?.hospitals_name.map((item) => {
                   return <TagField sx={{ marginRight: "12px" }} value={item} />;
                 })}
             </Typography>
@@ -595,9 +605,9 @@ export const DoctorShow: React.FC = () => {
             {t("doctors.fields.biography")}
           </Typography> */}
         </Stack>
-        {/* <Stack gap={1}>
+        <Stack gap={1}>
           <SubresourceList
-            resource="doctor_salaries"
+            resource="work_history"
             // title="Salary History"
             modalToggle={showCreateModal}
             icon={<CardMembership sx={{ verticalAlign: "middle" }} />}
@@ -606,11 +616,14 @@ export const DoctorShow: React.FC = () => {
           >
             <DataGrid
               // {...workHistoryDataGridProps}
-              columns={salariesColumns}
+              rows={record?.work_history || []}
+              getRowId={(row) => row._id}
+              sx={dataGridSxProps}
+              columns={workHistoriesColumns}
               autoHeight
             />
           </SubresourceList>
-        </Stack> */}
+        </Stack>
       </Stack>
       <Stack gap={1} marginTop={4}>
         <SubresourceList
@@ -624,16 +637,7 @@ export const DoctorShow: React.FC = () => {
             // {...dataGridProps}
             rows={record?.certificates || []}
             getRowId={(row) => row._id}
-            sx={{
-              border: "none",
-              "& .MuiDataGrid-columnHeaders": {
-                background: "rgb(242, 242, 242)",
-                borderBottom: "1px solid rgb(229, 229, 229)",
-              },
-              "& .MuiDataGrid-cell": {
-                borderBottom: "1px solid rgb(242, 242, 242)",
-              },
-            }}
+            sx={dataGridSxProps}
             columns={certificatesColumns}
             autoHeight
           />

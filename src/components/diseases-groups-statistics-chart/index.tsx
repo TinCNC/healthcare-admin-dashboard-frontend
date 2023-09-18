@@ -102,7 +102,7 @@ interface ageJSONStatisticsValue {
 }
 
 interface DataProps {
-  data?: Object;
+  data?: object;
 }
 
 function jsonToGraphArray(json?: Object) {

@@ -210,8 +210,8 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
                         label={t("technician_certificates.fields.issuer")}
                         margin="normal"
                         variant="standard"
-                        error={!!errors.creator}
-                        helperText={errors.creator?.message as string}
+                        error={!!errors.issuer}
+                        helperText={errors.issuer?.message as string}
                         required
                       />
                     )}

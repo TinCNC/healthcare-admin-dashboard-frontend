@@ -26,7 +26,7 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 
 import { List } from "components/crud/list";
 
-import { IClinic, IMedicine } from "interfaces";
+import { IHospital, IMedicine } from "interfaces";
 
 import { Search } from "@mui/icons-material";
 
@@ -51,14 +51,14 @@ export const MedicineList: React.FC = () => {
 
   // const [emailSearch, setEmailSearch] = useState<string>("");
 
-  const clinicsListQueryResult = useList<IClinic>({
-    resource: "clinics",
-  });
+  // const hospitalsListQueryResult = useList<IHospital>({
+  //   resource: "hospitals",
+  // });
 
-  const [selectClinics, setSelectClinics] = useState<IClinic[]>([]);
+  const [selectHospitals, setSelectHospitals] = useState<IHospital[]>([]);
 
-  // const clinicsListQueryResult = useList<IClinic>({
-  //   resource: "clinics",
+  // const hospitalsListQueryResult = useList<IHospital>({
+  //   resource: "hospitals",
   // });
 
   useEffect(() => {
@@ -85,11 +85,11 @@ export const MedicineList: React.FC = () => {
       },
     ];
 
-    if (selectClinics !== undefined && selectClinics.length !== 0) {
+    if (selectHospitals !== undefined && selectHospitals.length !== 0) {
       filter.push({
-        field: "clinic",
+        field: "hospital",
         operator: "in",
-        value: selectClinics.map((item) => {
+        value: selectHospitals.map((item) => {
           return item.id;
         }),
       });
@@ -102,17 +102,17 @@ export const MedicineList: React.FC = () => {
     brandSearch,
     minQuantitySearch,
     maxQuantitySearch,
-    selectClinics,
+    selectHospitals,
   ]);
 
   const columns = React.useMemo<GridColDef<IMedicine>[]>(
     () => [
-      {
-        field: "id",
-        headerName: t("medicines.fields.id"),
-        type: "number",
-        width: 50,
-      },
+      // {
+      //   field: "id",
+      //   headerName: t("medicines.fields.id"),
+      //   type: "number",
+      //   width: 50,
+      // },
       {
         field: "name",
         headerName: t("medicines.fields.name"),
@@ -134,26 +134,29 @@ export const MedicineList: React.FC = () => {
         // flex: 100,
       },
       {
-        field: "clinic",
-        headerName: t("medicines.fields.clinic"),
+        field: "hospital",
+        headerName: t("medicines.fields.hospital"),
         minWidth: 300,
         flex: 1,
-        renderCell: ({ row }) => {
-          if (
-            clinicsListQueryResult.isFetching ||
-            clinicsListQueryResult.isLoading
-          ) {
-            return "Loading...";
-          }
-
-          const clinic =
-            clinicsListQueryResult.data !== undefined
-              ? clinicsListQueryResult?.data?.data.find(
-                  (item) => item.id === row.clinic
-                )?.name
-              : "";
-          return clinic;
+        renderCell: (params) => {
+          return params.value.name;
         },
+        // renderCell: ({ row }) => {
+        //   if (
+        //     hospitalsListQueryResult.isFetching ||
+        //     hospitalsListQueryResult.isLoading
+        //   ) {
+        //     return "Loading...";
+        //   }
+
+        //   const hospital =
+        //     hospitalsListQueryResult.data !== undefined
+        //       ? hospitalsListQueryResult?.data?.data.find(
+        //           (item) => item.id === row.hospital
+        //         )?.name
+        //       : "";
+        //   return hospital;
+        // },
       },
       {
         field: "price",
@@ -194,9 +197,9 @@ export const MedicineList: React.FC = () => {
         renderCell: function render({ row }) {
           return (
             <Stack direction="row" spacing={1}>
-              <ShowButton size="small" hideText recordItemId={row.id} />
-              <EditButton size="small" hideText recordItemId={row.id} />
-              <DeleteButton size="small" hideText recordItemId={row.id} />
+              <ShowButton size="small" hideText recordItemId={row._id} />
+              <EditButton size="small" hideText recordItemId={row._id} />
+              <DeleteButton size="small" hideText recordItemId={row._id} />
             </Stack>
           );
         },
@@ -205,12 +208,7 @@ export const MedicineList: React.FC = () => {
         minWidth: 120,
       },
     ],
-    [
-      clinicsListQueryResult.data,
-      clinicsListQueryResult.isFetching,
-      clinicsListQueryResult.isLoading,
-      t,
-    ]
+    [t]
   );
 
   return (
@@ -266,24 +264,24 @@ export const MedicineList: React.FC = () => {
           orientation="vertical"
           flexItem
         />
-        <FormControl sx={{ minWidth: 320 }}>
+        {/* <FormControl sx={{ minWidth: 320 }}>
           <Autocomplete
             multiple
             // id=""
             options={
-              clinicsListQueryResult.data !== undefined
-                ? clinicsListQueryResult?.data?.data?.map((item) => item)
-                : ([] as IClinic[])
+              hospitalsListQueryResult.data !== undefined
+                ? hospitalsListQueryResult?.data?.data?.map((item) => item)
+                : ([] as IHospital[])
             }
-            getOptionLabel={(option) => (option as IClinic).name ?? option}
-            value={selectClinics}
+            getOptionLabel={(option) => (option as IHospital).name ?? option}
+            value={selectHospitals}
             onChange={(_event, value) => {
-              setSelectClinics(value as IClinic[]);
+              setSelectHospitals(value as IHospital[]);
             }}
             // defaultValue={[top100Films[13].title]}
             freeSolo
-            renderTags={(value: readonly IClinic[], getTagProps) =>
-              value.map((option: IClinic, index: number) => (
+            renderTags={(value: readonly IHospital[], getTagProps) =>
+              value.map((option: IHospital, index: number) => (
                 <Chip
                   variant="outlined"
                   label={option.name}
@@ -295,8 +293,8 @@ export const MedicineList: React.FC = () => {
               <TextField
                 {...params}
                 variant="outlined"
-                label="Clinics"
-                placeholder="Clinics"
+                label="Hospitals"
+                placeholder="Hospitals"
               />
             )}
           />
@@ -308,7 +306,7 @@ export const MedicineList: React.FC = () => {
           }}
           orientation="vertical"
           flexItem
-        />
+        /> */}
         <FormControl sx={{ width: 120 }}>
           <InputBase
             sx={{ ml: 1, flex: 1 }}
@@ -349,6 +347,7 @@ export const MedicineList: React.FC = () => {
       <List>
         <DataGrid
           {...dataGridProps}
+          getRowId={(row) => row._id}
           filterModel={undefined}
           disableColumnFilter={true}
           columns={columns}

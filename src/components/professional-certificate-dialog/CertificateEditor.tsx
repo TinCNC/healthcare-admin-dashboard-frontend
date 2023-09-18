@@ -63,7 +63,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
   //   IProfessionalCertificates,
   //   HttpError,
   //   IProfessionalCertificates & {
-  //     creator: IOrganization;
+  //     issuer: IOrganization;
   //     validator: ITechnician;
   //   }
   // >({
@@ -102,7 +102,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
     }
   };
 
-  const [creator, setCreator] = useState<IOrganization | null>(null);
+  const [issuer, setIssuer] = useState<IOrganization | null>(null);
   const [validator, setValidator] = useState<ITechnicianView | null>(null);
   const [speciality, setSpeciality] = useState<IMedicalSpeciality | null>(null);
   const [type, setType] = useState<string | null>(null);
@@ -117,7 +117,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
     setImagePreview("");
     setValue("image", "");
     console.log(getValues());
-    setCreator(null);
+    setIssuer(null);
     setValidator(null);
     setSpeciality(null);
     setIssuedDate(dayjs());
@@ -153,11 +153,11 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
   }, [formLoading, handleClose, submitted, isSubmitting, isSubmitSuccessful]);
 
   const {
-    autocompleteProps: autocompleteCreatorProps,
-    defaultValueQueryResult: defaultValueCreatorQueryResult,
+    autocompleteProps: autocompleteIssuerProps,
+    defaultValueQueryResult: defaultValueIssuerQueryResult,
   } = useAutocomplete<IOrganization>({
     resource: "organizations",
-    defaultValue: queryResult?.data?.data?.creator,
+    defaultValue: queryResult?.data?.data?.issuer,
     pagination: { current: 1, pageSize: 10000 },
     onSearch: (value: string) => [
       {
@@ -168,7 +168,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
     ],
   });
 
-  console.log(defaultValueCreatorQueryResult.data?.data);
+  console.log(defaultValueIssuerQueryResult.data?.data);
 
   const {
     autocompleteProps: autocompleteValidatorProps,
@@ -203,15 +203,15 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
   });
 
   useEffect(() => {
-    if (defaultValueCreatorQueryResult?.isFetched && !formLoading) {
+    if (defaultValueIssuerQueryResult?.isFetched && !formLoading) {
       console.log("loaded");
-      setCreator(defaultValueCreatorQueryResult?.data?.data.at(0) || null);
+      setIssuer(defaultValueIssuerQueryResult?.data?.data.at(0) || null);
       // setGetAutocompleteValue(false);
     }
   }, [
     formLoading,
-    defaultValueCreatorQueryResult?.isFetched,
-    defaultValueCreatorQueryResult?.data?.data,
+    defaultValueIssuerQueryResult?.isFetched,
+    defaultValueIssuerQueryResult?.data?.data,
   ]); // Only re-run the effect if count changes
 
   useEffect(() => {
@@ -531,16 +531,16 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
 
                 <Controller
                   control={control}
-                  name="creator"
-                  rules={{ required: "Creator is required" }}
+                  name="issuer"
+                  rules={{ required: "issuer is required" }}
                   render={({ field }) => (
                     <Autocomplete
-                      {...autocompleteCreatorProps}
+                      {...autocompleteIssuerProps}
                       {...field}
-                      value={creator}
+                      value={issuer}
                       onChange={(_, value) => {
                         console.log(value);
-                        setCreator(value);
+                        setIssuer(value);
                         field.onChange(value?.id);
                       }}
                       disabled={isSubmitting}
@@ -549,7 +549,7 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
                       }}
                       // getOptionLabel={(item) => {
                       //   return (
-                      //     autocompleteCreatorProps?.options?.find(
+                      //     autocompleteIssuerProps?.options?.find(
                       //       (p) => p?.id?.toString() === item?.id?.toString()
                       //     )?.name ?? ""
                       //   );
@@ -564,11 +564,11 @@ export const CertificateEditorDialog: React.FC<EditorDataProps> = ({
                         <LoadingTextField
                           loading={queryResult?.isFetching}
                           {...params}
-                          label={t("professional_certificates.fields.creator")}
+                          label={t("professional_certificates.fields.issuer")}
                           margin="dense"
                           variant="standard"
-                          error={!!errors.creator}
-                          helperText={errors.creator?.message as string}
+                          error={!!errors.issuer}
+                          helperText={errors.issuer?.message as string}
                           fullWidth
                         />
                       )}

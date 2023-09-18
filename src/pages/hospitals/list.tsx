@@ -1,15 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { useTranslate, useMany, CrudFilters } from "@refinedev/core";
 import { useDataGrid, EditButton, DeleteButton } from "@refinedev/mui";
-import { Stack, Paper, Divider, FormControl, IconButton, InputBase } from "@mui/material";
-import { DataGrid, GridColumns } from "@mui/x-data-grid";
+import {
+  Stack,
+  Paper,
+  Divider,
+  FormControl,
+  IconButton,
+  InputBase,
+} from "@mui/material";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 
 import { List } from "components/crud/list";
 
-import { IClinic } from "interfaces";
+import { IHospital } from "interfaces";
 import { Search } from "@mui/icons-material";
 
-export const ClinicList: React.FC = () => {
+export const HospitalList: React.FC = () => {
   const t = useTranslate();
 
   const [nameSearch, setNameSearch] = useState<string>("");
@@ -24,12 +31,17 @@ export const ClinicList: React.FC = () => {
     number | undefined
   >();
 
-  // const [selectClinics, setSelectClinics] = useState<number[]>([]);
+  // const [selectHospitals, setSelectHospitals] = useState<number[]>([]);
 
-  const { dataGridProps, setFilters } = useDataGrid<IClinic>();
+  const { dataGridProps, setFilters } = useDataGrid<IHospital>({
+    resource: "buildings",
+    filters: {
+      permanent: [{ field: "type", operator: "eq", value: "Hospital" }],
+    },
+  });
 
   useEffect(() => {
-    // console.log(selectClinics);
+    // console.log(selectHospitals);
     const filter: CrudFilters = [
       {
         field: "name",
@@ -52,11 +64,11 @@ export const ClinicList: React.FC = () => {
         value: maxCapacitySearch,
       },
     ];
-    // if (selectClinics !== undefined && selectClinics.length !== 0) {
+    // if (selectHospitals !== undefined && selectHospitals.length !== 0) {
     //   filter.push({
-    //     field: "clinic",
+    //     field: "hospital",
     //     operator: "in",
-    //     value: selectClinics,
+    //     value: selectHospitals,
     //   });
     // }
     setFilters(filter);
@@ -72,57 +84,71 @@ export const ClinicList: React.FC = () => {
   //   },
   // });
 
-  const columns: GridColumns<IClinic> = [
-    {
-      field: "id",
-      headerName: t("clinics.fields.id"),
-      type: "number",
-      width: 50,
-    },
-    {
-      field: "name",
-      headerName: t("clinics.fields.name"),
-      minWidth: 200,
-      flex: 1,
-    },
-    {
-      field: "address",
-      headerName: t("clinics.fields.address"),
-      minWidth: 200,
-      flex: 1,
-    },
-    {
-      field: "capacity",
-      headerName: t("clinics.fields.capacity"),
-      minWidth: 200,
-      flex: 1,
-    },
-    {
-      field: "created_at",
-      headerName: t("clinics.fields.createdAt"),
-      minWidth: 400,
-      flex: 1,
-      renderCell: ({ row }) => {
-        return new Date(row.created_at).toLocaleString();
+  const columns = React.useMemo<GridColDef<IHospital>[]>(
+    () => [
+      // {
+      //   field: "id",
+      //   headerName: t("hospitals.fields.id"),
+      //   type: "number",
+      //   width: 50,
+      // },
+      {
+        field: "name",
+        headerName: t("hospitals.fields.name"),
+        minWidth: 200,
+        flex: 1,
       },
-    },
-    {
-      field: "actions",
-      type: "actions",
-      headerName: t("table.actions"),
-      renderCell: function render({ row }) {
-        return (
-          <Stack direction="row" spacing={1}>
-            <EditButton size="small" hideText recordItemId={row.id} />
-            <DeleteButton size="small" hideText recordItemId={row.id} />
-          </Stack>
-        );
+      {
+        field: "address",
+        headerName: t("hospitals.fields.address"),
+        minWidth: 200,
+        flex: 1,
+        valueGetter: (params) => params.row.contact_info.address,
       },
-      align: "center",
-      headerAlign: "center",
-      minWidth: 80,
-    },
-  ];
+      {
+        field: "capacity",
+        headerName: t("hospitals.fields.capacity"),
+        minWidth: 200,
+        flex: 1,
+      },
+      {
+        field: "created_at",
+        headerName: t("hospitals.fields.createdAt"),
+        minWidth: 400,
+        flex: 1,
+        renderCell: ({ row }) => {
+          return new Date(row.created_at).toLocaleString();
+        },
+      },
+      {
+        field: "actions",
+        type: "actions",
+        headerName: t("table.actions"),
+        renderCell: function render({ row }) {
+          return (
+            <Stack direction="row" spacing={1}>
+              <EditButton
+                // resource="buildings"
+                size="small"
+                hideText
+                recordItemId={row._id}
+              />
+              <DeleteButton
+                // resource="buildings"
+                size="small"
+                hideText
+                recordItemId={row._id}
+              />
+            </Stack>
+          );
+        },
+        align: "center",
+        headerAlign: "center",
+        minWidth: 80,
+      },
+    ],
+    [t]
+  );
 
   return (
     <Stack gap={1}>
@@ -226,17 +252,17 @@ export const ClinicList: React.FC = () => {
         <DirectionsIcon />
       </IconButton> */}
         {/* <FormControl sx={{ minWidth: 320 }}>
-          <InputLabel>Select Clinics</InputLabel>
+          <InputLabel>Select Hospitals</InputLabel>
           <Select
             sx={{ ml: 1, flex: 1 }}
             multiple
             variant="standard"
-            value={selectClinics}
+            value={selectHospitals}
             onChange={(
               event: SelectChangeEvent<number[]>,
               child: React.ReactNode
             ) => {
-              setSelectClinics(event.target.value as number[]);
+              setSelectHospitals(event.target.value as number[]);
             }}
             // onChange={(
             //   event: SelectChangeEvent<number>,
@@ -246,9 +272,9 @@ export const ClinicList: React.FC = () => {
             // }}
             // label="Select Author"
           >
-            {clinicsListQueryResult.data !== undefined &&
-              clinicsListQueryResult.data.total > 0 &&
-              clinicsListQueryResult.data.data.map((row, index) => (
+            {hospitalsListQueryResult.data !== undefined &&
+              hospitalsListQueryResult.data.total > 0 &&
+              hospitalsListQueryResult.data.data.map((row, index) => (
                 <MenuItem key={row.id} value={row.id}>
                   {row.name}
                 </MenuItem>
@@ -259,6 +285,7 @@ export const ClinicList: React.FC = () => {
       <List>
         <DataGrid
           {...dataGridProps}
+          getRowId={(row) => row._id}
           filterModel={undefined}
           disableColumnFilter={true}
           columns={columns}

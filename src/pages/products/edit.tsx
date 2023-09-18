@@ -13,8 +13,6 @@ import { FileUpload, SaveOutlined } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { BaseSyntheticEvent, useState, useEffect } from "react";
 
-import { uploadImage, getPublicImageUrl } from "api";
-
 export const ProductEdit: React.FC = () => {
   const t = useTranslate();
   const {
@@ -38,28 +36,28 @@ export const ProductEdit: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSubmit = async (e: BaseSyntheticEvent<object, any, any>) => {
     try {
-      if (imageFile !== undefined) {
-        setCreatingProduct(true);
-        const uploaded = await uploadImage(
-          imageFile,
-          "product-image",
-          `${getValues("name")}/`
-        );
-        if (uploaded !== undefined) {
-          const imageUrl = await getPublicImageUrl(
-            "product-image",
-            uploaded?.path
-          );
-          if (imageUrl !== undefined) setValue("image", imageUrl?.publicUrl);
-        }
-        // if (uploaded !== undefined) {
-        //   const imageUrl = await getSignedImageUrl(
-        //     "profile-image",
-        //     uploaded?.Key
-        //   );
-        //   if (imageUrl !== undefined) setValue("image", imageUrl?.signedURL);
-        // }
-      }
+      // if (imageFile !== undefined) {
+      //   setCreatingProduct(true);
+      //   const uploaded = await uploadImage(
+      //     imageFile,
+      //     "product-image",
+      //     `${getValues("name")}/`
+      //   );
+      //   if (uploaded !== undefined) {
+      //     const imageUrl = await getPublicImageUrl(
+      //       "product-image",
+      //       uploaded?.path
+      //     );
+      //     if (imageUrl !== undefined) setValue("image", imageUrl?.publicUrl);
+      //   }
+      //   // if (uploaded !== undefined) {
+      //   //   const imageUrl = await getSignedImageUrl(
+      //   //     "profile-image",
+      //   //     uploaded?.Key
+      //   //   );
+      //   //   if (imageUrl !== undefined) setValue("image", imageUrl?.signedURL);
+      //   // }
+      // }
 
       saveButtonProps.onClick(e);
       setCreatingProduct(false);

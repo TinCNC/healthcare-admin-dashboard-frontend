@@ -7,7 +7,7 @@ import { Stack, Typography, Box } from "@mui/material";
 
 import { Show } from "components/crud/show";
 
-import { IClinic, IMedicine } from "interfaces";
+import { IHospital, IMedicine } from "interfaces";
 
 export const MedicineShow: React.FC = () => {
   const t = useTranslate();
@@ -17,13 +17,14 @@ export const MedicineShow: React.FC = () => {
   const { data, isLoading } = queryResult;
   const record = data?.data;
 
-  const { data: clinicsData, isLoading: clinicsLoading } = useOne<IClinic>({
-    resource: "clinics",
-    id: record?.clinic || "",
-    queryOptions: {
-      enabled: !!record?.clinic,
-    },
-  });
+  const { data: hospitalsData, isLoading: hospitalsLoading } =
+    useOne<IHospital>({
+      resource: "hospitals",
+      id: record?.hospital || "",
+      queryOptions: {
+        enabled: !!record?.hospital,
+      },
+    });
 
   return (
     <Show isLoading={isLoading}>
@@ -49,13 +50,13 @@ export const MedicineShow: React.FC = () => {
           <Typography variant="body2">{record?.name}</Typography>
 
           <Typography variant="body1" fontWeight="bold">
-            {t("medicines.fields.clinic")}
+            {t("medicines.fields.hospital")}
           </Typography>
           <Typography variant="body2">
-            {!clinicsLoading && clinicsData !== undefined && (
+            {!hospitalsLoading && hospitalsData !== undefined && (
               <TagField
                 sx={{ marginRight: "12px" }}
-                value={clinicsData?.data?.name}
+                value={hospitalsData?.data?.name}
               />
             )}
           </Typography>

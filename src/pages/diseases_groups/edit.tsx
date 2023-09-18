@@ -103,8 +103,8 @@ export const DiseaseGroupEdit: React.FC = () => {
     // jsonToGraphArray,
   ]);
 
-  // const { autocompleteProps } = useAutocomplete<IClinic>({
-  //   resource: "clinics",
+  // const { autocompleteProps } = useAutocomplete<IHospital>({
+  //   resource: "hospitals",
   //   onSearch: (value) => [
   //     {
   //       field: "name",

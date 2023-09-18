@@ -1,7 +1,7 @@
 import { SaveOutlined } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
-import { HttpError, useTranslate } from "@refinedev/core";
-import { Edit } from "@refinedev/mui";
+import { HttpError, useResource, useTranslate } from "@refinedev/core";
+import { Create, Edit } from "@refinedev/mui";
 import {
   Box,
   InputLabel,
@@ -38,6 +38,8 @@ export const DiseaseEdit: React.FC = () => {
     getValues,
   } = useForm<IDisease, HttpError, IDisease>();
 
+  const { action } = useResource();
+
   useEffect(() => {
     if (!formLoading && !queryResult?.isLoading) {
       console.log(getValues());
@@ -49,8 +51,8 @@ export const DiseaseEdit: React.FC = () => {
     }
   }, [getValues, reset, queryResult?.isLoading, formLoading]);
 
-  // const { autocompleteProps } = useAutocomplete<IClinic>({
-  //   resource: "clinics",
+  // const { autocompleteProps } = useAutocomplete<IHospital>({
+  //   resource: "hospitals",
   //   onSearch: (value) => [
   //     {
   //       field: "name",
@@ -60,7 +62,104 @@ export const DiseaseEdit: React.FC = () => {
   //   ],
   // });
 
-  return (
+  const EditForm = (
+    <Box
+      component="form"
+      sx={{ display: "flex", flexDirection: "column" }}
+      autoComplete="off"
+    >
+      <LoadingTextField
+        loading={queryResult?.isFetching}
+        disabled={isSubmitting}
+        registerProps={register("name", { required: "Name is required" })}
+        error={!!errors?.name}
+        helperText={errors.name?.message}
+        margin="normal"
+        required
+        fullWidth
+        id="name"
+        label={t("diseases.fields.name")}
+        name="name"
+        value={name}
+        onChange={(
+          event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+        ) => {
+          setName(event.target.value as string);
+        }}
+        autoFocus
+      />
+      <LoadingTextField
+        loading={queryResult?.isFetching}
+        disabled={isSubmitting}
+        registerProps={register("scientific_name", {
+          required: "Scientific name is required",
+        })}
+        error={!!errors?.scientific_name}
+        helperText={errors.scientific_name?.message}
+        margin="normal"
+        required
+        fullWidth
+        id="scientific_name"
+        label={t("diseases.fields.scientific_name")}
+        name="scientific_name"
+        value={scientificName}
+        onChange={(
+          event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+        ) => {
+          setScientificName(event.target.value as string);
+        }}
+      />
+      <LoadingTextField
+        loading={queryResult?.isFetching}
+        disabled={isSubmitting}
+        registerProps={register("classification", {
+          required: "Classification is required",
+        })}
+        error={!!errors?.classification}
+        helperText={errors.classification?.message}
+        margin="normal"
+        required
+        fullWidth
+        id="classification"
+        label={t("diseases.fields.classification")}
+        name="classification"
+        value={classification}
+        onChange={(
+          event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+        ) => {
+          setClassification(event.target.value as string);
+        }}
+      />
+      <LoadingFormControl
+        loading={queryResult?.isFetching}
+        disabled={isSubmitting}
+        // sx={{ marginTop: "12px", marginBottom: "12px" }}
+        margin="normal"
+        fullWidth
+      >
+        <InputLabel id="severity-label">
+          {t("diseases.fields.severity")}
+        </InputLabel>
+        <Select
+          {...register("severity")}
+          labelId="severity-label"
+          id="severity"
+          value={severity}
+          disabled={formLoading}
+          label={t("diseases.fields.severity")}
+          onChange={(event: SelectChangeEvent) => {
+            setSeverity(event.target.value as string);
+          }}
+        >
+          <MenuItem value="High">High</MenuItem>
+          <MenuItem value="Medium">Medium</MenuItem>
+          <MenuItem value="Low">Low</MenuItem>
+        </Select>
+      </LoadingFormControl>
+    </Box>
+  );
+
+  return action == "edit" ? (
     <Edit
       footerButtons={
         <LoadingButton
@@ -77,100 +176,27 @@ export const DiseaseEdit: React.FC = () => {
       isLoading={formLoading}
       saveButtonProps={saveButtonProps}
     >
-      <Box
-        component="form"
-        sx={{ display: "flex", flexDirection: "column" }}
-        autoComplete="off"
-      >
-        <LoadingTextField
-          loading={queryResult?.isFetching}
-          disabled={isSubmitting}
-          registerProps={register("name", { required: "Name is required" })}
-          error={!!errors?.name}
-          helperText={errors.name?.message}
-          margin="normal"
-          required
-          fullWidth
-          id="name"
-          label={t("diseases.fields.name")}
-          name="name"
-          value={name}
-          onChange={(
-            event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-          ) => {
-            setName(event.target.value as string);
-          }}
-          autoFocus
-        />
-        <LoadingTextField
-          loading={queryResult?.isFetching}
-          disabled={isSubmitting}
-          registerProps={register("scientific_name", {
-            required: "Scientific name is required",
-          })}
-          error={!!errors?.scientific_name}
-          helperText={errors.scientific_name?.message}
-          margin="normal"
-          required
-          fullWidth
-          id="scientific_name"
-          label={t("diseases.fields.scientific_name")}
-          name="scientific_name"
-          value={scientificName}
-          onChange={(
-            event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-          ) => {
-            setScientificName(event.target.value as string);
-          }}
-        />
-        <LoadingTextField
-          loading={queryResult?.isFetching}
-          disabled={isSubmitting}
-          registerProps={register("classification", {
-            required: "Classification is required",
-          })}
-          error={!!errors?.classification}
-          helperText={errors.classification?.message}
-          margin="normal"
-          required
-          fullWidth
-          id="classification"
-          label={t("diseases.fields.classification")}
-          name="classification"
-          value={classification}
-          onChange={(
-            event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-          ) => {
-            setClassification(event.target.value as string);
-          }}
-        />
-        <LoadingFormControl
-          loading={queryResult?.isFetching}
-          disabled={isSubmitting}
-          // sx={{ marginTop: "12px", marginBottom: "12px" }}
-          margin="normal"
-          fullWidth
-        >
-          <InputLabel id="severity-label">
-            {t("diseases.fields.severity")}
-          </InputLabel>
-          <Select
-            {...register("severity")}
-            labelId="severity-label"
-            id="severity"
-            value={severity}
-            disabled={formLoading}
-            label={t("diseases.fields.severity")}
-            onChange={(event: SelectChangeEvent) => {
-              setSeverity(event.target.value as string);
-            }}
-          >
-            <MenuItem value="High">High</MenuItem>
-            <MenuItem value="Medium">Medium</MenuItem>
-            <MenuItem value="Low">Low</MenuItem>
-          </Select>
-        </LoadingFormControl>
-      </Box>
+      {EditForm}
     </Edit>
+  ) : (
+    <Create
+      footerButtons={
+        <LoadingButton
+          type="submit"
+          startIcon={<SaveOutlined />}
+          loadingPosition="start"
+          loading={formLoading}
+          variant="contained"
+          onClick={async (e) => saveButtonProps.onClick(e)}
+        >
+          {t("buttons.save")}
+        </LoadingButton>
+      }
+      isLoading={formLoading}
+      saveButtonProps={saveButtonProps}
+      // saveButtonProps={saveButtonProps}
+    >
+      {EditForm}
+    </Create>
   );
 };

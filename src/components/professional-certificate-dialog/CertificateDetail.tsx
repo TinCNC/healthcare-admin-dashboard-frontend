@@ -24,7 +24,7 @@ import { useTranslate } from "@refinedev/core";
 export type DataProps = {
   loading?: boolean;
   data?: IProfessionalCertificatesView;
-  // creatorsData?: IOrganization[];
+  // issuersData?: IOrganization[];
   // validatorsData?: ITechnician[];
   // specialitiesData?: IMedicalSpeciality[];
   visible: boolean;
@@ -34,7 +34,7 @@ export type DataProps = {
 export const CertificateDetailDialog: React.FC<DataProps> = ({
   loading,
   data,
-  // creatorsData,
+  // issuersData,
   // validatorsData,
   // specialitiesData,
   visible,
@@ -103,9 +103,9 @@ export const CertificateDetailDialog: React.FC<DataProps> = ({
                 <Typography variant="body2">{data?.type}</Typography>
 
                 <Typography variant="body1" fontWeight="bold">
-                  {t("professional_certificates.fields.creator")}
+                  {t("professional_certificates.fields.issuer")}
                 </Typography>
-                <Typography variant="body2">{data?.creator_name}</Typography>
+                <Typography variant="body2">{data?.issuer_name}</Typography>
 
                 <Typography variant="body1" fontWeight="bold">
                   {t("professional_certificates.fields.validator")}

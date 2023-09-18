@@ -110,8 +110,8 @@ export const PrecriptionEditorDialog: React.FC<EditorDataProps> = ({
   // const {
   //   autocompleteProps: autocompleteValidatorProps,
   //   defaultValueQueryResult: defaultValueValidatorQueryResult,
-  // } = useAutocomplete<IClinic>({
-  //   resource: "clinics",
+  // } = useAutocomplete<IHospital>({
+  //   resource: "hospitals",
   //   defaultValue: queryResult?.data?.data?.validator,
   //   pagination: { current: 1, pageSize: 10000 },
   //   onSearch: (value: string) => [

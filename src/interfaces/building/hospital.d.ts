@@ -1,4 +1,4 @@
-import { ILocation } from "../location";
+import { IBuilding } from ".";
 
 export interface IContractInfo {
   website: string;
@@ -7,12 +7,4 @@ export interface IContractInfo {
   address: string;
 }
 
-export interface IHospital {
-  _id: string;
-  name: string;
-  location: ILocation;
-  director: string;
-  contact_info: IContractInfo;
-  capacity: number;
-  created_at: string;
-}
+export interface IHospital extends IBuilding {}

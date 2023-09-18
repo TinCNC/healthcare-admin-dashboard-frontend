@@ -20,6 +20,7 @@ export interface ICertificate {
 }
 
 export interface IWorkHistory {
+  _id: string;
   hospital: string;
   salary: number;
   start_date: string;
@@ -31,7 +32,7 @@ export interface IDoctor {
   user_ref: IUser;
   departments: number[];
   biography: string;
-  // clinics: number[];
+  // hospitals: number[];
   work_history: IWorkHistory[];
   certificates: ICertificate[];
   created_at: string;

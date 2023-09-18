@@ -59,8 +59,8 @@ export const TechnicianList: React.FC = () => {
 
   const [selectGenders, setSelectGenders] = useState<string[]>([]);
 
-  // const clinicsListQueryResult = useList<IClinic>({
-  //   resource: "clinics",
+  // const hospitalsListQueryResult = useList<IHospital>({
+  //   resource: "hospitals",
   // });
 
   useEffect(() => {
@@ -138,25 +138,25 @@ export const TechnicianList: React.FC = () => {
       flex: 1,
     },
     // {
-    //   field: "clinic",
-    //   headerName: t("technicians.fields.clinic"),
+    //   field: "hospital",
+    //   headerName: t("technicians.fields.hospital"),
     //   minWidth: 100,
     //   flex: 1,
     //   renderCell: ({ row }) => {
     //     if (
-    //       clinicsListQueryResult.isFetching ||
-    //       clinicsListQueryResult.isLoading
+    //       hospitalsListQueryResult.isFetching ||
+    //       hospitalsListQueryResult.isLoading
     //     ) {
     //       return "Loading...";
     //     }
 
-    //     const clinic =
-    //       clinicsListQueryResult.data !== undefined
-    //         ? clinicsListQueryResult?.data?.data.find(
-    //             (item) => item.id === row.clinic
+    //     const hospital =
+    //       hospitalsListQueryResult.data !== undefined
+    //         ? hospitalsListQueryResult?.data?.data.find(
+    //             (item) => item.id === row.hospital
     //           )?.name
     //         : "";
-    //     return clinic;
+    //     return hospital;
     //   },
     // },
     {

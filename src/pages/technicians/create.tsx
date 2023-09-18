@@ -15,8 +15,6 @@ import { FileUpload, SaveOutlined } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { BaseSyntheticEvent, useState } from "react";
 
-import { uploadImage, getPublicImageUrl } from "api";
-
 export const TechnicianCreate: React.FC = () => {
   const t = useTranslate();
   const {
@@ -45,21 +43,21 @@ export const TechnicianCreate: React.FC = () => {
     // console.log(imageFile);
 
     try {
-      if (imageFile !== undefined) {
-        setCreatingTechnician(true);
-        const uploaded = await uploadImage(
-          imageFile,
-          "profile-image",
-          `technicians/${getValues("username")}/`
-        );
-        if (uploaded !== undefined) {
-          const imageUrl = await getPublicImageUrl(
-            "profile-image",
-            uploaded?.path
-          );
-          if (imageUrl !== undefined) setValue("image", imageUrl?.publicUrl);
-        }
-      }
+      // if (imageFile !== undefined) {
+      //   setCreatingTechnician(true);
+      //   const uploaded = await uploadImage(
+      //     imageFile,
+      //     "profile-image",
+      //     `technicians/${getValues("username")}/`
+      //   );
+      //   if (uploaded !== undefined) {
+      //     const imageUrl = await getPublicImageUrl(
+      //       "profile-image",
+      //       uploaded?.path
+      //     );
+      //     if (imageUrl !== undefined) setValue("image", imageUrl?.publicUrl);
+      //   }
+      // }
       saveButtonProps.onClick(e);
       setCreatingTechnician(false);
       // throw new Error("Function not implemented.");
@@ -88,8 +86,8 @@ export const TechnicianCreate: React.FC = () => {
   // const {
   //   autocompleteProps,
   //   // defaultValueQueryResult
-  // } = useAutocomplete<IClinic>({
-  //   resource: "clinics",
+  // } = useAutocomplete<IHospital>({
+  //   resource: "hospitals",
   //   onSearch: (value) => [
   //     {
   //       field: "name",
@@ -97,7 +95,7 @@ export const TechnicianCreate: React.FC = () => {
   //       value,
   //     },
   //   ],
-  //   defaultValue: queryResult?.data?.data.clinic,
+  //   defaultValue: queryResult?.data?.data.hospital,
   // });
 
   return (

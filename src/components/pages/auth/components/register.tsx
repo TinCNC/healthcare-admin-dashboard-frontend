@@ -14,7 +14,7 @@ import {
 } from "@refinedev/core";
 import { FormPropsType } from "../index";
 import { layoutStyles, titleStyles } from "./styles";
-import { ThemedTitle } from "@/components/themedLayoutV1/title";
+import { ThemedTitleV2 } from "@/components/themedLayoutV2/title";
 import {
   Button,
   TextField,
@@ -85,7 +85,7 @@ export const RegisterPage: React.FC<RegisterProps> = ({
         }}
       >
         {title ?? (
-          <ThemedTitle
+          <ThemedTitleV2
             collapsed={false}
             wrapperStyles={{
               gap: "8px",
