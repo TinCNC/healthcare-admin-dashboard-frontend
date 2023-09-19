@@ -4,7 +4,7 @@ import { ThemedLayoutContextProvider } from "@refinedev/mui";
 import { ThemedTitleV2 as DefaulTitle } from "./title";
 import { ThemedHeaderV2 as DefaultHeader } from "./header";
 import { ThemedSiderV2 as DefaultSider } from "./sider";
-import { Box } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import type { RefineThemedLayoutV2Props } from "@refinedev/mui";
 
 export const ThemedLayoutV2: React.FC<RefineThemedLayoutV2Props> = ({
@@ -41,7 +41,7 @@ export const ThemedLayoutV2: React.FC<RefineThemedLayoutV2Props> = ({
               bgcolor: (theme) => theme.palette.background.default,
             }}
           >
-            {children}
+            <Container>{children}</Container>
           </Box>
           {Footer && <Footer />}
         </Box>

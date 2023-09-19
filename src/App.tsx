@@ -120,9 +120,11 @@ import {
   faBone,
   faCubes,
   faMedkit,
+  faTemperatureFull,
+  faWallet,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { Category, Google, GridView } from "@mui/icons-material";
+import { Category, Equalizer, Google, GridView } from "@mui/icons-material";
 import { OrderList } from "@/pages/order";
 import { ColorModeContextProvider } from "./contexts/color-mode";
 // import { Header } from "./components/header";
@@ -136,6 +138,8 @@ import { PatientRecord } from "./pages/patients/patient_record";
 import { InterpolationMap, TOptionsBase } from "i18next";
 import { $Dictionary } from "i18next/typescript/helpers";
 import { DashboardPage } from "@/pages/dashboard";
+import { ChemistList } from "./pages/chemists";
+import { StatisticList } from "./pages/statistics";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -196,107 +200,24 @@ function App() {
                       },
                     },
                     {
-                      name: "order",
-                      list: "/orders",
+                      name: "statistics",
+                      list: "/statistics",
                       meta: {
-                        hide: true,
+                        icon: <Equalizer />,
                       },
                     },
                     {
-                      name: "departments",
-                      list: "/departments",
-                      create: "/departments/create",
-                      edit: "/departments/edit/:id",
-                      show: "/departments/show/:id",
+                      name: "chemists",
+                      list: "/chemists",
                       meta: {
-                        canDelete: true,
-                        icon: <FontAwesomeIcon icon={faSitemap} />,
+                        icon: <FontAwesomeIcon icon={faTemperatureFull} />,
                       },
                     },
                     {
-                      name: "laboratories",
-                      list: "/laboratories",
-                      create: "/laboratories/create",
-                      edit: "/laboratories/edit/:id",
-                      show: "/laboratories/show/:id",
+                      name: "wallets",
+                      list: "/",
                       meta: {
-                        canDelete: true,
-                        icon: <FontAwesomeIcon icon={faFlaskVial} />,
-                      },
-                    },
-                    {
-                      name: "medical_specialities",
-                      list: "/medical_specialities",
-                      create: "/medical_specialities/create",
-                      edit: "/medical_specialities/edit/:id",
-                      show: "/medical_specialities/show/:id",
-                      meta: {
-                        canDelete: true,
-                        icon: <FontAwesomeIcon icon={faSitemap} />,
-                      },
-                    },
-                    {
-                      name: "organizations",
-                      list: "/organizations",
-                      create: "/organizations/create",
-                      edit: "/organizations/edit/:id",
-                      show: "/organizations/show/:id",
-                      meta: {
-                        canDelete: true,
-                        icon: <FontAwesomeIcon icon={faBuilding} />,
-                      },
-                    },
-                    {
-                      name: "diseases",
-                      meta: {
-                        icon: <FontAwesomeIcon icon={faDisease} />,
-                      },
-                    },
-                    {
-                      name: "diseases",
-                      list: "/diseases",
-                      create: "/diseases/create",
-                      edit: "/diseases/edit/:id",
-                      show: "/diseases/show/:id",
-
-                      meta: {
-                        canDelete: true,
-                        parent: "diseases",
-                        icon: <FontAwesomeIcon icon={faDisease} />,
-                      },
-                    },
-                    {
-                      name: "diseases_groups",
-                      list: "/diseases_groups",
-                      create: "/diseases_groups/create",
-                      edit: "/diseases_groups/edit/:id",
-                      show: "/diseases_groups/show/:id",
-                      meta: {
-                        canDelete: true,
-                        parent: "diseases",
-                        icon: <FontAwesomeIcon icon={faViruses} />,
-                      },
-                    },
-                    {
-                      name: "medicines",
-                      list: "/medicines",
-                      create: "/medicines/create",
-                      edit: "/medicines/edit/:id",
-                      show: "/medicines/show/:id",
-                      meta: {
-                        canDelete: true,
-                        icon: <FontAwesomeIcon icon={faMedkit} />,
-                      },
-                    },
-                    {
-                      name: "hospitals",
-                      list: "/hospitals",
-                      create: "/hospitals/create",
-                      edit: "/hospitals/edit/:id",
-                      show: "/hospitals/show/:id",
-                      meta: {
-                        canDelete: true,
-                        icon: <FontAwesomeIcon icon={faHospital} />,
+                        icon: <FontAwesomeIcon icon={faWallet} />,
                       },
                     },
                     {
@@ -311,82 +232,187 @@ function App() {
                       },
                     },
                     {
-                      name: "patients",
-                      list: "/patients",
-                      create: "/patients/create",
-                      edit: "/patients/edit/:id",
-                      show: "/patients/show/:id",
+                      name: "hospitals",
+                      list: "/hospitals",
+                      create: "/hospitals/create",
+                      edit: "/hospitals/edit/:id",
+                      show: "/hospitals/show/:id",
                       meta: {
                         canDelete: true,
-                        icon: <FontAwesomeIcon icon={faHospitalUser} />,
+                        icon: <FontAwesomeIcon icon={faHospital} />,
                       },
                     },
                     {
-                      name: "patient_record",
-                      // list: "/patient_record",
-                      create: "patients/show/:patientId/patient_record/create",
-                      edit: "patients/show/:patientId/patient_record/edit/:id",
-                      show: "patients/show/:patientId/patient_record/:id",
+                      name: "medicines",
+                      list: "/medicines",
+                      create: "/medicines/create",
+                      edit: "/medicines/edit/:id",
+                      show: "/medicines/show/:id",
                       meta: {
                         canDelete: true,
-                        icon: <FontAwesomeIcon icon={faHospitalUser} />,
-                        // parent: "patients",
+                        icon: <FontAwesomeIcon icon={faMedkit} />,
+                      },
+                    },
+                    {
+                      name: "order",
+                      list: "/orders",
+                      meta: {
                         hide: true,
                       },
                     },
-                    {
-                      name: "technicians",
-                      list: "/technicians",
-                      create: "/technicians/create",
-                      edit: "/technicians/edit/:id",
-                      show: "/technicians/show/:id",
-                      meta: {
-                        canDelete: true,
-                        icon: <FontAwesomeIcon icon={faUserSecret} />,
-                      },
-                    },
-                    {
-                      name: "prosthetics",
-                      meta: {
-                        icon: <FontAwesomeIcon icon={faBone} />,
-                      },
-                    },
-                    {
-                      name: "3d_objects",
-                      list: "/3d_objects",
-                      create: "/3d_objects/create",
-                      edit: "/3d_objects/edit/:id",
-                      show: "/3d_objects/show/:id",
-                      meta: {
-                        canDelete: true,
-                        parent: "prosthetics",
-                        icon: <FontAwesomeIcon icon={faCubes} />,
-                      },
-                    },
-                    {
-                      name: "products",
-                      list: "/products",
-                      create: "/products/create",
-                      edit: "/products/edit/:id",
-                      show: "/products/show/:id",
-                      meta: {
-                        canDelete: true,
-                        parent: "prosthetics",
-                        icon: <FontAwesomeIcon icon={faBone} />,
-                      },
-                    },
-                    {
-                      name: "categories",
-                      list: "/categories",
-                      create: "/categories/create",
-                      edit: "/categories/edit/:id",
-                      show: "/categories/show/:id",
-                      meta: {
-                        canDelete: true,
-                        parent: "prosthetics",
-                        icon: <Category />,
-                      },
-                    },
+                    // {
+                    //   name: "departments",
+                    //   list: "/departments",
+                    //   create: "/departments/create",
+                    //   edit: "/departments/edit/:id",
+                    //   show: "/departments/show/:id",
+                    //   meta: {
+                    //     canDelete: true,
+                    //     icon: <FontAwesomeIcon icon={faSitemap} />,
+                    //   },
+                    // },
+                    // {
+                    //   name: "laboratories",
+                    //   list: "/laboratories",
+                    //   create: "/laboratories/create",
+                    //   edit: "/laboratories/edit/:id",
+                    //   show: "/laboratories/show/:id",
+                    //   meta: {
+                    //     canDelete: true,
+                    //     icon: <FontAwesomeIcon icon={faFlaskVial} />,
+                    //   },
+                    // },
+                    // {
+                    //   name: "medical_specialities",
+                    //   list: "/medical_specialities",
+                    //   create: "/medical_specialities/create",
+                    //   edit: "/medical_specialities/edit/:id",
+                    //   show: "/medical_specialities/show/:id",
+                    //   meta: {
+                    //     canDelete: true,
+                    //     icon: <FontAwesomeIcon icon={faSitemap} />,
+                    //   },
+                    // },
+                    // {
+                    //   name: "organizations",
+                    //   list: "/organizations",
+                    //   create: "/organizations/create",
+                    //   edit: "/organizations/edit/:id",
+                    //   show: "/organizations/show/:id",
+                    //   meta: {
+                    //     canDelete: true,
+                    //     icon: <FontAwesomeIcon icon={faBuilding} />,
+                    //   },
+                    // },
+                    // {
+                    //   name: "diseases",
+                    //   meta: {
+                    //     icon: <FontAwesomeIcon icon={faDisease} />,
+                    //   },
+                    // },
+                    // {
+                    //   name: "diseases",
+                    //   list: "/diseases",
+                    //   create: "/diseases/create",
+                    //   edit: "/diseases/edit/:id",
+                    //   show: "/diseases/show/:id",
+
+                    //   meta: {
+                    //     canDelete: true,
+                    //     parent: "diseases",
+                    //     icon: <FontAwesomeIcon icon={faDisease} />,
+                    //   },
+                    // },
+                    // {
+                    //   name: "diseases_groups",
+                    //   list: "/diseases_groups",
+                    //   create: "/diseases_groups/create",
+                    //   edit: "/diseases_groups/edit/:id",
+                    //   show: "/diseases_groups/show/:id",
+                    //   meta: {
+                    //     canDelete: true,
+                    //     parent: "diseases",
+                    //     icon: <FontAwesomeIcon icon={faViruses} />,
+                    //   },
+                    // },
+
+                    // {
+                    //   name: "patients",
+                    //   list: "/patients",
+                    //   create: "/patients/create",
+                    //   edit: "/patients/edit/:id",
+                    //   show: "/patients/show/:id",
+                    //   meta: {
+                    //     canDelete: true,
+                    //     icon: <FontAwesomeIcon icon={faHospitalUser} />,
+                    //   },
+                    // },
+                    // {
+                    //   name: "patient_record",
+                    //   // list: "/patient_record",
+                    //   create: "patients/show/:patientId/patient_record/create",
+                    //   edit: "patients/show/:patientId/patient_record/edit/:id",
+                    //   show: "patients/show/:patientId/patient_record/:id",
+                    //   meta: {
+                    //     canDelete: true,
+                    //     icon: <FontAwesomeIcon icon={faHospitalUser} />,
+                    //     // parent: "patients",
+                    //     hide: true,
+                    //   },
+                    // },
+                    // {
+                    //   name: "technicians",
+                    //   list: "/technicians",
+                    //   create: "/technicians/create",
+                    //   edit: "/technicians/edit/:id",
+                    //   show: "/technicians/show/:id",
+                    //   meta: {
+                    //     canDelete: true,
+                    //     icon: <FontAwesomeIcon icon={faUserSecret} />,
+                    //   },
+                    // },
+                    // {
+                    //   name: "prosthetics",
+                    //   meta: {
+                    //     icon: <FontAwesomeIcon icon={faBone} />,
+                    //   },
+                    // },
+                    // {
+                    //   name: "3d_objects",
+                    //   list: "/3d_objects",
+                    //   create: "/3d_objects/create",
+                    //   edit: "/3d_objects/edit/:id",
+                    //   show: "/3d_objects/show/:id",
+                    //   meta: {
+                    //     canDelete: true,
+                    //     parent: "prosthetics",
+                    //     icon: <FontAwesomeIcon icon={faCubes} />,
+                    //   },
+                    // },
+                    // {
+                    //   name: "products",
+                    //   list: "/products",
+                    //   create: "/products/create",
+                    //   edit: "/products/edit/:id",
+                    //   show: "/products/show/:id",
+                    //   meta: {
+                    //     canDelete: true,
+                    //     parent: "prosthetics",
+                    //     icon: <FontAwesomeIcon icon={faBone} />,
+                    //   },
+                    // },
+                    // {
+                    //   name: "categories",
+                    //   list: "/categories",
+                    //   create: "/categories/create",
+                    //   edit: "/categories/edit/:id",
+                    //   show: "/categories/show/:id",
+                    //   meta: {
+                    //     canDelete: true,
+                    //     parent: "prosthetics",
+                    //     icon: <Category />,
+                    //   },
+                    // },
                   ]}
                   options={{
                     syncWithLocation: true,
@@ -412,11 +438,17 @@ function App() {
                         element={<NavigateToResource resource="departments" />}
                       /> */}
                       <Route index element={<DashboardPage />} />
-                      <Route path="/departments">
-                        <Route index element={<DepartmentList />} />
-                        <Route path="create" element={<DepartmentCreate />} />
+                      <Route path="/statistics">
+                        <Route index element={<StatisticList />} />
+                        {/* <Route path="create" element={<DepartmentCreate />} />
                         <Route path="edit/:id" element={<DepartmentEdit />} />
-                        {/* <Route path="show/:id" element={<DepartmentShow />} /> */}
+                        <Route path="show/:id" element={<DepartmentShow />} /> */}
+                      </Route>
+                      <Route path="/chemists">
+                        <Route index element={<ChemistList />} />
+                        {/* <Route path="create" element={<DepartmentCreate />} />
+                        <Route path="edit/:id" element={<DepartmentEdit />} />
+                        <Route path="show/:id" element={<DepartmentShow />} /> */}
                       </Route>
                       <Route path="/laboratories">
                         <Route index element={<LaboratoryList />} />

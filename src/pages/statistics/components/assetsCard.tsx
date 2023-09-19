@@ -15,7 +15,7 @@ import { useTranslate } from "@refinedev/core";
 import React from "react";
 import { GridColDef, GridRowsProp } from "@mui/x-data-grid";
 
-export const RecentTransactionsCard: React.FC = () => {
+export const AssetsCard: React.FC = () => {
   const t = useTranslate();
 
   const rows: GridRowsProp = [
@@ -106,7 +106,6 @@ export const RecentTransactionsCard: React.FC = () => {
             {params.value}
           </>
         );
-        // return "$" + params.value;
       },
     },
     {

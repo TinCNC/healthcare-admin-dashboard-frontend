@@ -29,11 +29,14 @@ import {
   MenuItem,
   Container,
 } from "@mui/material";
-import { StatisticsCard } from "./components";
-import { ActivityFeedCard } from "./components/activityFeedCard";
-import { AppointmentsCard } from "./components/appointmentsCard";
-import { Banner } from "./components/banner";
-import { RecentTransactionsCard } from "./components/recentTransactions";
+import {
+  StatisticsCard,
+  ActivityFeedCard,
+  AppointmentsCard,
+  Banner,
+  RecentTransactionsCard,
+} from "./components";
+
 // import { DataGrid, GridColDef } from "@mui/x-data-grid";
 
 // import { List } from "components/crud/list";
@@ -46,7 +49,7 @@ export const DashboardPage: React.FC = () => {
   const t = useTranslate();
 
   return (
-    <Container>
+    <>
       <Stack gap={3}>
         <Stack gap={1} direction="row" alignItems="self-end">
           <Typography variant="h6" sx={{ marginBottom: "0px" }}>
@@ -68,6 +71,6 @@ export const DashboardPage: React.FC = () => {
         </Stack>
         <RecentTransactionsCard />
       </Stack>
-    </Container>
+    </>
   );
 };

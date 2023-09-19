@@ -107,6 +107,13 @@
   "tags": {
     "clone": "Clone"
   },
+  "sort_by:": {
+    "sort_by": "Sort By",
+    "popular": "Popular",
+    "latest": "Latest",
+    "highest_rating": "Highest Rating",
+    "lowest_rating": "Lowest Rating"
+  },
   "dashboard": {
     "good_morning": "Good morning",
     "welcome_banner": "WELCOME TO YOUR PERSONAL VIRTUAL HEALTH ASSISTANT",
@@ -141,6 +148,60 @@
         "amount": "Amount",
         "paid_by": "Paid By"
       }
+    }
+  },
+  "chemists": {
+    "title": "Chemists",
+    "your_connection": "Your Connection",
+    "all_chemists": "All Chemists",
+    "task_singular": "Task",
+    "task_plural": "Tasks",
+    "review_singular": "Review",
+    "review_plural": "Reviews",
+    "chat": "Chat",
+    "status": {
+      "connected": "Connected",
+      "disconnected": "Disconnected"
+    },
+    "search_box": {
+      "search_chemists": "Search Chemists",
+      "category": "Category"
+    }
+  },
+  "statistics": {
+    "title": "Statistics",
+    "assets": {
+      "title": "Assets",
+      "btc": "BTC",
+      "eth": "ETH",
+      "vha_token": "VHA Token",
+      "others": "Others"
+    },
+    "convert": {
+      "title": "Convert",
+      "convert_now": "Convert Now",
+      "notes_message": "The ultimate price and output is determined by the amount of tokens in the pool at the time of your swap."
+    },
+    "history": {
+      "title": "History",
+      "view_all": "View All",
+      "pending": "Pending",
+      "success": "Success"
+    },
+    "recent_appointments": {
+      "title": "Recent Appointments",
+      "orders": "Orders",
+      "amount": "Amount"
+    },
+    "data_analysis": {
+      "title": "Data Analysis",
+      "time_range": {
+        "last_week": "Last Week",
+        "last_month": "Last Month"
+      },
+      "bank_account": "Bank Account",
+      "vha_token": "VHA Token",
+      "credit_card": "Credit Card"
     }
   },
   "posts": {
