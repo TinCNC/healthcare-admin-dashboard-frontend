@@ -13,7 +13,7 @@ import {
   Box,
 } from "@mui/material";
 
-import { Delete, Folder } from "@mui/icons-material";
+import { Folder } from "@mui/icons-material";
 
 import { useTranslate } from "@refinedev/core";
 import React from "react";

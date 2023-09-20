@@ -1,9 +1,12 @@
 import { Stack } from "@mui/system";
 import React from "react";
-import { ActivityFeedCard } from "../dashboard/components/activityFeedCard";
-import { AppointmentsCard } from "../dashboard/components/appointmentsCard";
-import { RecentTransactionsCard } from "../dashboard/components/recentTransactions";
-import { AssetsCard } from "./components";
+import {
+  AssetsCard,
+  ConvertCard,
+  DataAnalysisCard,
+  HistoryCard,
+  RecentAppointmentsCard,
+} from "./components";
 
 export const StatisticList = () => {
   return (
@@ -14,16 +17,16 @@ export const StatisticList = () => {
             <AssetsCard />
           </Stack>
           <Stack width="50%">
-            <AppointmentsCard />
+            <ConvertCard />
           </Stack>
         </Stack>
-        <RecentTransactionsCard />
+        <HistoryCard />
         <Stack gap={6} direction="row">
           <Stack width="50%">
-            <ActivityFeedCard />
+            <RecentAppointmentsCard />
           </Stack>
           <Stack width="50%">
-            <AppointmentsCard />
+            <DataAnalysisCard />
           </Stack>
         </Stack>
       </Stack>
